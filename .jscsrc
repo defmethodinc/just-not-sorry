@@ -1,0 +1,4 @@
+{
+    "preset": "airbnb",
+    "requireCamelCaseOrUpperCaseIdentifiers": {ignoreProperties: true}
+}
