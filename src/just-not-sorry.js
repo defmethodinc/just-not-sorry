@@ -1,6 +1,7 @@
 var gmail;
 
 function refresh(f) {
+  'use strict';
   if ((/in/.test(document.readyState)) || (Gmail === undefined)) {
     setTimeout('refresh(' + f + ')', 10);
   } else {
@@ -9,11 +10,12 @@ function refresh(f) {
 }
 
 function init(compose, type) {
+  'use strict';
   console.log('api.dom.compose object:', compose, 'type is:', type);
   var wrapper = document.createElement('span');
   wrapper.className = 'just-sorry-warning';
 
-  var observer = new MutationObserver(function(mutations) {
+  var observer = new MutationObserver(function() {
     var body = compose.dom('body').get(0);
     findAndReplaceDOMText(body, {
       find: / just /gi,
@@ -30,7 +32,13 @@ function init(compose, type) {
   observer.observe(target, config);
 }
 
+function removeWarning(str) {
+  'use strict';
+  return str.replace(/just-sorry-warning/gi, '');
+}
+
 function cleanup(url, body, data, xhr) {
+  'use strict';
   var bodyParams = xhr.xhrParams.body_params;
 
   var oldCmml = xhr.xhrParams.url.cmml;
@@ -53,15 +61,8 @@ function cleanup(url, body, data, xhr) {
   bodyParams.body = newBody;
 }
 
-function removeWarning(str) {
-  return str.replace(/just-sorry-warning/gi, '');
-}
-
-var bodyIncludesKeywords = function() {
-  return true;
-};
-
 var main = function() {
+  'use strict';
   gmail = new Gmail();
   console.log('Hello,', gmail.get.user_email());
   gmail.observe.on('compose', init);
