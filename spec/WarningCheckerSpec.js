@@ -4,26 +4,26 @@ describe('WarningChecker', function() {
   describe('.addWarning', function() {
     it('handles an empty string', function() {
       var content = '';
-      var result = checker.addWarning(content, 'just', 'just-warning');
+      var result = checker.addWarning(content, 'just', 'warning');
       expect(result).toEqual(content);
     });
 
     it('adds a warning around just', function() {
       var content = 'test just test';
-      var result = checker.addWarning(content, 'just', 'just-warning');
-      expect(result).toMatch(/<span class="just-warning">just<\/span>/);
+      var result = checker.addWarning(content, 'just', 'warning');
+      expect(result).toMatch(/<span class="warning">just<\/span>/);
     });
 
     it('adds a warning around sorry', function() {
       var content = 'test just test sorry test';
-      var result = checker.addWarning(content, 'sorry', 'sorry-warning');
-      expect(result).toMatch(/<span class="sorry-warning">sorry<\/span>/);
+      var result = checker.addWarning(content, 'sorry', 'warning');
+      expect(result).toMatch(/<span class="warning">sorry<\/span>/);
     });
 
     it('handles multiple instances of a keyword', function() {
       var content = 'sorry sorry';
-      var result = checker.addWarning(content, 'sorry', 'sorry-warning');
-      expect(result).toEqual('<span class="sorry-warning">sorry<\/span> <span class="sorry-warning">sorry<\/span>');
+      var result = checker.addWarning(content, 'sorry', 'warning');
+      expect(result).toEqual('<span class="warning">sorry<\/span> <span class="warning">sorry<\/span>');
     });
 
     it('does not wrap a keyword that has already been wrapped', function() {
@@ -34,14 +34,14 @@ describe('WarningChecker', function() {
 
     it('matches case insensitive', function() {
       var content = 'jUsT';
-      var result = checker.addWarning(content, 'just', 'just-warning');
-      expect(result).toMatch(/<span class="just-warning">jUsT<\/span>/);
+      var result = checker.addWarning(content, 'just', 'warning');
+      expect(result).toMatch(/<span class="warning">jUsT<\/span>/);
     });
 
     it('catches keywords with punctuation', function() {
       var content = 'just. test';
-      var result = checker.addWarning(content, 'just', 'just-warning');
-      expect(result).toEqual('<span class="just-warning">just<\/span>. test');
+      var result = checker.addWarning(content, 'just', 'warning');
+      expect(result).toEqual('<span class="warning">just<\/span>. test');
     });
 
     it('matches phrases', function() {
@@ -52,8 +52,14 @@ describe('WarningChecker', function() {
 
     it('only matches the whole word', function() {
       var content = 'my justification';
-      var result = checker.addWarning(content, 'just', 'just-warning');
+      var result = checker.addWarning(content, 'just', 'warning');
       expect(result).toEqual(content);
+    });
+
+    it('does not allow the warningClass to contain the keyword', function() {
+      expect(function() {
+        checker.addWarning('just sorry', 'just', 'just-warning');
+      }).toThrowError(/warningClass cannot contain the keyword/);
     });
   });
 });
