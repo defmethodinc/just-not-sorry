@@ -1,0 +1,19 @@
+{
+  "manifest_version": 2,
+  "name": "Just Not Sorry",
+  "version": "0.1",
+  "description": "Gmail Plug-in that warns you when you write emails using words which undermine your message",
+  "content_scripts": [
+    {
+      "matches": ["https://mail.google.com/*"],
+      "css": ["just-not-sorry.css"],
+      "js": ["content.js"]
+    }
+  ],
+  "web_accessible_resources": [
+    "jquery-2.1.4.min.js",
+    "findAndReplaceDOMText.js",
+    "gmail-0.4.js",
+    "just-not-sorry.js"
+  ]
+}
