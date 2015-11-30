@@ -7,13 +7,13 @@
     {
       "matches": ["https://mail.google.com/*"],
       "css": ["just-not-sorry.css"],
-      "js": ["content.js"]
+      "js": ["src/content.js"]
     }
   ],
   "web_accessible_resources": [
-    "jquery-2.1.4.min.js",
-    "findAndReplaceDOMText.js",
-    "gmail-0.4.js",
-    "just-not-sorry.js"
+    "lib/jquery-2.1.4.min.js",
+    "lib/findAndReplaceDOMText.js",
+    "lib/gmail-0.4.js",
+    "src/just-not-sorry.js"
   ]
 }
