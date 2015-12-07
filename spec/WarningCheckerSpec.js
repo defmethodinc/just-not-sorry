@@ -73,14 +73,7 @@ describe('WarningChecker', function() {
       expect(result).toEqual(content);
     });
 
-    it('does NOT consider non-breaking spaces to be word breaks so Gmail can do its special handling', function() {
-      var content = 'I just&nbsp;want to go';
-      var $fixture = setFixtures(content);
-      var result = checker.addWarning($fixture, 'just', 'warning');
-      expect(result).toEqual('I just&nbsp;want to go');
-    });
-
-    it('does NOT perform replacement when target word is before a <br>', function() {
+    it('does NOT perform replacement when target word is before a <br> otherwise Gmail will include words after the keyword in the span', function() {
       var content = 'I just<br>';
       var $fixture = setFixtures(content);
       var result = checker.addWarning($fixture, 'just', 'warning');

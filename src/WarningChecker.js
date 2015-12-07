@@ -14,7 +14,7 @@ WarningChecker.prototype.addWarning = function addWarning(
   var wrapper = document.createElement('span');
   wrapper.className = warningClass;
 
-  var pattern = new RegExp('\\b(' + keyword + ')(?!(\u00a0|$))\\b', 'ig');
+  var pattern = new RegExp('\\b(' + keyword + ')(?!($))\\b', 'ig');
   findAndReplaceDOMText($content.get(0), {
     preset: 'prose',
     find: pattern,
