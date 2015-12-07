@@ -15,5 +15,5 @@ t.src = chrome.extension.getURL('src/WarningChecker.js');
 (document.head || document.documentElement).appendChild(t);
 
 var s = document.createElement('script');
-s.src = chrome.extension.getURL('src/just-not-sorry.js');
+s.src = chrome.extension.getURL('src/JustNotSorry.js');
 (document.head || document.documentElement).appendChild(s);

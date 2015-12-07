@@ -10,7 +10,7 @@
     {
       "matches": ["https://mail.google.com/*"],
       "css": ["just-not-sorry.css"],
-      "js": ["src/content.js"]
+      "js": ["src/Content.js"]
     }
   ],
   "web_accessible_resources": [
@@ -18,6 +18,6 @@
     "lib/findAndReplaceDOMText.js",
     "lib/gmail-0.4.js",
     "src/WarningChecker.js",
-    "src/just-not-sorry.js"
+    "src/JustNotSorry.js"
   ]
 }
