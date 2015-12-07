@@ -9,7 +9,7 @@ function refresh(f) {
   }
 }
 
-function init(compose, type) {
+function checkForWarnings(compose, type) {
   'use strict';
   console.log('api.dom.compose object:', compose, 'type is:', type);
 
@@ -29,7 +29,7 @@ function removeWarning(str) {
   return str.replace(/jns-warning/gi, '');
 }
 
-function cleanup(url, body, data, xhr) {
+function cleanupWarnings(url, body, data, xhr) {
   'use strict';
   var bodyParams = xhr.xhrParams.body_params;
 
@@ -57,8 +57,8 @@ var main = function() {
   'use strict';
   gmail = new Gmail();
   console.log('Hello,', gmail.get.user_email());
-  gmail.observe.on('compose', init);
-  gmail.observe.before('send_message', cleanup);
+  gmail.observe.on('compose', checkForWarnings);
+  gmail.observe.before('send_message', cleanupWarnings);
 };
 
 refresh(main);
