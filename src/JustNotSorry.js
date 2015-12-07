@@ -1,4 +1,5 @@
 var gmail;
+var warningChecker;
 
 function refresh(f) {
   'use strict';
@@ -13,10 +14,9 @@ function checkForWarnings(compose, type) {
   'use strict';
   console.log('api.dom.compose object:', compose, 'type is:', type);
 
-  var checker = new WarningChecker();
   var observer = new MutationObserver(function() {
     var body = compose.dom('body');
-    checker.addWarning(body, 'sorry', 'jns-warning');
+    warningChecker.addWarning(body, 'sorry', 'jns-warning');
   });
 
   var target = compose.$el.get(0);
@@ -57,6 +57,7 @@ var main = function() {
   'use strict';
   gmail = new Gmail();
   console.log('Hello,', gmail.get.user_email());
+  warningChecker = new WarningChecker();
   gmail.observe.on('compose', checkForWarnings);
   gmail.observe.before('send_message', cleanupWarnings);
 };
