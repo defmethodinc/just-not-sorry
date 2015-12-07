@@ -1,5 +1,5 @@
 describe('WarningChecker', function() {
-  var checker = new WarningChecker();
+  var checker = new WarningChecker({});
 
   describe('.addWarning', function() {
     it('handles an empty string', function() {
@@ -115,6 +115,45 @@ describe('WarningChecker', function() {
       var $fixture = setFixtures(content);
       var result = checker.removeWarning($fixture, 'warning');
       expect(result).toEqual('I am <span style="background-color: blue">sorry</span>!');
+    });
+  });
+
+  describe('multiple warnings', function() {
+    var checker = new WarningChecker({
+      just: 'warning1',
+      'so sorry': 'warning2',
+    });
+
+    describe('.addWarnings', function() {
+      it('does nothing when given an empty string', function() {
+        var content = '';
+        var $fixture = setFixtures(content);
+        var result = checker.addWarnings($fixture);
+        expect(result).toEqual(content);
+      });
+
+      it('adds warnings to all keywords', function() {
+        var content = 'I am just so sorry sorry. Yes, just.';
+        var $fixture = setFixtures(content);
+        var result = checker.addWarnings($fixture);
+        expect(result).toEqual('I am <span class="warning1">just<\/span> <span class="warning2">so sorry<\/span> sorry. Yes, <span class="warning1">just<\/span>.');
+      });
+    });
+
+    describe('.removeWarnings', function() {
+      it('does nothing when given an empty string', function() {
+        var content = '';
+        var $fixture = setFixtures(content);
+        var result = checker.removeWarnings($fixture);
+        expect(result).toEqual(content);
+      });
+
+      it('removes all warningClasses', function() {
+        var content = 'I am <span class="warning1">just<\/span> <span class="warning2">so sorry<\/span> sorry. Yes, <span class="warning1">just<\/span>.';
+        var $fixture = setFixtures(content);
+        var result = checker.removeWarnings($fixture);
+        expect(result).toEqual('I am just so sorry sorry. Yes, just.');
+      });
     });
   });
 });

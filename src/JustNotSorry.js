@@ -52,7 +52,7 @@ var main = function() {
   'use strict';
   gmail = new Gmail();
   console.log('Hello,', gmail.get.user_email());
-  warningChecker = new WarningChecker();
+  warningChecker = new WarningChecker({});
   gmail.observe.on('compose', checkForWarnings);
   gmail.observe.before('send_message', cleanupWarnings);
 };

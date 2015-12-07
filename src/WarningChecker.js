@@ -1,5 +1,9 @@
-function WarningChecker() {
+function WarningChecker(warningMap) {
+  if (!warningMap) {
+    throw new Error('a warningMap of keywords to warningClasses must be provided');
+  }
 
+  this.warningMap = warningMap;
 }
 
 WarningChecker.prototype.addWarning = function addWarning($content, keyword, warningClass) {
@@ -23,11 +27,31 @@ WarningChecker.prototype.addWarning = function addWarning($content, keyword, war
   return $content.html();
 };
 
+WarningChecker.prototype.addWarnings = function addWarnings($content) {
+  'use strict';
+  var _this = this;
+  $.each(_this.warningMap, function(keyword, warningClass) {
+    _this.addWarning($content, keyword, warningClass);
+  });
+
+  return $content.html();
+};
+
 WarningChecker.prototype.removeWarning = function removeWarning($content, warningClass) {
   'use strict';
   var $elementsToRemove = $content.find('span.' + warningClass);
   $elementsToRemove.replaceWith(function() {
     return $(this).contents();
+  });
+
+  return $content.html();
+};
+
+WarningChecker.prototype.removeWarnings = function removeWarnings($content) {
+  'use strict';
+  var _this = this;
+  $.each(_this.warningMap, function(keyword, warningClass) {
+    _this.removeWarning($content, warningClass);
   });
 
   return $content.html();
