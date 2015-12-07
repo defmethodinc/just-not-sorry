@@ -1,9 +1,7 @@
-function WarningChecker(warnings) {
-  if (!warnings) {
-    throw new Error('an array of warning information must be provided');
-  }
-
-  this.warnings = warnings;
+function WarningChecker(options) {
+  options || (options = {});
+  this.warnings = options.warnings || [];
+  this.warningClass = options.warningClass || 'jns-warning';
 }
 
 WarningChecker.prototype.addWarning = function addWarning($content, keyword, warningClass, message) {
@@ -34,7 +32,7 @@ WarningChecker.prototype.addWarnings = function addWarnings($content) {
   'use strict';
   var _this = this;
   $.each(_this.warnings, function(index, warning) {
-    _this.addWarning($content, warning.keyword, warning.warningClass, warning.message);
+    _this.addWarning($content, warning.keyword, _this.warningClass, warning.message);
   });
 
   return $content.html();
@@ -52,10 +50,7 @@ WarningChecker.prototype.removeWarning = function removeWarning($content, warnin
 
 WarningChecker.prototype.removeWarnings = function removeWarnings($content) {
   'use strict';
-  var _this = this;
-  $.each(_this.warnings, function(index, warning) {
-    _this.removeWarning($content, warning.warningClass);
-  });
+  this.removeWarning($content, this.warningClass);
 
   return $content.html();
 };

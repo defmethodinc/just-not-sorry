@@ -119,10 +119,15 @@ describe('WarningChecker', function() {
   });
 
   describe('multiple warnings', function() {
-    var checker = new WarningChecker([
-      { keyword: 'just', warningClass: 'warning1', message: 'test'},
-      { keyword: 'so sorry', warningClass: 'warning2', message: 'test 2'},
-    ]);
+    var checker = new WarningChecker(
+      {
+        warningClass: 'warning1',
+        warnings: [
+          { keyword: 'just', message: 'test'},
+          { keyword: 'so sorry', message: 'test 2'},
+        ],
+      }
+    );
 
     describe('.addWarnings', function() {
       it('does nothing when given an empty string', function() {
@@ -137,7 +142,7 @@ describe('WarningChecker', function() {
         var $fixture = setFixtures(content);
         var result = checker.addWarnings($fixture);
         var expectedResult = 'I am <span class="warning1" title="test">' +
-          'just<\/span> <span class="warning2" title="test 2">so sorry' +
+          'just<\/span> <span class="warning1" title="test 2">so sorry' +
           '<\/span> sorry. Yes, <span class="warning1" title="test">just' +
           '<\/span>.';
         expect(result).toEqual(expectedResult);
@@ -153,7 +158,7 @@ describe('WarningChecker', function() {
       });
 
       it('removes all warningClasses', function() {
-        var content = 'I am <span class="warning1">just<\/span> <span class="warning2">so sorry<\/span> sorry. Yes, <span class="warning1">just<\/span>.';
+        var content = 'I am <span class="warning1">just<\/span> <span class="warning1">so sorry<\/span> sorry. Yes, <span class="warning1">just<\/span>.';
         var $fixture = setFixtures(content);
         var result = checker.removeWarnings($fixture);
         expect(result).toEqual('I am just so sorry sorry. Yes, just.');
