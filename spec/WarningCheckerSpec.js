@@ -87,4 +87,34 @@ describe('WarningChecker', function() {
       }).toThrowError(/warningClass cannot contain the keyword/);
     });
   });
+
+  describe('.removeWarning', function() {
+    it('does nothing when given an empty string', function() {
+      var content = '';
+      var $fixture = setFixtures(content);
+      var result = checker.removeWarning($fixture, 'warning');
+      expect(result).toEqual(content);
+    });
+
+    it('removes the warning class', function() {
+      var content = '<span class="warning">just</span>';
+      var $fixture = setFixtures(content);
+      var result = checker.removeWarning($fixture, 'warning');
+      expect(result).toEqual('just');
+    });
+
+    it('removes multiple warning classes', function() {
+      var content = 'I am <span class="warning">just</span> so <span class="warning">sorry</span>';
+      var $fixture = setFixtures(content);
+      var result = checker.removeWarning($fixture, 'warning');
+      expect(result).toEqual('I am just so sorry');
+    });
+
+    it('handles nested spans', function() {
+      var content = 'I am <span style="background-color: blue"><span class="warning">sorry</span></span>!';
+      var $fixture = setFixtures(content);
+      var result = checker.removeWarning($fixture, 'warning');
+      expect(result).toEqual('I am <span style="background-color: blue">sorry</span>!');
+    });
+  });
 });

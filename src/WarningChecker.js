@@ -2,10 +2,7 @@ function WarningChecker() {
 
 }
 
-WarningChecker.prototype.addWarning = function addWarning(
-  $content,
-  keyword,
-  warningClass) {
+WarningChecker.prototype.addWarning = function addWarning($content, keyword, warningClass) {
   'use strict';
   if (new RegExp(keyword).test(warningClass)) {
     throw new Error('warningClass cannot contain the keyword because the RegExp will be too complex');
@@ -23,5 +20,15 @@ WarningChecker.prototype.addWarning = function addWarning(
       return !el.matches('span.' + warningClass);
     },
   });
+  return $content.html();
+};
+
+WarningChecker.prototype.removeWarning = function removeWarning($content, warningClass) {
+  'use strict';
+  var $elementsToRemove = $content.find('span.' + warningClass);
+  $elementsToRemove.replaceWith(function() {
+    return $(this).contents();
+  });
+
   return $content.html();
 };

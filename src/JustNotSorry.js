@@ -24,11 +24,6 @@ function checkForWarnings(compose, type) {
   observer.observe(target, config);
 }
 
-function removeWarning(str) {
-  'use strict';
-  return str.replace(/jns-warning/gi, '');
-}
-
 function cleanupWarnings(url, body, data, xhr) {
   'use strict';
   var bodyParams = xhr.xhrParams.body_params;
@@ -36,7 +31,7 @@ function cleanupWarnings(url, body, data, xhr) {
   var oldCmml = xhr.xhrParams.url.cmml;
 
   var existingBody = bodyParams.body;
-  var newBody = removeWarning(existingBody);
+  var newBody = warningChecker.removeWarning($(existingBody), 'jns-warning');
 
   if (newBody.length > oldCmml) {
     xhr.xhrParams.url.cmml = newBody.length;
