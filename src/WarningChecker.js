@@ -3,7 +3,7 @@ function WarningChecker() {
 }
 
 WarningChecker.prototype.addWarning = function addWarning(
-  content,
+  $content,
   keyword,
   warningClass) {
   'use strict';
@@ -11,13 +11,17 @@ WarningChecker.prototype.addWarning = function addWarning(
     throw new Error('warningClass cannot contain the keyword because the RegExp will be too complex');
   }
 
-  var warningStart = '<span class="' + warningClass + '">';
-  var pattern = new RegExp('(' + warningStart + ')?\\b(' + keyword + ')\\b(</span>)?', 'ig');
-  return content.replace(pattern, function(match) {
-    if (new RegExp(warningStart).test(match)) {
-      return match;
-    } else {
-      return warningStart + match + '<\/span>';
-    }
+  var wrapper = document.createElement('span');
+  wrapper.className = warningClass;
+
+  var pattern = new RegExp('\\b(' + keyword + ')(?!(\u00a0|$))\\b', 'ig');
+  findAndReplaceDOMText($content.get(0), {
+    preset: 'prose',
+    find: pattern,
+    wrap: wrapper,
+    filterElements: function(el) {
+      return !el.matches('span.' + warningClass);
+    },
   });
+  return $content.html();
 };
