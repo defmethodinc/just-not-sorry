@@ -3,6 +3,9 @@
   "name": "Just Not Sorry",
   "version": "0.1",
   "description": "Gmail Plug-in that warns you when you write emails using words which undermine your message",
+  "icons": { "16": "img/JustNotSorry-16.png",
+             "48": "img/JustNotSorry-48.png",
+            "128": "img/JustNotSorry-128.png" },
   "content_scripts": [
     {
       "matches": ["https://mail.google.com/*"],
