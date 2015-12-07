@@ -16,7 +16,7 @@ function checkForWarnings(compose, type) {
 
   var observer = new MutationObserver(function() {
     var body = compose.dom('body');
-    warningChecker.addWarning(body, 'sorry', 'jns-warning');
+    warningChecker.addWarnings(body);
   });
 
   var target = compose.$el.get(0);
@@ -31,7 +31,7 @@ function cleanupWarnings(url, body, data, xhr) {
   var oldCmml = xhr.xhrParams.url.cmml;
 
   var existingBody = bodyParams.body;
-  var newBody = warningChecker.removeWarning($(existingBody), 'jns-warning');
+  var newBody = warningChecker.removeWarnings($(existingBody));
 
   if (newBody.length > oldCmml) {
     xhr.xhrParams.url.cmml = newBody.length;
@@ -52,7 +52,12 @@ var main = function() {
   'use strict';
   gmail = new Gmail();
   console.log('Hello,', gmail.get.user_email());
-  warningChecker = new WarningChecker({});
+  warningChecker = new WarningChecker({
+    just: 'jns-warning',
+    actually: 'jns-warning',
+    sorry: 'jns-warning',
+    apologize: 'jns-warning',
+  });
   gmail.observe.on('compose', checkForWarnings);
   gmail.observe.before('send_message', cleanupWarnings);
 };
