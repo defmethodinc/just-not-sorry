@@ -10,6 +10,10 @@ var g = document.createElement('script');
 g.src = chrome.extension.getURL('lib/gmail-0.4.js');
 (document.head || document.documentElement).appendChild(g);
 
+var t = document.createElement('script');
+t.src = chrome.extension.getURL('src/WarningChecker.js');
+(document.head || document.documentElement).appendChild(t);
+
 var s = document.createElement('script');
 s.src = chrome.extension.getURL('src/just-not-sorry.js');
 (document.head || document.documentElement).appendChild(s);

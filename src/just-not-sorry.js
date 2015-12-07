@@ -12,29 +12,21 @@ function refresh(f) {
 function init(compose, type) {
   'use strict';
   console.log('api.dom.compose object:', compose, 'type is:', type);
-  var wrapper = document.createElement('span');
-  wrapper.className = 'just-sorry-warning';
 
+  var checker = new WarningChecker();
   var observer = new MutationObserver(function() {
-    var body = compose.dom('body').get(0);
-    findAndReplaceDOMText(body, {
-      find: / just /gi,
-      wrap: wrapper,
-      filterElements: function(el) {
-        return !el.matches('span');
-      },
-    });
+    var body = compose.dom('body');
+    checker.addWarning(body, 'sorry', 'jns-warning');
   });
 
-  var config = {characterData: true, subtree: true};
-
   var target = compose.$el.get(0);
+  var config = {characterData: true, subtree: true};
   observer.observe(target, config);
 }
 
 function removeWarning(str) {
   'use strict';
-  return str.replace(/just-sorry-warning/gi, '');
+  return str.replace(/jns-warning/gi, '');
 }
 
 function cleanup(url, body, data, xhr) {
