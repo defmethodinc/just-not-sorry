@@ -9,7 +9,7 @@ describe('WarningChecker', function() {
       expect(result).toEqual(content);
     });
 
-    it('adds a warning around just', function() {
+    it('adds a warning around a keyword', function() {
       var content = 'test just test';
       var $fixture = setFixtures(content);
       var result = checker.addWarning($fixture, 'just', 'warning');
@@ -17,11 +17,11 @@ describe('WarningChecker', function() {
       expect(result).toMatch(/<span class="warning">just<\/span>/);
     });
 
-    it('adds a warning around sorry', function() {
+    it('adds a title element to provide a message in a tooltip', function() {
       var content = 'test just test sorry test';
       var $fixture = setFixtures(content);
-      var result = checker.addWarning($fixture, 'sorry', 'warning');
-      expect(result).toMatch(/<span class="warning">sorry<\/span>/);
+      var result = checker.addWarning($fixture, 'sorry', 'warning', 'a message');
+      expect(result).toMatch(/<span class="warning" title="a message">sorry<\/span>/);
     });
 
     it('handles multiple instances of a keyword', function() {
@@ -119,10 +119,10 @@ describe('WarningChecker', function() {
   });
 
   describe('multiple warnings', function() {
-    var checker = new WarningChecker({
-      just: 'warning1',
-      'so sorry': 'warning2',
-    });
+    var checker = new WarningChecker([
+      { keyword: 'just', warningClass: 'warning1', message: 'test'},
+      { keyword: 'so sorry', warningClass: 'warning2', message: 'test 2'},
+    ]);
 
     describe('.addWarnings', function() {
       it('does nothing when given an empty string', function() {
@@ -136,7 +136,11 @@ describe('WarningChecker', function() {
         var content = 'I am just so sorry sorry. Yes, just.';
         var $fixture = setFixtures(content);
         var result = checker.addWarnings($fixture);
-        expect(result).toEqual('I am <span class="warning1">just<\/span> <span class="warning2">so sorry<\/span> sorry. Yes, <span class="warning1">just<\/span>.');
+        var expectedResult = 'I am <span class="warning1" title="test">' +
+          'just<\/span> <span class="warning2" title="test 2">so sorry' +
+          '<\/span> sorry. Yes, <span class="warning1" title="test">just' +
+          '<\/span>.';
+        expect(result).toEqual(expectedResult);
       });
     });
 
