@@ -65,7 +65,7 @@ var main = function() {
       { keyword: 'I\'m no expert',
         message: '"I\'m no expert" undermines your idea and displays an overall lack of self-confidence. --Lydia Dishman', },
       { keyword: 'does that make sense',
-        message: '"does that make sense?" undermines your idea and displays an overall lack of self-confidence. --Lydia Dishman', },
+        message: '"does that make sense" comes across either as condescending (like your audience can\'t understand) or it implies you feel you’ve been incoherent. A better way to close is something like "I look forward to hearing your thoughts." You can leave it up to the other party to let you know if they are confused about something, rather than implying that you "didn\'t make sense." --Tara Sophia Mohr', },
     ],
   });
   gmail.observe.on('compose', checkForWarnings);
