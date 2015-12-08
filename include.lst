@@ -1,0 +1,6 @@
+src/*.js
+lib/*.js
+img/*.png
+just-not-sorry.css
+manifest.json
+README.md
