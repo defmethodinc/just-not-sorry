@@ -12,7 +12,6 @@ function refresh(f) {
 
 function checkForWarnings(compose, type) {
   'use strict';
-  console.log('api.dom.compose object:', compose, 'type is:', type);
 
   var observer = new MutationObserver(function() {
     var body = compose.dom('body');
@@ -51,7 +50,6 @@ function cleanupWarnings(url, body, data, xhr) {
 var main = function() {
   'use strict';
   gmail = new Gmail();
-  console.log('Hello,', gmail.get.user_email());
   warningChecker = new WarningChecker({
     warnings: [
       { keyword: 'just',
