@@ -21,7 +21,8 @@ Inspired by the writings of Tara Mohr and others, this Chrome Extension for Gmai
 Open 'SpecRunner.html' in your web browser to run the test suite.
 
 ### To Publish to Chrome Webstore
-Follow the steps in the [docs starting at step 5](https://developer.chrome.com/webstore/get_started_simple#step5).
+  * Run the `package.sh` shell script to generate a zip file
+  * Then follow the steps in the [docs starting at step 5](https://developer.chrome.com/webstore/get_started_simple#step5).
 
 ### Libraries Used
 For production:
