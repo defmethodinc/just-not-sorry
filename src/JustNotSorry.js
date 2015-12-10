@@ -3,7 +3,7 @@ var warningChecker;
 
 function refresh(f) {
   'use strict';
-  if ((/in/.test(document.readyState)) || (Gmail === undefined)) {
+  if ((/in/.test(document.readyState)) || (window.jQuery === undefined) || (window.Gmail === undefined)) {
     setTimeout('refresh(' + f + ')', 10);
   } else {
     f();
