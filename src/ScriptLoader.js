@@ -3,6 +3,7 @@ var scriptsToLoad = [
   'lib/findAndReplaceDOMText.js',
   'lib/gmail-0.4.js',
   'src/WarningChecker.js',
+  'src/Warnings.js',
   'src/JustNotSorry.js',
 ];
 scriptsToLoad.forEach(function(currScript) {
