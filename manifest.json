@@ -4,7 +4,7 @@
   "short_name": "JustNotSorry",
   "author": "Steve Brudz, Manish Kakwani, and Tami Reiss of Cyrus Innovation",
   "version": "0.1",
-  "description": "Gmail Plug-in that warns you when you write emails using words which undermine your message",
+  "description": "A Gmail Plug-in that warns you when you write emails using words which undermine your message",
   "icons": { "16": "img/JustNotSorry-16.png",
              "48": "img/JustNotSorry-48.png",
             "128": "img/JustNotSorry-128.png" },
@@ -12,7 +12,7 @@
     {
       "matches": ["https://mail.google.com/*"],
       "css": ["just-not-sorry.css"],
-      "js": ["src/Content.js"]
+      "js": ["src/ScriptLoader.js"]
     }
   ],
   "web_accessible_resources": [
