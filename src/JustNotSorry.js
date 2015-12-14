@@ -18,7 +18,10 @@ function checkForWarnings(compose, type) {
 
   var observer = new MutationObserver(function() {
     var body = compose.dom('body');
+    var caretPosition = body.caret('pos');
+    warningChecker.removeWarnings(body);
     warningChecker.addWarnings(body);
+    body.caret('pos', caretPosition);
   });
 
   var target = compose.$el.get(0);
