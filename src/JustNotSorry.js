@@ -3,7 +3,10 @@ var warningChecker;
 
 function refresh(f) {
   'use strict';
-  if ((/loading/.test(document.readyState)) || (window.Gmail === undefined)) {
+  if ((/loading/.test(document.readyState)) ||
+      (window.jQuery === undefined) ||
+      (window.Gmail === undefined) ||
+      (window.WARNINGS === undefined)) {
     setTimeout('refresh(' + f + ')', 10);
   } else {
     f();
