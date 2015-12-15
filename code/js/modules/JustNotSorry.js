@@ -1,17 +1,8 @@
-var gmail;
-var warningChecker;
-
-function refresh(f) {
-  'use strict';
-  if ((/loading/.test(document.readyState)) ||
-      (window.jQuery === undefined) ||
-      (window.Gmail === undefined) ||
-      (window.WARNINGS === undefined)) {
-    setTimeout('refresh(' + f + ')', 10);
-  } else {
-    f();
-  }
-}
+var $ = require('../libs/jquery-2.1.4');
+var caret = require('../libs/jquery.caret');
+var Gmail = require('../gmail-0.4');
+var WARNINGS = require('./Warnings');
+var WarningChecker = require('./WarningChecker');
 
 function checkForWarnings(compose, type) {
   'use strict';
@@ -53,12 +44,10 @@ function cleanupWarnings(url, body, data, xhr) {
   bodyParams.body = newBody;
 }
 
-var main = function() {
+module.exports.init = function() {
   'use strict';
-  gmail = new Gmail();
+  gmail = new Gmail($);
   warningChecker = new WarningChecker(WARNINGS);
   gmail.observe.on('compose', checkForWarnings);
   gmail.observe.before('send_message', cleanupWarnings);
 };
-
-refresh(main);

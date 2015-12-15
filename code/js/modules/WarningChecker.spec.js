@@ -1,3 +1,6 @@
+var assert = require('assert');
+var WarningChecker = require('./WarningChecker');
+
 describe('WarningChecker', function() {
   var checker = new WarningChecker({});
 

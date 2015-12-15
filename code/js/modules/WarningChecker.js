@@ -1,8 +1,11 @@
-function WarningChecker(options) {
+var $ = require('../libs/jquery-2.1.4');
+var findAndReplaceDOMText = require('../lib/findAndReplaceDOMText');
+
+module.exports.WarningChecker = function WarningChecker(options) {
   options || (options = {});
   this.warnings = options.warnings || [];
   this.warningClass = options.warningClass || 'jns-warning';
-}
+};
 
 WarningChecker.prototype.addWarning = function addWarning($content, keyword, warningClass, message) {
   'use strict';
