@@ -36,8 +36,10 @@ For production:
   * [gmail.js](https://github.com/KartikTalwar/gmail.js)
   * [findAndReplaceDOMText](https://github.com/padolsey/findAndReplaceDOMText)
   * [jQuery](https://jquery.com/)
-  * Based on [gmail-chrome-extension-boilerplate](https://github.com/KartikTalwar/gmail-chrome-extension-boilerplate)
+  * [Caret.js](https://github.com/ichord/Caret.js)
+  * Based on [gmail-chrome-extension-boilerplate](https://github.com/KartikTalwar/gmail-chrome-extension-boilerplate) and [chrome-extension-skeleton](https://github.com/salsita/chrome-extension-skeleton)
 
 For test:
-  * [jasmine.js](http://jasmine.github.io/)
-  * [jasmine-jquery.js](https://github.com/velesin/jasmine-jquery)
+  * [mocha.js](https://mochajs.org/)
+  * [js-fixtures](https://github.com/badunk/js-fixtures)
+  * [browserify-test](https://github.com/alekseykulikov/browserify-test)
