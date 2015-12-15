@@ -16,6 +16,10 @@
     "beforeEach": true,
     "describe": true,
     "afterEach": true,
-    "it": true
+    "it": true,
+    "expect": true,
+    "setFixtures": true,
+    "MutationObserver": true,
+    "document": true
   }
 }

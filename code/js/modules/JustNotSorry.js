@@ -1,10 +1,12 @@
-var $ = require('../libs/jquery-2.1.4');
-var caret = require('../libs/jquery.caret');
+var $ = require('../libs/jquery');
+require('../libs/jquery.caret');
 var Gmail = require('../gmail-0.4');
+var gmail = new Gmail($);
 var WARNINGS = require('./Warnings');
 var WarningChecker = require('./WarningChecker');
+var warningChecker = new WarningChecker(WARNINGS);
 
-function checkForWarnings(compose, type) {
+function checkForWarnings(compose) {
   'use strict';
 
   var observer = new MutationObserver(function() {
@@ -46,8 +48,6 @@ function cleanupWarnings(url, body, data, xhr) {
 
 module.exports.init = function() {
   'use strict';
-  gmail = new Gmail($);
-  warningChecker = new WarningChecker(WARNINGS);
   gmail.observe.on('compose', checkForWarnings);
   gmail.observe.before('send_message', cleanupWarnings);
 };

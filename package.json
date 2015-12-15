@@ -2,24 +2,33 @@
   "name": "JustNotSorry",
   "version": "0.2.0",
   "description": "A Gmail Plug-in that warns you when you write emails using words which undermine your message",
-  "dependencies": {},
+  "dependencies": {
+    "findandreplacedomtext": "^0.4.4"
+  },
   "devDependencies": {
+    "browserify": "~7.0.3",
+    "browserify-test": "^2.1.2",
+    "eventemitter2": "^0.4.14",
+    "expect.js": "^0.3.1",
     "grunt": "~0.4.5",
+    "grunt-browserify": "~3.2.1",
     "grunt-contrib-clean": "~0.6.0",
-    "grunt-mkdir": "~0.1.2",
     "grunt-contrib-copy": "~0.7.0",
     "grunt-contrib-jshint": "~0.10.0",
-    "grunt-mocha-test": "~0.12.4",
-    "browserify": "~7.0.3",
-    "grunt-browserify": "~3.2.1",
     "grunt-contrib-uglify": "~0.6.0",
-    "grunt-exec": "~0.4.6",
-    "eventemitter2": "^0.4.14",
     "grunt-contrib-watch": "~0.6.1",
+    "grunt-exec": "~0.4.6",
+    "grunt-mkdir": "~0.1.2",
+    "js-fixtures": "^1.5.3",
+    "mocha": "^2.3.4",
     "sinon": "~1.12.2"
   },
   "engines": {
     "node": ">= 0.10.0"
+  },
+  "scripts": {
+    "test": "browserify-test ./code/js/modules/*.spec.js",
+    "start": "browserify-test --watch ./code/js/modules/*.spec.js"
   },
   "license": "MIT",
   "repository": "https://github.com/cyrusinnovation/just-not-sorry",

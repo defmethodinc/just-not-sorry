@@ -1,4 +1,4 @@
-var WARNINGS = {
+module.exports.WARNINGS = {
   warnings: [
     { keyword: 'just',
       source:  'http://www.taramohr.com/8-ways-women-undermine-themselves-with-their-words/',
