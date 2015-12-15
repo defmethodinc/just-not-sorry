@@ -1,5 +1,5 @@
 {
-  "name": "Just Not Sorry -- the Gmail Plug-in",
+  "name": "JustNotSorry",
   "version": "0.2.0",
   "description": "A Gmail Plug-in that warns you when you write emails using words which undermine your message",
   "dependencies": {},
@@ -21,5 +21,7 @@
   "engines": {
     "node": ">= 0.10.0"
   },
+  "license": "MIT",
+  "repository": "https://github.com/cyrusinnovation/just-not-sorry",
   "export-symbol": "justNotSorry.exports"
 }
