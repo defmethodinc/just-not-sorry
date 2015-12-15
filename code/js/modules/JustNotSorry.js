@@ -1,6 +1,6 @@
 var $ = require('../libs/jquery');
 require('../libs/jquery.caret');
-var Gmail = require('../gmail-0.4');
+var Gmail = require('../libs/gmail-0.4');
 var gmail = new Gmail($);
 var WARNINGS = require('./Warnings');
 var WarningChecker = require('./WarningChecker');

@@ -30,11 +30,6 @@ module.exports = function(grunt) {
                    'code/**/*.json', '!code/js/libs/*'] }
     },
 
-    mochaTest: {
-      options: { colors: true, reporter: 'spec' },
-      files: ['code/**/*.spec.js']
-    },
-
     copy: {
       main: { files: [ {
         expand: true,
@@ -67,24 +62,19 @@ module.exports = function(grunt) {
     },
 
     exec: {
-      crx: {
-        cmd: [
-          './crxmake.sh build/unpacked-prod ./mykey.pem',
-          'mv -v ./unpacked-prod.crx build/' + pkg.name + '-' + pkg.version + '.crx'
-        ].join(' && ')
+      zip: {
+        cmd: './package.sh'
       }
+      // crx: {
+      //   cmd: [
+      //     './crxmake.sh build/unpacked-prod ./mykey.pem',
+      //     'mv -v ./unpacked-prod.crx build/' + pkg.name + '-' + pkg.version + '.crx'
+      //   ].join(' && ')
+      // }
     },
 
     uglify: {
       min: { files: fileMaps.uglify }
-    },
-
-    watch: {
-      js: {
-        files: ['package.json', 'lint-options.json', 'Gruntfile.js', 'code/**/*.js',
-                'code/**/*.json', '!code/js/libs/*'],
-        tasks: ['test']
-      }
     }
 
   });
@@ -92,7 +82,6 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-contrib-clean');
   grunt.loadNpmTasks('grunt-mkdir');
   grunt.loadNpmTasks('grunt-contrib-jshint');
-  grunt.loadNpmTasks('grunt-mocha-test');
   grunt.loadNpmTasks('grunt-contrib-copy');
   grunt.loadNpmTasks('grunt-browserify');
   grunt.loadNpmTasks('grunt-exec');
@@ -116,26 +105,11 @@ module.exports = function(grunt) {
     }
   );
 
-  grunt.registerTask(
-    'circleci', 'Store built extension as CircleCI arfitact',
-    function() {
-      if (process.env.CIRCLE_ARTIFACTS) { grunt.task.run('copy:artifact'); }
-      else { grunt.log.ok('Not on CircleCI, skipped'); }
-    }
-  );
-
-  //
-  // testing-related tasks
-  //
-
-  grunt.registerTask('test', ['jshint', 'mochaTest']);
-  grunt.registerTask('test-cont', ['test', 'watch']);
-
   //
   // DEFAULT
   //
 
-  grunt.registerTask('default', ['clean', 'test', 'mkdir:unpacked', 'copy:main', 'manifest',
-    'mkdir:js', 'browserify', 'copy:prod', 'uglify', 'exec', 'circleci']);
+  grunt.registerTask('default', ['clean', 'mkdir:unpacked', 'copy:main', 'manifest',
+    'mkdir:js', 'browserify', 'copy:prod', 'uglify', 'exec']);
 
 };

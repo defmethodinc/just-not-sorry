@@ -3,9 +3,9 @@
   "manifest_version": 2,
   "short_name": "JustNotSorry",
   "author": "Steve Brudz, Manish Kakwani, and Tami Reiss of Cyrus Innovation",
-  "icons": { "16": "img/JustNotSorry-16.png",
-             "48": "img/JustNotSorry-48.png",
-            "128": "img/JustNotSorry-128.png" },
+  "icons": { "16": "images/JustNotSorry-16.png",
+             "48": "images/JustNotSorry-48.png",
+            "128": "images/JustNotSorry-128.png" },
   "content_scripts": [
     {
       "matches": ["https://mail.google.com/*"],
