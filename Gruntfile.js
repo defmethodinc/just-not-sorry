@@ -17,7 +17,7 @@ module.exports = function(grunt) {
 
   grunt.initConfig({
 
-    clean: ['build/unpacked-dev', 'build/unpacked-prod', 'build/*.crx'],
+    clean: ['build/unpacked-dev', 'build/unpacked-prod', 'build/*.zip'],
 
     mkdir: {
       unpacked: { options: { create: ['build/unpacked-dev', 'build/unpacked-prod'] } },
