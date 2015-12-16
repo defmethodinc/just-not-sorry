@@ -3,7 +3,7 @@
   "name": "Just Not Sorry -- the Gmail Plug-in",
   "short_name": "JustNotSorry",
   "author": "Steve Brudz, Manish Kakwani, and Tami Reiss of Cyrus Innovation",
-  "version": "0.1.3",
+  "version": "0.2.0",
   "description": "A Gmail Plug-in that warns you when you write emails using words which undermine your message",
   "icons": { "16": "img/JustNotSorry-16.png",
              "48": "img/JustNotSorry-48.png",
@@ -15,6 +15,10 @@
       "js": ["lib/head.load.min.js", "src/ScriptLoader.js"]
     }
   ],
+  "options_ui": {
+    "page": "options/options.html",
+    "chrome_style": true
+  },
   "web_accessible_resources": [
     "lib/jquery-2.1.4.min.js",
     "lib/jquery.caret.min.js",
