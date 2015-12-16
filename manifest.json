@@ -18,10 +18,15 @@
   "web_accessible_resources": [
     "lib/jquery-2.1.4.min.js",
     "lib/jquery.caret.min.js",
+    "lib/google-analytics-bundle.js",
     "lib/findAndReplaceDOMText.js",
     "lib/gmail.js",
     "src/WarningChecker.js",
     "src/Warnings.js",
     "src/JustNotSorry.js"
+  ],
+  "permissions": [
+    "https://www.google-analytics.com/",
+    "storage"
   ]
 }
