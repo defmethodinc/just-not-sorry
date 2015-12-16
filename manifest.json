@@ -22,7 +22,10 @@
     "persistent": false
   },
   "page_action": {
-    "default_icon": "img/JustNotSorry-16.png",
+    "default_icon": {
+      "19": "img/JustNotSorry-19.png",
+      "38": "img/JustNotSorry-38.png"
+    },
     "default_title": "Just Not Sorry"
   },
   "options_ui": {
