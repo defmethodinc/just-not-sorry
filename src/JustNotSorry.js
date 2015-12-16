@@ -1,6 +1,3 @@
-var gmail;
-var warningChecker;
-
 function refresh(f) {
   'use strict';
   if ((/loading/.test(document.readyState)) ||
@@ -13,52 +10,52 @@ function refresh(f) {
   }
 }
 
-function checkForWarnings(compose, type) {
+var JustNotSorry = function() {
   'use strict';
+  var gmail;
+  var warningChecker;
 
-  var observer = new MutationObserver(function() {
-    var body = compose.dom('body');
-    var caretPosition = body.caret('pos');
-    warningChecker.removeWarnings(body);
-    warningChecker.addWarnings(body);
-    body.caret('pos', caretPosition);
-  });
+  function checkForWarnings(compose, type) {
+    var observer = new MutationObserver(function() {
+      var body = compose.dom('body');
+      var caretPosition = body.caret('pos');
+      warningChecker.removeWarnings(body);
+      warningChecker.addWarnings(body);
+      body.caret('pos', caretPosition);
+    });
 
-  var target = compose.$el.get(0);
-  var config = {characterData: true, subtree: true};
-  observer.observe(target, config);
-}
-
-function cleanupWarnings(url, body, data, xhr) {
-  'use strict';
-  var bodyParams = xhr.xhrParams.body_params;
-
-  var oldCmml = xhr.xhrParams.url.cmml;
-
-  var existingBody = bodyParams.body;
-  var newBody = warningChecker.removeWarnings($(existingBody));
-
-  if (newBody.length > oldCmml) {
-    xhr.xhrParams.url.cmml = newBody.length;
-  } else {
-    newBody += '<div>';
-    while (newBody.length < oldCmml) {
-      newBody += ' ';
-    }
-
-    newBody += '</div>';
-    xhr.xhrParams.url.cmml = newBody.length;
+    var target = compose.$el.get(0);
+    var config = {characterData: true, subtree: true};
+    observer.observe(target, config);
   }
 
-  bodyParams.body = newBody;
-}
+  function cleanupWarnings(url, body, data, xhr) {
+    var bodyParams = xhr.xhrParams.body_params;
 
-var main = function() {
-  'use strict';
+    var oldCmml = xhr.xhrParams.url.cmml;
+
+    var existingBody = bodyParams.body;
+    var newBody = warningChecker.removeWarnings($(existingBody));
+
+    if (newBody.length > oldCmml) {
+      xhr.xhrParams.url.cmml = newBody.length;
+    } else {
+      newBody += '<div>';
+      while (newBody.length < oldCmml) {
+        newBody += ' ';
+      }
+
+      newBody += '</div>';
+      xhr.xhrParams.url.cmml = newBody.length;
+    }
+
+    bodyParams.body = newBody;
+  }
+
   gmail = new Gmail();
   warningChecker = new WarningChecker(WARNINGS);
   gmail.observe.on('compose', checkForWarnings);
   gmail.observe.before('send_message', cleanupWarnings);
 };
 
-refresh(main);
+refresh(JustNotSorry);
