@@ -12,7 +12,7 @@
     {
       "matches": ["https://mail.google.com/*"],
       "css": ["just-not-sorry.css"],
-      "js": ["src/ScriptLoader.js"]
+      "js": ["lib/head.load.min.js", "src/ScriptLoader.js"]
     }
   ],
   "web_accessible_resources": [

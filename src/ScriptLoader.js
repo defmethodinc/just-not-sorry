@@ -1,14 +1,10 @@
 var scriptsToLoad = [
-  'lib/jquery-2.1.4.min.js',
-  'lib/jquery.caret.min.js',
-  'lib/findAndReplaceDOMText.js',
-  'lib/gmail-0.4.js',
-  'src/WarningChecker.js',
-  'src/Warnings.js',
-  'src/JustNotSorry.js',
+  chrome.extension.getURL('lib/jquery-2.1.4.min.js'),
+  chrome.extension.getURL('lib/jquery.caret.min.js'),
+  chrome.extension.getURL('lib/findAndReplaceDOMText.js'),
+  chrome.extension.getURL('lib/gmail-0.4.js'),
+  chrome.extension.getURL('src/WarningChecker.js'),
+  chrome.extension.getURL('src/Warnings.js'),
+  chrome.extension.getURL('src/JustNotSorry.js'),
 ];
-scriptsToLoad.forEach(function(currScript) {
-  var scriptTag = document.createElement('script');
-  scriptTag.src = chrome.extension.getURL(currScript);
-  (document.head || document.documentElement).appendChild(scriptTag);
-});
+head.load(scriptsToLoad);
