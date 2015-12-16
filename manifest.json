@@ -15,6 +15,16 @@
       "js": ["lib/head.load.min.js", "src/ScriptLoader.js"]
     }
   ],
+  "background": {
+    "scripts": [
+      "src/background.js"
+    ],
+    "persistent": false
+  },
+  "page_action": {
+    "default_icon": "img/JustNotSorry-16.png",
+    "default_title": "Just Not Sorry"
+  },
   "options_ui": {
     "page": "options/options.html",
     "chrome_style": true
@@ -31,6 +41,7 @@
   ],
   "permissions": [
     "https://www.google-analytics.com/",
-    "storage"
+    "storage",
+    "declarativeContent"
   ]
 }
