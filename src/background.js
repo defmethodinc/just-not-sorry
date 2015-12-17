@@ -1,7 +1,12 @@
+var gaService = analytics.getService('JustNotSorryTest');
+
 chrome.runtime.onInstalled.addListener(function() {
-    // Replace all rules ...
+  var tracker = gaService.getTracker('UA-3535278-4'); // prod
+  var timing = tracker.startTiming('Analytics Performance', 'Send Event');
+  tracker.sendAppView('JustNotSorryInstalled');
+  timing.send();
+
   chrome.declarativeContent.onPageChanged.removeRules(undefined, function() {
-    // With a new rule ...
     chrome.declarativeContent.onPageChanged.addRules([
       {
         conditions: [
@@ -9,7 +14,6 @@ chrome.runtime.onInstalled.addListener(function() {
             pageUrl: { urlContains: 'mail.google.com' },
           })
         ],
-        // Shows the extension's page action.
         actions: [ new chrome.declarativeContent.ShowPageAction() ]
       }
     ]);
@@ -18,10 +22,8 @@ chrome.runtime.onInstalled.addListener(function() {
 
 chrome.pageAction.onClicked.addListener(function() {
   if (chrome.runtime.openOptionsPage) {
-    // New way to open options pages, if supported (Chrome 42+).
     chrome.runtime.openOptionsPage();
-  } else {
-    // Reasonable fallback.
+  } else { // fallback to old way
     window.open(chrome.runtime.getURL('options.html'));
   }
 });
