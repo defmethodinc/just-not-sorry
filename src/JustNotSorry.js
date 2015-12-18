@@ -15,7 +15,28 @@ var JustNotSorry = function() {
   var gmail;
   var warningChecker;
 
-  function checkForWarnings(compose, type) {
+  function addWarningsOnFocusIn(compose) {
+    var $target = compose.$el;
+    $target.focusin(function(e) {
+      var body = compose.dom('body');
+      if (e.target === body.get(0)) {
+        warningChecker.addWarnings(body);
+      }
+    });
+  }
+
+  function removeWarningsOnFocusOut(compose) {
+    var $target = compose.$el;
+    $target.focusout(function(e) {
+      var body = compose.dom('body');
+      if (e.target === body.get(0)) {
+        warningChecker.removeWarnings(body);
+      }
+    });
+  }
+
+  function updateWarningsOnMutation(compose) {
+    var target = compose.$el.get(0);
     var observer = new MutationObserver(function() {
       var body = compose.dom('body');
       var caretPosition = body.caret('pos');
@@ -23,39 +44,18 @@ var JustNotSorry = function() {
       warningChecker.addWarnings(body);
       body.caret('pos', caretPosition);
     });
-
-    var target = compose.$el.get(0);
-    var config = {characterData: true, subtree: true};
-    observer.observe(target, config);
+    observer.observe(target, {characterData: true, subtree: true});
   }
 
-  function cleanupWarnings(url, body, data, xhr) {
-    var bodyParams = xhr.xhrParams.body_params;
-
-    var oldCmml = xhr.xhrParams.url.cmml;
-
-    var existingBody = bodyParams.body;
-    var newBody = warningChecker.removeWarnings($(existingBody));
-
-    if (newBody.length > oldCmml) {
-      xhr.xhrParams.url.cmml = newBody.length;
-    } else {
-      newBody += '<div>';
-      while (newBody.length < oldCmml) {
-        newBody += ' ';
-      }
-
-      newBody += '</div>';
-      xhr.xhrParams.url.cmml = newBody.length;
-    }
-
-    bodyParams.body = newBody;
+  function checkForWarnings(compose) {
+    addWarningsOnFocusIn(compose);
+    removeWarningsOnFocusOut(compose);
+    updateWarningsOnMutation(compose);
   }
 
   gmail = new Gmail();
   warningChecker = new WarningChecker(WARNINGS);
   gmail.observe.on('compose', checkForWarnings);
-  gmail.observe.before('send_message', cleanupWarnings);
 };
 
 refresh(JustNotSorry);
