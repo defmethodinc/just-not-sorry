@@ -82,8 +82,10 @@ We also agree to the individual redress principle, which requires that individua
 
 If there are any questions regarding this privacy policy you may contact us using the information below.
 
+```
 http://www.cyrusinnovation.com
 902 Broadway, 6th Floor
 New York, NY 10010
 USA
 info@cyrusinnovation.com
+```
