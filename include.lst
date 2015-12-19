@@ -1,6 +1,8 @@
 src/*.js
 lib/*.js
 img/*.png
+options/*.*
 just-not-sorry.css
 manifest.json
 README.md
+PRIVACY.md
