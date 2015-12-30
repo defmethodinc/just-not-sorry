@@ -2,13 +2,13 @@ var WARNINGS = {
   warnings: [
     { keyword: 'just',
       source:  'http://www.taramohr.com/8-ways-women-undermine-themselves-with-their-words/',
-      message: '"Just" demeans what you have to say. “Just” shrinks your power. ' +
-               'It’s time to say goodbye to the justs. --Tara Sophia Mohr', },
+      message: '"Just" demeans what you have to say. "Just" shrinks your power. ' +
+               'It\'s time to say goodbye to the justs. --Tara Sophia Mohr', },
     { keyword: 'actually',
       source:  'http://www.taramohr.com/8-ways-women-undermine-themselves-with-their-words/',
       message: '"Actually" communicates a sense of surprise that you have ' +
                'something to say. Of course you want to add something. Of ' +
-               'course you have questions. There’s nothing surprising about ' +
+               'course you have questions. There\'s nothing surprising about ' +
                'it.  --Tara Sophia Mohr', },
     { keyword: 'sorry',
       source:  'http://www.fastcompany.com/3032112/strong-female-lead/sorry-not-sorry-why-women-need-to-stop-apologizing-for-everything',
@@ -30,7 +30,7 @@ var WARNINGS = {
       source:  'http://goop.com/how-women-undermine-themselves-with-words/',
       message: '"does that make sense" comes across either as condescending ' +
                '(like your audience can\'t understand) or it implies you feel ' +
-               'you’ve been incoherent. A better way to close is something like ' +
+               'you\'ve been incoherent. A better way to close is something like ' +
                '"I look forward to hearing your thoughts." You can leave it up ' +
                'to the other party to let you know if they are confused about ' +
                'something, rather than implying that you "didn\'t make sense." ' +
