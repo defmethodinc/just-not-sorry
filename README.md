@@ -7,6 +7,7 @@ Inspired by the writings of Tara Mohr and others, this Chrome Extension for Gmai
   * http://www.fastcompany.com/3032112/strong-female-lead/sorry-not-sorry-why-women-need-to-stop-apologizing-for-everything
   * http://www.fastcompany.com/3049609/the-future-of-work/4-types-of-useless-phrases-you-need-to-eliminate-from-your-emails
   * http://jezebel.com/google-exec-women-stop-saying-just-so-much-you-sound-1715228159
+  * http://www.lifehack.org/articles/communication/7-things-not-to-say-and-7-things-to-start-saying.html
 
 ## Contributing
 
