@@ -37,9 +37,6 @@ var WARNINGS = {
                '--Tara Sophia Mohr', },
     { keyword: 'try',
       source:  'http://www.lifehack.org/articles/communication/7-things-not-to-say-and-7-things-to-start-saying.html',
-      message: 'When we say “I\'ll try”, what we\'re really saying is that ' +
-               'we\'re not ready to commit. As Yoda from Star Wars once said: '+
-               '“Do or do not. There is no try.” ' +
-               '--Zoe B', },
+      message: '"Do or do not. There is no try." --Yoda' },
   ],
 };
