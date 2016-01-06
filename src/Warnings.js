@@ -38,5 +38,7 @@ var WARNINGS = {
     { keyword: 'try|trying',
       source:  'http://www.lifehack.org/articles/communication/7-things-not-to-say-and-7-things-to-start-saying.html',
       message: '"Do or do not. There is no try." --Yoda' },
+      { keyword: 'In my opinion',
+      message: '"When you write something in an email, it's your opinion. No need to say 'in my opinion'." --Jay' },
   ],
 };
