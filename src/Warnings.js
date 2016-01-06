@@ -35,7 +35,7 @@ var WARNINGS = {
                'to the other party to let you know if they are confused about ' +
                'something, rather than implying that you "didn\'t make sense." ' +
                '--Tara Sophia Mohr', },
-    { keyword: 'try',
+    { keyword: 'try|trying',
       source:  'http://www.lifehack.org/articles/communication/7-things-not-to-say-and-7-things-to-start-saying.html',
       message: '"Do or do not. There is no try." --Yoda' },
   ],
