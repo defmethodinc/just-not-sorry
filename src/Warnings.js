@@ -38,5 +38,14 @@ var WARNINGS = {
     { keyword: 'try',
       source:  'http://www.lifehack.org/articles/communication/7-things-not-to-say-and-7-things-to-start-saying.html',
       message: '"Do or do not. There is no try." --Yoda' },
+    { keyword: 'I\'m just saying',
+      source:  'http://101books.net/2012/03/02/7-annoying-words-that-should-die-a-horrible-death/',
+      message: 'I think what you’re saying is that you said something. If ' +
+               'you\'re using it to mitigate something that may be offensive or ' +
+               'embarassing, then don\'t say it. Say something else. Otherwise, '
+               'say what you\'re saying without the “just saying.” We already ' +
+               'know you’re saying it… after all, you just said it!' +
+               '--Jon Acuff', },
+    },
   ],
 };
