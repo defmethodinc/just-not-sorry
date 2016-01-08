@@ -1,6 +1,8 @@
 # Just Not Sorry -- the Gmail Plug-in
 Inspired by the writings of Tara Mohr and others, this Chrome Extension for Gmail will warn you when you use phrases that might be undermining your message.
 
+The Chrome Extension can be found at https://chrome.google.com/webstore/detail/just-not-sorry-the-gmail/fmegmibednnlgojepmidhlhpjbppmlci?hl=en-US
+
 ## Citations
   * http://www.taramohr.com/8-ways-women-undermine-themselves-with-their-words/
   * http://goop.com/how-women-undermine-themselves-with-words/
