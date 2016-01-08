@@ -35,5 +35,20 @@ var WARNINGS = {
                'to the other party to let you know if they are confused about ' +
                'something, rather than implying that you "didn\'t make sense." ' +
                '--Tara Sophia Mohr', },
+    { keyword: 'I feel',
+      source:  'http://www.freelancewriting.com/articles/ten-words-to-avoid-when-writing.php',
+      message: '"If you write an opinion, the reader understands that you also ' +
+               'believe is right" ' +
+	           '--David Bowman', },
+    { keyword: 'a lot',
+      source:  'http://www.freelancewriting.com/articles/ten-words-to-avoid-when-writing.php',
+      message: '"Which unit is exactly a lot? 100 documents? 50 dollars?" ' +
+	           '--David Bowman', },
+    { keyword: 'is like',
+      source:  'http://www.freelancewriting.com/articles/ten-words-to-avoid-when-writing.php',
+      message: '"If this is like something, then it is NOT that thing. Giving ' +
+	           'accurate descriptions and using correct verbs will reduce your ' +
+	            'need to use "like," '+
+	           '--David Bowman', },
   ],
 };
