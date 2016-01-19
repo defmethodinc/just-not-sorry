@@ -14,7 +14,7 @@ var WARNINGS = {
       source:  'http://www.fastcompany.com/3032112/strong-female-lead/sorry-not-sorry-why-women-need-to-stop-apologizing-for-everything',
       message: 'Using "sorry" frequently undermines your gravitas and makes you ' +
                'appear unfit for leadership. --Sylvia Ann Hewlett', },
-    { keyword: 'apologize',
+    { keyword: 'apologize|apologies|forgive',
       source:  'http://www.fastcompany.com/3032112/strong-female-lead/sorry-not-sorry-why-women-need-to-stop-apologizing-for-everything',
       message: 'Apologizing unnecessarily puts you in a subservient position and ' +
                'makes people lose respect for you --Bonnie Marcus', },
