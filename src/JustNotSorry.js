@@ -15,42 +15,42 @@ var JustNotSorry = function() {
   var gmail;
   var warningChecker;
 
-  function addWarningsOnFocusIn(compose) {
+  function addWarningsOnFocusIn(compose, observer) {
     var $target = compose.$el;
     $target.focusin(function(e) {
       var body = compose.dom('body');
       if (e.target === body.get(0)) {
         warningChecker.addWarnings(body);
+        observer.observe(target, {characterData: true, subtree: true});
       }
     });
   }
 
-  function removeWarningsOnFocusOut(compose) {
+  function removeWarningsOnFocusOut(compose, observer) {
     var $target = compose.$el;
     $target.focusout(function(e) {
       var body = compose.dom('body');
       if (e.target === body.get(0)) {
+        observer.disconnect();
         warningChecker.removeWarnings(body);
       }
     });
   }
 
-  function updateWarningsOnMutation(compose) {
-    var target = compose.$el.get(0);
-    var observer = new MutationObserver(function() {
+  function createObserverForWarningsOnMutation() {
+    return new MutationObserver(function() {
       var body = compose.dom('body');
       var caretPosition = body.caret('pos');
       warningChecker.removeWarnings(body);
       warningChecker.addWarnings(body);
       body.caret('pos', caretPosition);
     });
-    observer.observe(target, {characterData: true, subtree: true});
   }
 
   function checkForWarnings(compose) {
-    addWarningsOnFocusIn(compose);
-    removeWarningsOnFocusOut(compose);
-    updateWarningsOnMutation(compose);
+    var observer = createObserverForWarningsOnMutation();
+    removeWarningsOnFocusOut(compose, observer);
+    updateWarningsOnMutation(compose, observer);
   }
 
   gmail = new Gmail();
