@@ -28,7 +28,7 @@ Use [JSCS](http://jscs.info/) with the AirBnB preset.
 
 ### Jasmine Tests
 Open 'SpecRunner.html' in your web browser to run the test suite.
-    
+
 ### To Publish to Chrome Webstore
   * Update the version number in `manifest.json`
   * Run the `package.sh` shell script to generate a zip file
@@ -38,6 +38,7 @@ Open 'SpecRunner.html' in your web browser to run the test suite.
 For production:
   * [gmail.js](https://github.com/KartikTalwar/gmail.js)
   * [findAndReplaceDOMText](https://github.com/padolsey/findAndReplaceDOMText)
+  * A custom fork of [Caret.js](https://github.com/sbrudz/Caret.js) that takes line breaks into account
   * [jQuery](https://jquery.com/)
   * Based on [gmail-chrome-extension-boilerplate](https://github.com/KartikTalwar/gmail-chrome-extension-boilerplate)
 
