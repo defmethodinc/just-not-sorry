@@ -38,5 +38,10 @@ var WARNINGS = {
     { keyword: 'try|trying',
       source:  'http://www.lifehack.org/articles/communication/7-things-not-to-say-and-7-things-to-start-saying.html',
       message: '"Do or do not. There is no try." --Yoda' },
+    { keyword: 'I believe',
+      source:  'https://hbr.org/2011/12/replace-meaningless-words-with',
+      message: 'Phrases containing “we believe,” “we think,” and “we feel” pervade ' +
+               'presentation narratives to such a degree that they spill over into ' +
+               'sentences where caution is unnecessary. --Jerry Weissman', },
   ],
 };
