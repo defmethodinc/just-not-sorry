@@ -38,5 +38,13 @@ var WARNINGS = {
     { keyword: 'try|trying',
       source:  'http://www.lifehack.org/articles/communication/7-things-not-to-say-and-7-things-to-start-saying.html',
       message: '"Do or do not. There is no try." --Yoda' },
+    { keyword: 'I should',
+      source:  'http://www.lifehack.org/articles/communication/7-things-not-to-say-and-7-things-to-start-saying.html',
+      message: 'The word "should" is inherently negative. "Should" implies a lose: lose ' +
+              'situation and it\'s just not conducive to positive outcomes in life. ' +
+              'It\'s a form of criticism, and it\'s best left out of your everyday language. ' +
+              'Instead of beating yourself up for what you should have done, ' +
+              'focus on what you have the power to change.' +
+              '-- Zoe B', },
   ],
 };
