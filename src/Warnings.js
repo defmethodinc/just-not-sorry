@@ -51,5 +51,11 @@ var WARNINGS = {
       message: 'If you write an opinion, the reader understands that you also ' +
                'believe it is right.' +
 	             '--David Bowman', },
+    { keyword: 'I believe',
+      source:  'https://hbr.org/2011/12/replace-meaningless-words-with',
+      message: 'Phrases containing “we believe,” “we think,” and “we feel” pervade ' +
+               'presentation narratives to such a degree that they spill over into ' +
+               'sentences where caution is unnecessary.' +
+               '--Jerry Weissman', },
   ],
 };
