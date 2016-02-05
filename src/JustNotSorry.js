@@ -48,15 +48,20 @@ var JustNotSorry = function() {
     var target = compose.$el.get(0);
     var observer = new MutationObserver(function() {
       var body = compose.dom('body');
-      if (body.text().includes('just')) {
+      var textToFind = "I'm sorry that I went home";
+      if (body.text().includes(textToFind)) {
         var range = document.createRange();
-        var index = body.text().indexOf('just');
+        var index = body.text().indexOf(textToFind);
         // debugger;
         var bodyNode = body.get(0);
         var child = bodyNode.firstChild;
         range.setStart(child, index);
-        range.setEnd(child, index+4);
-        drawBox(range.getBoundingClientRect(), bodyNode.parentNode);
+        range.setEnd(child, index+(textToFind.length));
+        var rects = range.getClientRects();
+        for (var i = 0; i != rects.length; i++) {
+	        var rect = rects[i];
+          drawBox(rect, bodyNode.parentNode);
+        }
       }
       // var caretPosition = body.caret('pos');
       // warningChecker.removeWarnings(body);
