@@ -48,4 +48,4 @@ For test:
 
 ### License
 
-Just Not Sory is Copyright © 2015 Cyrus Innovation, Inc. It is free software, and may be redistributed under the terms specified in the (MIT) LICENSE file.
+Just Not Sorry is Copyright © 2015 Cyrus Innovation, Inc. It is free software, and may be redistributed under the terms specified in the (MIT) LICENSE file.
