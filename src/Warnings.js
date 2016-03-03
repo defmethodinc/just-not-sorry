@@ -14,7 +14,7 @@ var WARNINGS = {
       source:  'http://www.fastcompany.com/3032112/strong-female-lead/sorry-not-sorry-why-women-need-to-stop-apologizing-for-everything',
       message: 'Using "sorry" frequently undermines your gravitas and makes you ' +
                'appear unfit for leadership. --Sylvia Ann Hewlett', },
-    { keyword: 'apologize',
+    { keyword: 'apologize|apologies|forgive',
       source:  'http://www.fastcompany.com/3032112/strong-female-lead/sorry-not-sorry-why-women-need-to-stop-apologizing-for-everything',
       message: 'Apologizing unnecessarily puts you in a subservient position and ' +
                'makes people lose respect for you --Bonnie Marcus', },
@@ -38,5 +38,24 @@ var WARNINGS = {
     { keyword: 'try|trying',
       source:  'http://www.lifehack.org/articles/communication/7-things-not-to-say-and-7-things-to-start-saying.html',
       message: '"Do or do not. There is no try." --Yoda' },
+    { keyword: 'I should',
+      source:  'http://www.lifehack.org/articles/communication/7-things-not-to-say-and-7-things-to-start-saying.html',
+      message: 'The word "should" is inherently negative. "Should" implies a lose: lose ' +
+               'situation and it\'s just not conducive to positive outcomes in life. ' +
+               'It\'s a form of criticism, and it\'s best left out of your everyday language. ' +
+               'Instead of beating yourself up for what you should have done, ' +
+               'focus on what you have the power to change.' +
+               '-- Zoe B', },
+    { keyword: 'I feel',
+      source:  'http://www.freelancewriting.com/articles/ten-words-to-avoid-when-writing.php',
+      message: 'If you write an opinion, the reader understands that you also ' +
+               'believe it is right.' +
+	             '--David Bowman', },
+    { keyword: 'I believe',
+      source:  'https://hbr.org/2011/12/replace-meaningless-words-with',
+      message: 'Phrases containing “we believe,” “we think,” and “we feel” pervade ' +
+               'presentation narratives to such a degree that they spill over into ' +
+               'sentences where caution is unnecessary.' +
+               '--Jerry Weissman', },
   ],
 };
