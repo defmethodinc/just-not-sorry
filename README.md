@@ -45,3 +45,7 @@ For production:
 For test:
   * [jasmine.js](http://jasmine.github.io/)
   * [jasmine-jquery.js](https://github.com/velesin/jasmine-jquery)
+
+### License
+
+Just Not Sory is Copyright © 2015 Cyrus Innovation, Inc. It is free software, and may be redistributed under the terms specified in the (MIT) LICENSE file.

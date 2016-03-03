@@ -1,3 +1,7 @@
+# LICENSE
+
+## The MIT License
+
 Copyright (c) 2015 Cyrus Innovation, Inc.
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
