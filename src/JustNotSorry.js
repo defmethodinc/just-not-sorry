@@ -19,8 +19,9 @@ var JustNotSorry = function() {
     var $target = compose.$el;
     $target.focusin(function(e) {
       var body = compose.dom('body');
+      var editor = body.parent();
       if (e.target === body.get(0)) {
-        warningChecker.addWarnings(body);
+        warningChecker.addWarnings(editor);
       }
     });
   }
@@ -29,8 +30,9 @@ var JustNotSorry = function() {
     var $target = compose.$el;
     $target.focusout(function(e) {
       var body = compose.dom('body');
+      var editor = body.parent();
       if (e.target === body.get(0)) {
-        warningChecker.removeWarnings(body);
+        warningChecker.removeWarnings(editor);
       }
     });
   }
@@ -39,10 +41,9 @@ var JustNotSorry = function() {
     var target = compose.$el.get(0);
     var observer = new MutationObserver(function() {
       var body = compose.dom('body');
-      var caretPosition = body.caret('pos');
-      warningChecker.removeWarnings(body);
-      warningChecker.addWarnings(body);
-      body.caret('pos', caretPosition);
+      var editor = body.parent();
+      warningChecker.removeWarnings(editor);
+      warningChecker.addWarnings(editor);
     });
     observer.observe(target, {characterData: true, subtree: true});
   }

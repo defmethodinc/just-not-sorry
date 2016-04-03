@@ -2,119 +2,70 @@ describe('WarningChecker', function() {
   var checker = new WarningChecker({});
 
   describe('.addWarning', function() {
-    it('handles an empty string', function() {
-      var content = '';
-      var $fixture = setFixtures(content);
-      var result = checker.addWarning($fixture, 'just', 'warning');
-      expect(result).toEqual(content);
-    });
-
-    it('adds a warning around a keyword', function() {
+    it('delegates to domRegexpMatch', function() {
+      var matcherSpy = spyOn(window, 'domRegexpMatch');
       var content = 'test just test';
       var $fixture = setFixtures(content);
-      var result = checker.addWarning($fixture, 'just', 'warning');
-      expect($fixture.find('span.warning')).toHaveText('just');
-      expect(result).toMatch(/<span class="warning">just<\/span>/);
+      checker.addWarning($fixture, 'just', 'warning message');
+      expect(matcherSpy).toHaveBeenCalled();
+    });
+
+    it('passes the message and warningClass to the highlight generator callback', function() {
+      var matcherSpy = spyOn(window, 'domRegexpMatch');
+      var generatorSpy = spyOn(HighlightGenerator, 'highlightMatches');
+      var content = 'test just test';
+      var $fixture = setFixtures(content);
+      checker.addWarning($fixture, 'just', 'warning message');
+      expect(generatorSpy).toHaveBeenCalledWith('warning message', 'jns-warning');
+    });
+
+    it('adds a warning for a single keyword', function() {
+      var content = 'test just test';
+      var $fixture = setFixtures(content);
+      checker.addWarning($fixture, 'just', 'warning message');
+      expect($fixture.find('div.jns-warning').length).toEqual(1);
+    });
+
+    it('does not add warnings for partial matches', function() {
+      var content = 'test justify test';
+      var $fixture = setFixtures(content);
+      checker.addWarning($fixture, 'just', 'warning message');
+      expect($fixture.find('div.jns-warning').length).toEqual(0);
+    });
+
+    it('adds multiple warnings when keyword is matched multiple times', function() {
+      var content = 'test just test just test';
+      var $fixture = setFixtures(content);
+      checker.addWarning($fixture, 'just', 'warning message');
+      expect($fixture.find('div.jns-warning').length).toEqual(2);
     });
 
     it('adds a title element to provide a message in a tooltip', function() {
       var content = 'test just test sorry test';
       var $fixture = setFixtures(content);
-      var result = checker.addWarning($fixture, 'sorry', 'warning', 'a message');
-      expect(result).toMatch(/<span class="warning" title="a message">sorry<\/span>/);
-    });
-
-    it('handles multiple instances of a keyword', function() {
-      var content = 'sorry sorry test';
-      var $fixture = setFixtures(content);
-      var result = checker.addWarning($fixture, 'sorry', 'warning');
-      expect(result).toEqual('<span class="warning">sorry<\/span> <span class="warning">sorry<\/span> test');
-    });
-
-    it('does not wrap a keyword that has already been wrapped', function() {
-      var content = '<span class="blah-warning">sorry<\/span> <span class="blah-warning">sorry<\/span>';
-      var $fixture = setFixtures(content);
-      var result = checker.addWarning($fixture, 'sorry', 'blah-warning');
-      expect(result).toEqual(content);
-    });
-
-    it('wraps a keyword that is within an un-related span', function() {
-      var content = 'Why so <span class="blue">sorry<\/span>?';
-      var $fixture = setFixtures(content);
-      var result = checker.addWarning($fixture, 'sorry', 'blah-warning');
-      expect(result).toEqual('Why so <span class="blue"><span class="blah-warning">sorry<\/span><\/span>?');
+      checker.addWarning($fixture, 'just', 'warning message');
+      expect($fixture.find('div.jns-warning')[0].title).toEqual('warning message');
     });
 
     it('matches case insensitive', function() {
       var content = 'jUsT kidding';
       var $fixture = setFixtures(content);
-      var result = checker.addWarning($fixture, 'just', 'warning');
-      expect(result).toMatch(/<span class="warning">jUsT<\/span>/);
+      checker.addWarning($fixture, 'just', 'warning message');
+      expect($fixture.find('div.jns-warning').length).toEqual(1);
     });
 
     it('catches keywords with punctuation', function() {
       var content = 'just. test';
       var $fixture = setFixtures(content);
-      var result = checker.addWarning($fixture, 'just', 'warning');
-      expect(result).toEqual('<span class="warning">just<\/span>. test');
+      checker.addWarning($fixture, 'just', 'warning message');
+      expect($fixture.find('div.jns-warning').length).toEqual(1);
     });
 
     it('matches phrases', function() {
       var content = 'my cat is so sorry because of you';
       var $fixture = setFixtures(content);
-      var result = checker.addWarning($fixture, 'so sorry', 'big-warning');
-      expect(result).toEqual('my cat is <span class="big-warning">so sorry<\/span> because of you');
-    });
-
-    it('only matches the whole word', function() {
-      var content = 'my justification';
-      var $fixture = setFixtures(content);
-      var result = checker.addWarning($fixture, 'just', 'warning');
-      expect(result).toEqual(content);
-    });
-
-    it('does NOT perform replacement when target word is before a <br> otherwise Gmail will include words after the keyword in the span', function() {
-      var content = 'I just<br>';
-      var $fixture = setFixtures(content);
-      var result = checker.addWarning($fixture, 'just', 'warning');
-      expect(result).toEqual('I just<br>');
-    });
-
-    it('does not allow the warningClass to contain the keyword', function() {
-      expect(function() {
-        var $fixture = setFixtures('just sorry');
-        checker.addWarning($fixture, 'just', 'just-warning');
-      }).toThrowError(/warningClass cannot contain the keyword/);
-    });
-  });
-
-  describe('.removeWarning', function() {
-    it('does nothing when given an empty string', function() {
-      var content = '';
-      var $fixture = setFixtures(content);
-      var result = checker.removeWarning($fixture, 'warning');
-      expect(result).toEqual(content);
-    });
-
-    it('removes the warning class', function() {
-      var content = '<span class="warning">just</span>';
-      var $fixture = setFixtures(content);
-      var result = checker.removeWarning($fixture, 'warning');
-      expect(result).toEqual('just');
-    });
-
-    it('removes multiple warning classes', function() {
-      var content = 'I am <span class="warning">just</span> so <span class="warning">sorry</span>';
-      var $fixture = setFixtures(content);
-      var result = checker.removeWarning($fixture, 'warning');
-      expect(result).toEqual('I am just so sorry');
-    });
-
-    it('handles nested spans', function() {
-      var content = 'I am <span style="background-color: blue"><span class="warning">sorry</span></span>!';
-      var $fixture = setFixtures(content);
-      var result = checker.removeWarning($fixture, 'warning');
-      expect(result).toEqual('I am <span style="background-color: blue">sorry</span>!');
+      checker.addWarning($fixture, 'so sorry', 'warning message');
+      expect($fixture.find('div.jns-warning').length).toEqual(1);
     });
   });
 
@@ -133,35 +84,29 @@ describe('WarningChecker', function() {
       it('does nothing when given an empty string', function() {
         var content = '';
         var $fixture = setFixtures(content);
-        var result = checker.addWarnings($fixture);
-        expect(result).toEqual(content);
+        checker.addWarnings($fixture);
+        expect($fixture.find('div.warning1').length).toEqual(0);
       });
 
       it('adds warnings to all keywords', function() {
-        var content = 'I am just so sorry sorry. Yes, just.';
+        var content = 'I am just so sorry. Yes, just.';
         var $fixture = setFixtures(content);
-        var result = checker.addWarnings($fixture);
-        var expectedResult = 'I am <span class="warning1" title="test">' +
-          'just<\/span> <span class="warning1" title="test 2">so sorry' +
-          '<\/span> sorry. Yes, <span class="warning1" title="test">just' +
-          '<\/span>.';
-        expect(result).toEqual(expectedResult);
+        checker.addWarnings($fixture);
+        expect($fixture.find('div.warning1').length).toEqual(3);
+        expect($fixture.find('div.warning1[title="test"]').length).toEqual(2);
+        expect($fixture.find('div.warning1[title="test 2"]').length).toEqual(1);
       });
     });
 
     describe('.removeWarnings', function() {
-      it('does nothing when given an empty string', function() {
-        var content = '';
+      it('removes all warnings', function() {
+        var content = 'I am so sorry';
         var $fixture = setFixtures(content);
-        var result = checker.removeWarnings($fixture);
-        expect(result).toEqual(content);
-      });
+        $fixture.append($('<div class="warning1"></div>'));
+        expect($fixture.find('div.warning1').length).toEqual(1);
 
-      it('removes all warningClasses', function() {
-        var content = 'I am <span class="warning1">just<\/span> <span class="warning1">so sorry<\/span> sorry. Yes, <span class="warning1">just<\/span>.';
-        var $fixture = setFixtures(content);
-        var result = checker.removeWarnings($fixture);
-        expect(result).toEqual('I am just so sorry sorry. Yes, just.');
+        checker.removeWarnings($fixture);
+        expect($fixture.find('div.warning1').length).toEqual(0);
       });
     });
   });

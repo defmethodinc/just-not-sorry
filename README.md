@@ -16,6 +16,8 @@ The Chrome Extension can be found at https://chrome.google.com/webstore/detail/j
 ### Requests to add or change warning phrases
 Please [create a GitHub issue](https://github.com/cyrusinnovation/just-not-sorry/issues/new) with your request.  If you're a developer, you're welcome to submit a pull request.
 
+**NOTE:** All warning phrases must include a link to an article that explains why the phrase could negatively impact someone's message.
+
 ### Development Setup
   * `git clone` the repo
   * Follow the [instructions on the Chrome docs](https://developer.chrome.com/extensions/getstarted#unpacked) to load the extension
@@ -37,8 +39,9 @@ Open 'SpecRunner.html' in your web browser to run the test suite.
 ### Libraries Used
 For production:
   * [gmail.js](https://github.com/KartikTalwar/gmail.js)
-  * [findAndReplaceDOMText](https://github.com/padolsey/findAndReplaceDOMText)
-  * A custom fork of [Caret.js](https://github.com/sbrudz/Caret.js) that takes line breaks into account
+  * [head.js](http://headjs.com/)
+  * [dom-regexp-match](https://github.com/webmodules/dom-regexp-match)
+  * [chrome-platform-analytics](https://github.com/GoogleChrome/chrome-platform-analytics)
   * [jQuery](https://jquery.com/)
   * Based on [gmail-chrome-extension-boilerplate](https://github.com/KartikTalwar/gmail-chrome-extension-boilerplate)
 
@@ -48,4 +51,4 @@ For test:
 
 ### License
 
-Just Not Sorry is Copyright © 2015 Cyrus Innovation, Inc. It is free software, and may be redistributed under the terms specified in the (MIT) LICENSE file.
+Just Not Sorry is Copyright © 2015-16 Cyrus Innovation, Inc. It is free software, and may be redistributed under the terms specified in the (MIT) LICENSE file.
