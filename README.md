@@ -31,10 +31,13 @@ Use [JSCS](http://jscs.info/) with the AirBnB preset.
 ### Jasmine Tests
 Open 'SpecRunner.html' in your web browser to run the test suite.
 
-### To Publish to Chrome Webstore
-  * Update the version number in `manifest.json`
-  * Run the `package.sh` shell script to generate a zip file
-  * Go to [Chrome Developer Dashboard](https://chrome.google.com/webstore/developer/dashboard) and edit the existing app. Upload the new zip file and then publish the changes (button is at the very bottom).
+### To Publish a New Version to Chrome Webstore
+  1. Make sure all the tests pass
+  1. Update the version number in `manifest.json` and commit the change to master.
+     Use [semantic versioning](http://semver.org/) to determine how to increment the version number
+  1. Run the `package.sh` shell script to generate a zip file
+  1. Go to [Chrome Developer Dashboard](https://chrome.google.com/webstore/developer/dashboard) and edit the existing app. Upload the new zip file and then publish the changes (button is at the very bottom)
+  1. Tag the new release in [GitHub](https://github.com/cyrusinnovation/just-not-sorry/releases) and include release notes
 
 ### Libraries Used
 For production:
