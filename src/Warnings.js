@@ -70,7 +70,7 @@ var WARNINGS = {
 	             '--David Bowman', },
     { keyword: 'I believe',
       source:  'https://hbr.org/2011/12/replace-meaningless-words-with',
-      message: 'Phrases containing “we believe,” “we think,” and “we feel” pervade ' +
+      message: 'Phrases containing "we believe," "we think," and "we feel" pervade ' +
                'presentation narratives to such a degree that they spill over into ' +
                'sentences where caution is unnecessary. ' +
                '--Jerry Weissman', },
@@ -80,7 +80,7 @@ var WARNINGS = {
                'you\'re using it to mitigate something that may be offensive or ' +
                'embarrassing, then don\'t say it. Say something else. Otherwise, ' +
                'say what you\'re saying without the "just saying." We already ' +
-               'know you’re saying it... after all, you just said it! ' +
+               'know you\'re saying it... after all, you just said it! ' +
                '--Robert Bruce', },
     { keyword: 'In my opinion',
       source:  'https://preciseedit.wordpress.com/2009/06/19/in-my-opinion-i-think-that-i-believe-this-is-bad-writing/',

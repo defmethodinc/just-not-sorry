@@ -14,7 +14,9 @@ The Chrome Extension can be found at https://chrome.google.com/webstore/detail/j
 ## Contributing
 
 ### Requests to add or change warning phrases
-Please [create a GitHub issue](https://github.com/cyrusinnovation/just-not-sorry/issues/new) with your request.  If you're a developer, you're welcome to submit a pull request.
+Please [create a GitHub issue](https://github.com/cyrusinnovation/just-not-sorry/issues/new) with your request.
+
+If you're a developer, you're welcome to submit a pull request.  Please run the tests before submitting, as they will validate the format of the message.
 
 **NOTE:** All warning phrases must include a link to an article that explains why the phrase could negatively impact someone's message.
 
