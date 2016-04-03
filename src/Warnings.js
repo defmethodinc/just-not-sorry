@@ -18,14 +18,31 @@ var WARNINGS = {
       source:  'http://www.fastcompany.com/3032112/strong-female-lead/sorry-not-sorry-why-women-need-to-stop-apologizing-for-everything',
       message: 'Apologizing unnecessarily puts you in a subservient position and ' +
                'makes people lose respect for you --Bonnie Marcus', },
-    { keyword: 'I think',
+    { keyword: 'I think|We think',
       source:  'http://www.fastcompany.com/3049609/the-future-of-work/4-types-of-useless-phrases-you-need-to-eliminate-from-your-emails',
       message: '"I think" undermines your idea and displays an overall lack of ' +
                'self-confidence. --Lydia Dishman', },
-    { keyword: 'I\'m no expert',
+    { keyword: 'I\'m no expert|We\'re no expert',
       source:  'http://www.fastcompany.com/3049609/the-future-of-work/4-types-of-useless-phrases-you-need-to-eliminate-from-your-emails',
       message: '"I\'m no expert" undermines your idea and displays an overall ' +
               'lack of self-confidence. --Lydia Dishman', },
+    { keyword: 'Yes, but',
+      source:  'http://www.strategicserendipityforlife.com/documents/Articles/Communication_8TipsForFearlessCommunicationInTheWorkplace.pdf',
+      message: 'The "Yes, but" syndrome is entirely counterproductive, particularly in a work setting. ' +
+               'You will become an integral part of any team if you are willing ' +
+               'to build ideas rather than discard them. --Victoria Simon, Ph.D. and Holly Pedersen, Ph.D.', },
+    { keyword: 'literally',
+      source:  'https://expresswriters.com/50-weak-words-and-phrases-to-cut-out-of-your-blogging/',
+      message: 'If something is literal, your readers should know it without you needing to use this word to clarify it. ' +
+               'More often than not, the word "literally" makes writing sound flabby and juvenile, ' +
+               'which is probably not what you\'re going for. --Julia McCoy', },
+    { keyword: 'very',
+      source:  'http://blog.crew.co/5-weak-words-to-avoid/',
+      message: 'The word \'very\' does not communicate enough information. Find a stronger, more meaningful adverb, or omit it completely. --Andrea Ayres', },
+    { keyword: 'kind of|sort of',
+      source:  'http://www.strategicserendipityforlife.com/documents/Articles/Communication_8TipsForFearlessCommunicationInTheWorkplace.pdf',
+      message: 'This qualifier weakens the message as well as the authority of the writer. --Victoria Simon, Ph.D. and Holly Pedersen, Ph.D.',
+    },
     { keyword: 'does that make sense',
       source:  'http://goop.com/how-women-undermine-themselves-with-words/',
       message: '"does that make sense" comes across either as condescending ' +
@@ -44,18 +61,18 @@ var WARNINGS = {
                'situation and it\'s just not conducive to positive outcomes in life. ' +
                'It\'s a form of criticism, and it\'s best left out of your everyday language. ' +
                'Instead of beating yourself up for what you should have done, ' +
-               'focus on what you have the power to change.' +
+               'focus on what you have the power to change. ' +
                '-- Zoe B', },
     { keyword: 'I feel',
       source:  'http://www.freelancewriting.com/articles/ten-words-to-avoid-when-writing.php',
       message: 'If you write an opinion, the reader understands that you also ' +
-               'believe it is right.' +
+               'believe it is right. ' +
 	             '--David Bowman', },
     { keyword: 'I believe',
       source:  'https://hbr.org/2011/12/replace-meaningless-words-with',
       message: 'Phrases containing “we believe,” “we think,” and “we feel” pervade ' +
                'presentation narratives to such a degree that they spill over into ' +
-               'sentences where caution is unnecessary.' +
+               'sentences where caution is unnecessary. ' +
                '--Jerry Weissman', },
     { keyword: 'I\'m just saying',
       source:  'http://101books.net/2012/03/02/7-annoying-words-that-should-die-a-horrible-death/',
@@ -63,7 +80,7 @@ var WARNINGS = {
                'you\'re using it to mitigate something that may be offensive or ' +
                'embarrassing, then don\'t say it. Say something else. Otherwise, ' +
                'say what you\'re saying without the "just saying." We already ' +
-               'know you’re saying it... after all, you just said it!' +
+               'know you’re saying it... after all, you just said it! ' +
                '--Robert Bruce', },
     { keyword: 'In my opinion',
       source:  'https://preciseedit.wordpress.com/2009/06/19/in-my-opinion-i-think-that-i-believe-this-is-bad-writing/',
