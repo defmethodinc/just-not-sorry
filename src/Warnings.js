@@ -65,5 +65,12 @@ var WARNINGS = {
                'say what you\'re saying without the "just saying." We already ' +
                'know you’re saying it... after all, you just said it!' +
                '--Robert Bruce', },
+    { keyword: 'In my opinion',
+      source:  'https://preciseedit.wordpress.com/2009/06/19/in-my-opinion-i-think-that-i-believe-this-is-bad-writing/',
+      message: 'Phrases such as "in my opinion," "I think that," and "I believe" create three problems for writers: ' +
+               '1. They delay the writer\'s message; ' +
+               '2. They demonstrate insecurity; and ' +
+               '3. They tell the reader what he already knows. Remove that phrase, or any similar phrase, ' +
+               'and get to the point. --David Bowman', },
   ],
 };
