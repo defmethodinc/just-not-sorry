@@ -57,5 +57,13 @@ var WARNINGS = {
                'presentation narratives to such a degree that they spill over into ' +
                'sentences where caution is unnecessary.' +
                '--Jerry Weissman', },
+    { keyword: 'I\'m just saying',
+      source:  'http://101books.net/2012/03/02/7-annoying-words-that-should-die-a-horrible-death/',
+      message: 'I think what you\'re saying is that you said something. If ' +
+               'you\'re using it to mitigate something that may be offensive or ' +
+               'embarrassing, then don\'t say it. Say something else. Otherwise, ' +
+               'say what you\'re saying without the "just saying." We already ' +
+               'know you’re saying it... after all, you just said it!' +
+               '--Robert Bruce', },
   ],
 };
