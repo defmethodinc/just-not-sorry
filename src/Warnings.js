@@ -67,7 +67,7 @@ var WARNINGS = {
       source:  'http://www.freelancewriting.com/articles/ten-words-to-avoid-when-writing.php',
       message: 'If you write an opinion, the reader understands that you also ' +
                'believe it is right. ' +
-	             '--David Bowman', },
+               '--David Bowman', },
     { keyword: 'I believe',
       source:  'https://hbr.org/2011/12/replace-meaningless-words-with',
       message: 'Phrases containing "we believe," "we think," and "we feel" pervade ' +
@@ -89,5 +89,17 @@ var WARNINGS = {
                '2. They demonstrate insecurity; and ' +
                '3. They tell the reader what he already knows. Remove that phrase, or any similar phrase, ' +
                'and get to the point. --David Bowman', },
+    { keyword: 'This might be a stupid question',
+      source:  'http://www.vogue.com/13362056/things-working-women-should-never-email/',
+      message: 'Like they said in school, there are no stupid ' +
+               'questions. Well, sometimes there are--but ask, don\t caveat. --Alexandra Macon', },
+    { keyword: 'I may be wrong|I might be wrong',
+      source:  'http://www.vogue.com/13362056/things-working-women-should-never-email/',
+      message: 'Don\'t lessen the impact of what you say before ' +
+               'you say it. --Alexandra Macon', },
+    { keyword: 'Does this make sense',
+      source:  'http://www.vogue.com/13362056/things-working-women-should-never-email/',
+      message: 'Trust that what you wrote makes sense. Don\'t' +
+               'openly question in email whether or not your' + 'thinking is sensical. --Alexandra Macon', },
   ],
 };
