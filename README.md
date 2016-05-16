@@ -18,7 +18,7 @@ Please [create a GitHub issue](https://github.com/cyrusinnovation/just-not-sorry
 
 If you're a developer, you're welcome to submit a pull request.  Please run the tests before submitting, as they will validate the format of the message.
 
-**NOTE:** All warning phrases must include a link to an article that explains why the phrase could negatively impact someone's message.
+**NOTE:** All warning phrases must include a link to an article that explains why the phrase could negatively impact someone's message.  If available, please also include alternative wording suggestions from the article.
 
 ### Development Setup
   * `git clone` the repo
