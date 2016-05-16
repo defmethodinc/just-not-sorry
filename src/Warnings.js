@@ -97,9 +97,5 @@ var WARNINGS = {
       source:  'http://www.vogue.com/13362056/things-working-women-should-never-email/',
       message: 'Don\'t lessen the impact of what you say before ' +
                'you say it. --Alexandra Macon', },
-    { keyword: 'Does this make sense',
-      source:  'http://www.vogue.com/13362056/things-working-women-should-never-email/',
-      message: 'Trust that what you wrote makes sense. Don\'t' +
-               'openly question in email whether or not your' + 'thinking is sensical. --Alexandra Macon', },
   ],
 };
