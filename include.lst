@@ -2,6 +2,7 @@ src/*.js
 lib/*.js
 img/*.png
 options/*.*
+templates/*
 just-not-sorry.css
 manifest.json
 README.md

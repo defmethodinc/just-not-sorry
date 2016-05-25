@@ -1,0 +1,139 @@
+<dom-module id="jns-popup-container">
+  <template>
+    <style> 
+      :host {
+        font-family: Lato, sans-serif !important;
+        font-weight: 100;
+        position: absolute;
+        z-index: 9999;
+        bottom: 64px;
+        left: 0;
+        transition: 0.3s opacity ease-out;
+        max-width: 33%;
+        opacity: 0;
+      }
+      paper-button.indigo {
+        background-color: var(--paper-indigo-500);
+        color: white;
+        --paper-button-raised-keyboard-focus: {
+          background-color: var(--paper-pink-a200) !important;
+          color: white !important;
+        };
+      }
+      paper-card.chromePopup-cyan {
+        /*background-color: var(--paper-lime-500);*/
+        --paper-card-header: {
+          background-color: var(--paper-cyan-500);
+        }
+        --paper-card-header-text: {
+          font-weight: 100 !important;
+        }
+        --paper-card-header-color: #fff;
+        --paper-card-content: {
+          /*color: #2BB673;*/
+          /*color: #2BB472;*/
+          color: #2ab371;
+          /*2BB673*/
+          padding: 4px 6px;
+        }
+        --paper-card-actions: {
+          padding: 4px;
+          color: #333;
+        }
+      }
+
+      .chromePopup-author{
+        text-align: right;
+        margin: 4px;
+        color: #333;
+      }
+      .card-triangle {
+        content: "";
+        position: absolute;
+        height: 14px;
+        width: 14px;
+        transform: rotate(45deg);
+        top: -7px;
+        left: 8px;
+        margin-left: 50%;
+        box-shadow: rgba(0, 0, 0, 0.34902) -3px -3px 5px -4px;
+        /*background: var(--paper-cyan-500) !important;*/
+        background: #fff !important;
+      }
+    </style>
+    <paper-card class="chromePopup-cyan" on-mouseenter="onMouseEnter" on-mouseleave="onMouseLeave">
+    <span class="card-triangle"></span>
+    <div class="card-content">
+      <quote>{{content}}</quote>
+      <p class="chromePopup-author"><i>{{author}}</i></p>
+
+    </div>
+    <div class="card-actions">
+      <a href="{{source}}" target="_blank" style="text-decoration: none; color: #333">
+        <iron-icon icon="icons:link"></iron-icon>
+        Source
+      </a>
+      <!-- <paper-button class="indigo">Ok</paper-button> -->
+    </div>
+  </paper-card>
+  </template>
+</dom-module>
+
+<script>
+var JSNPopup = Polymer({
+  is: 'jns-popup-container',
+  properties: {
+    who: {
+      type: String,
+      value: 'World'
+    }
+  },
+  ready: function() {
+    if(location.host === 'localhost:3333') {
+      this.setContent(WARNINGS.warnings[0]).toggle(1);
+    }
+  },
+  onMouseEnter: function(evt) {
+    clearTimeout(this.delayTimer);
+    this.focued = true;
+  },
+  onMouseLeave: function(evt) {
+    this.focued = false;
+    var self = this;
+    this.delayTimer = setTimeout(this.toggle.bind(this), 100);
+  },
+  setPosition: function(left, top) {
+    left -= this.clientWidth / 2;
+    this.style.top = top + 'px';
+    this.style.left = left + 'px';
+    return this;
+  },
+  setContent(warn) {
+    // this.set('title', warn.keyword);
+    var messageSegs = warn.message.split('--');
+    this.set('content', messageSegs[0]);
+    this.set('author', messageSegs[1]);
+    this.set('source', warn.source);
+    return this;
+  },
+  toggle: function(toggle) {
+    clearTimeout(this.delayTimer);
+    if(this.focued) return this;
+    var self = this;
+    self.delayTimer = setTimeout(function() {
+      if(toggle) {
+        self.style.opacity = 1;
+        self.style.pointerEvents = '';
+      } else {
+        self.style.opacity = 0;
+        self.style.pointerEvents = 'none';
+      }
+    }, toggle ? 100 : 400);
+    return this;
+  }
+});
+var jsnPopup = new JSNPopup();
+document.body.appendChild(jsnPopup);
+window.chromePopup = jsnPopup;
+console.warn('popup???');
+</script>

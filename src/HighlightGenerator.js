@@ -1,24 +1,32 @@
 var HighlightGenerator = window.HighlightGenerator = {};
-
-HighlightGenerator.highlightMatches = function highlightMatches(message, warningClass) {
-  return function (currMatch, rangeToHighlight) {
-    var parentNode = this;
-    var parentRect = parentNode.getBoundingClientRect();
-    var rectsToHighlight = rangeToHighlight.getClientRects();
-    for (var i = 0; i < rectsToHighlight.length; i++) {
-      var highlightNode = HighlightGenerator.highlightMatch(rectsToHighlight[i], parentRect);
-      highlightNode.title = message;
-      highlightNode.className = warningClass;
-      parentNode.appendChild(highlightNode);
-    }
-  }
+var stop = false;
+HighlightGenerator.highlightMatches = function highlightMatches(message, warningClass, warn) {
+  return function(currMatch, rangeToHighlight) {
+    var $range = window.$(rangeToHighlight.startContainer);
+    if ($range.parents().hasClass('chrome-jns-highlight')) return;
+    var fragment = rangeToHighlight.extractContents();
+    var $span = window.$('<e class="chrome-jns-highlight"></e>');
+    $span.append(fragment);
+    $span.hover(function(evt) {
+      var clientRect = evt.target.getBoundingClientRect();
+      window.chromePopup.toggle(true)
+        .setContent(warn)
+        .setPosition(evt.pageX, evt.pageY + $span.height());
+    }, function() {
+      window.chromePopup.toggle(false);
+    });
+    rangeToHighlight.insertNode($span[0]);
+  };
 };
 
 HighlightGenerator.highlightMatch = function highlightMatch(rect, parentRect) {
   var highlightNode = HighlightGenerator.generateHighlightNode();
   var scrollTop = document.documentElement.scrollTop || document.body.scrollTop;
   var scrollLeft = document.documentElement.scrollLeft || document.body.scrollLeft;
-  var scroll = {top: scrollTop, left: scrollLeft};
+  var scroll = {
+    top: scrollTop,
+    left: scrollLeft
+  };
   var coords = HighlightGenerator.transformCoordinatesRelativeToParent(rect, parentRect, scroll);
   HighlightGenerator.setNodeStyle(highlightNode, rect, coords);
   return highlightNode;
