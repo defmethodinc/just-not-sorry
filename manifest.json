@@ -1,9 +1,9 @@
 {
   "manifest_version": 2,
-  "name": "Just Not Sorry -- the Gmail Plug-in",
-  "short_name": "JustNotSorry",
+  "name": "Ding",
+  "short_name": "Ding",
   "author": "Steve Brudz, Manish Kakwani, and Tami Reiss of Cyrus Innovation",
-  "version": "1.0.0",
+  "version": "1.0.9",
   "description": "A Gmail Plug-in that warns you when you write emails using words which undermine your message",
   "icons": { "16": "img/JustNotSorry-16.png",
              "48": "img/JustNotSorry-48.png",
@@ -12,7 +12,9 @@
     {
       "matches": ["https://mail.google.com/*"],
       "css": ["just-not-sorry.css"],
-      "js": ["lib/head.load.min.js", "src/ScriptLoader.js"]
+      "js": ["src/ScriptLoader.js"],
+      "run_at": "document_end",
+      "all_frames": false
     }
   ],
   "background": {
@@ -27,20 +29,23 @@
       "19": "img/JustNotSorry-19.png",
       "38": "img/JustNotSorry-38.png"
     },
-    "default_title": "Just Not Sorry"
+    "default_title": "Ding"
   },
   "options_ui": {
     "page": "options/options.html",
     "chrome_style": true
   },
   "web_accessible_resources": [
-    "lib/jquery-2.1.4.min.js",
+    "lib/jquery-2.2.4.min.js",
+    "lib/webcomponents.min.js",
     "lib/dom-regexp-match-1.1.0.js",
     "lib/gmail.js",
     "src/HighlightGenerator.js",
     "src/WarningChecker.js",
     "src/Warnings.js",
-    "src/JustNotSorry.js"
+    "templates/*.html",
+    "src/JustNotSorry.js",
+    "bower_components/*"
   ],
   "permissions": [
     "https://www.google-analytics.com/",

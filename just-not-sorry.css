@@ -1,3 +1,28 @@
 .jns-warning {
-  border-bottom: 2px dashed #FF9933;
+  /*border-bottom: 2px dashed #FF9933;*/
+  /*background-image: linear-gradient(to right, black 33%, rgba(255,255,255,0) 0%);
+  background-position: bottom;
+  background-size: 3px 8px;
+  background-repeat: repeat-x;
+  min-height: 8px;*/
+}
+
+
+
+e.chrome-jns-highlight {
+  background: rgba(245, 245, 220, 0.52);
+  background-image: -webkit-linear-gradient(left, 
+    transparent 11%,
+    #2ab371 11%,
+    #2ab371 88%,
+    transparent 88%,
+    transparent);
+  background-repeat: repeat-x;
+  background-size: 10% 2px;
+  background-position: 50% 100%;
+  -webkit-transition: all .25s linear;
+          transition: all .25s linear;
+}
+e.chrome-jns-highlight:hover {
+  background-size: 100% 2px;
 }
