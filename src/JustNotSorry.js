@@ -15,6 +15,32 @@ var JustNotSorry = function() {
   var gmail;
   var warningChecker;
 
+  function observeContentEditable() {
+    console.log('observeContentEditable');
+    var observer = new MutationObserver(function(mutations) {
+      console.log('in mutation observer');
+      mutations.forEach(function(mutation) {
+        //var changedNode = mutation.target;
+        var myNodeList = mutation.addedNodes;
+        for (var i = 0; i < myNodeList.length; ++i) {
+          var node = myNodeList[i];
+          if (node.querySelectorAll) {
+            var editableNodes = node.querySelectorAll('div[contentEditable=true]');
+            if (editableNodes.length > 0) {
+              console.log('mutation', mutation);
+              console.log('node ' + i, node);
+              console.log(editableNodes);
+            }
+          }
+          //if (node.getAttribute('contentEditable')) {
+          //  console.log('node ' + i, myNodeList[i]);
+          //}
+        }
+      });
+    });
+    observer.observe(document, {childList: true, subtree: true});
+  }
+
   function addWarningsOnFocusIn(compose) {
     var $target = compose.$el;
     $target.focusin(function(e) {
@@ -54,9 +80,11 @@ var JustNotSorry = function() {
     updateWarningsOnMutation(compose);
   }
 
-  gmail = new Gmail();
+  //gmail = new Gmail();
   warningChecker = new WarningChecker(WARNINGS);
-  gmail.observe.on('compose', checkForWarnings);
+  //gmail.observe.on('compose', checkForWarnings);
+  observeContentEditable();
 };
 
-refresh(JustNotSorry);
+JustNotSorry();
+//refresh(JustNotSorry);
