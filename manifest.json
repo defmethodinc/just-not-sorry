@@ -10,7 +10,7 @@
             "128": "img/JustNotSorry-128.png" },
   "content_scripts": [
     {
-      "matches": ["https://mail.google.com/*"],
+      "matches": ["https://mail.google.com/*", "https://inbox.google.com/*"],
       "css": ["just-not-sorry.css"],
       "js": ["lib/head.load.min.js", "src/ScriptLoader.js"]
     }
