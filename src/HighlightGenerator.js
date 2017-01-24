@@ -38,6 +38,10 @@ HighlightGenerator.transformCoordinatesRelativeToParent = function transformCoor
     coords.top = (rect.top + scroll.top - parentRect.top + (rect.height * 1.4));
     coords.left = ((rect.left * 1.01) + scroll.left - parentRect.left);
     return coords;
+  } else {
+    coords.top = (rect.top + scroll.top - parentRect.top + (rect.height * 1.4));
+    coords.left = ((rect.left * 1.01) + scroll.left - parentRect.left);
+    return coords;
   }
 };
 
