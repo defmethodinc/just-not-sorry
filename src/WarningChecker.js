@@ -6,8 +6,7 @@ function WarningChecker(options) {
 
 WarningChecker.prototype.addWarning = function addWarning(node, keyword, message) {
   'use strict';
-  var pattern = new RegExp('\\b(' + keyword + ')(?!($))\\b', 'ig');
-  //var pattern = new RegExp(keyword);
+  var pattern = new RegExp(keyword, 'ig');
   domRegexpMatch(node, pattern, HighlightGenerator.highlightMatches(message, this.warningClass));
 };
 
@@ -21,8 +20,8 @@ WarningChecker.prototype.addWarnings = function addWarnings(node) {
 
 WarningChecker.prototype.removeWarnings = function removeWarnings(node) {
   'use strict';
-  var $elementsToRemove = node.getElementsByClassName(this.warningClass);
-  for (var i = $elementsToRemove.length; i--;) {
-    $elementsToRemove[i].remove();
+  var elementsToRemove = node.getElementsByClassName(this.warningClass);
+  for (var i = elementsToRemove.length; i--;) {
+    elementsToRemove[i].remove();
   }
 };

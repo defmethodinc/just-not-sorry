@@ -1,39 +1,33 @@
-var JustNotSorry = function() {
-  'use strict';
-  var warningChecker;
+'use strict';
 
-  function addWarningsOnFocusIn(target) {
+function setWarnings(target) {
+  warningChecker.addWarnings(target);
+  ['focus', 'keydown'].forEach(function(event) {
+    target.addEventListener(event, function() {
+      warningChecker.addWarnings(target);
+    }, {once: true});
+  });
+}
+
+function removeWarnings(target) {
+  target.onblur = function() {
     warningChecker.removeWarnings(target);
-    warningChecker.addWarnings(target);
-    ['focus', 'keydown'].forEach(function(event) {
-      target.addEventListener(event, function() {
-        warningChecker.addWarnings(target);
-      }, {once: true});
-    });
   }
+}
 
-  function removeWarningsOnFocusOut(target) {
-    target.onblur = function() {
-      warningChecker.removeWarnings(target);
+function checkForWarnings() {
+  var target;
+  var observer = new MutationObserver(function(mutation) {
+    if (!target) {
+      target = document.querySelector('div[contentEditable=true]');
+      setWarnings(target);
+    } else {
+      setWarnings(target);
+      removeWarnings(target);
     }
-  }
+  });
+  observer.observe(document, {characterData: true, subtree: true});
+}
 
-  function checkForWarnings() {
-    var target;
-    var observer = new MutationObserver(function(mutation) {
-      if (!target) {
-        target = document.querySelector('div[contentEditable=true]');
-        addWarningsOnFocusIn(target);
-      } else {
-        addWarningsOnFocusIn(target);
-        removeWarningsOnFocusOut(target);
-      }
-    });
-    observer.observe(document, {characterData: true, subtree: true});
-  }
-
-  warningChecker = new WarningChecker(WARNINGS);
-  checkForWarnings();
-};
-
-JustNotSorry();
+var warningChecker = new WarningChecker(WARNINGS);
+checkForWarnings();

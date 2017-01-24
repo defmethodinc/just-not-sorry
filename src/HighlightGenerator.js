@@ -30,9 +30,15 @@ HighlightGenerator.generateHighlightNode = function generateHighlightNode() {
 
 HighlightGenerator.transformCoordinatesRelativeToParent = function transformCoordinatesRelativeToParent(rect, parentRect, scroll) {
   var coords = {};
-  coords.top = (rect.top + scroll.top - parentRect.top + (rect.height * 0.9));
-  coords.left = (rect.left + scroll.left - parentRect.left);
-  return coords;
+  if (HighlightGenerator.getHostname() === 'inbox.google.com') {
+    coords.top = (rect.top + scroll.top - parentRect.top + (rect.height * 0.9));
+    coords.left = (rect.left + scroll.left - parentRect.left);
+    return coords;
+  } else if (HighlightGenerator.getHostname() === 'mail.google.com') {
+    coords.top = (rect.top + scroll.top - parentRect.top + (rect.height * 1.4));
+    coords.left = ((rect.left * 1.005) + scroll.left - parentRect.left);
+    return coords;
+  }
 };
 
 HighlightGenerator.setNodeStyle = function positionNode(node, rect, coords) {
@@ -43,4 +49,8 @@ HighlightGenerator.setNodeStyle = function positionNode(node, rect, coords) {
   node.style.zIndex = 10;
   node.style.position = 'absolute';
   node.style.padding = '0px';
+};
+
+HighlightGenerator.getHostname = function() {
+  return document.location.hostname;
 };

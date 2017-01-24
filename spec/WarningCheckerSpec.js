@@ -1,13 +1,11 @@
 describe('WarningChecker', function() {
   describe('.addWarning', function() {
     var checker;
+    var host;
 
     beforeEach(function() {
       checker = new WarningChecker({});
-    });
-
-    afterEach(function() {
-      checker = null;
+      host = spyOn(HighlightGenerator, 'getHostname').and.returnValue('mail.google.com')
     });
 
     it('delegates to domRegexpMatch', function() {
@@ -79,6 +77,8 @@ describe('WarningChecker', function() {
 
   describe('multiple warnings', function() {
     var checker;
+    var host;
+
     beforeEach(function() {
       checker = new WarningChecker(
         {
@@ -89,10 +89,7 @@ describe('WarningChecker', function() {
           ],
         }
       );
-    });
-
-    afterEach(function() {
-      checker = null;
+      host = spyOn(HighlightGenerator, 'getHostname').and.returnValue('mail.google.com')
     });
 
     describe('.addWarnings', function() {

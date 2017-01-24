@@ -1,4 +1,8 @@
 describe('HighlightGenerator', function () {
+  beforeEach(function() {
+    var host = spyOn(HighlightGenerator, 'getHostname').and.returnValue('mail.google.com')
+  });
+
   describe('#highlightMatches', function () {
     var warningClass = 'test-warning';
     var message = 'test';
@@ -42,8 +46,8 @@ describe('HighlightGenerator', function () {
       var node = HighlightGenerator.highlightMatch(rect, parentRect);
       expect(node).toBeDefined();
       expect(node.nodeName).toEqual('DIV');
-      expect(node.style.top).toEqual('10px');
-      expect(node.style.left).toEqual('1px');
+      expect(node.style.top).toEqual('15px');
+      expect(node.style.left).toEqual('1.01px');
     });
   });
 
@@ -63,21 +67,21 @@ describe('HighlightGenerator', function () {
     };
 
     it('returns the top position relative to the parent top position and offset by 90% of the rectangle', function () {
-      expect(subject().top).toEqual(10);
+      expect(subject().top).toEqual(15);
     });
 
     it('returns the left position relative to the parent left position', function () {
-      expect(subject().left).toEqual(1);
+      expect(subject().left).toBeCloseTo(1.01);
     });
 
     it('offsets the top position when the window is vertically scrolled', function () {
       scroll = {top: 10, left: 0};
-      expect(subject().top).toEqual(20);
+      expect(subject().top).toBeCloseTo(25);
     });
 
     it('offsets the left position when the window is horizontally scrolled', function () {
       scroll = {top: 0, left: 10};
-      expect(subject().left).toEqual(11);
+      expect(subject().left).toBeCloseTo(11.01);
     });
   });
 
