@@ -34,7 +34,6 @@
     "chrome_style": true
   },
   "web_accessible_resources": [
-    "lib/jquery-2.1.4.min.js",
     "lib/dom-regexp-match-1.1.0.js",
     "src/HighlightGenerator.js",
     "src/WarningChecker.js",
