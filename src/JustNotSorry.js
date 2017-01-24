@@ -3,6 +3,8 @@ var JustNotSorry = function() {
   var warningChecker;
 
   function addWarningsOnFocusIn(target) {
+    warningChecker.removeWarnings(target);
+    warningChecker.addWarnings(target);
     ['focus', 'keydown'].forEach(function(event) {
       target.addEventListener(event, function() {
         warningChecker.addWarnings(target);
