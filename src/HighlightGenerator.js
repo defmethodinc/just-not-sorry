@@ -30,9 +30,15 @@ HighlightGenerator.generateHighlightNode = function generateHighlightNode() {
 
 HighlightGenerator.transformCoordinatesRelativeToParent = function transformCoordinatesRelativeToParent(rect, parentRect, scroll) {
   var coords = {};
-  coords.top = (rect.top + scroll.top - parentRect.top + (rect.height * 0.9));
-  coords.left = (rect.left + scroll.left - parentRect.left);
-  return coords;
+  if (document.location.hostname === 'inbox.google.com') {
+    coords.top = (rect.top + scroll.top - parentRect.top + (rect.height * 0.9));
+    coords.left = (rect.left + scroll.left - parentRect.left);
+    return coords;
+  } else if (document.location.hostname === 'mail.google.com') {
+    coords.top = (rect.top + scroll.top - parentRect.top + (rect.height * 1.4));
+    coords.left = ((rect.left * 1.01) + scroll.left - parentRect.left);
+    return coords;
+  }
 };
 
 HighlightGenerator.setNodeStyle = function positionNode(node, rect, coords) {
