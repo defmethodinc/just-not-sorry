@@ -21,8 +21,8 @@ describe('WarningChecker', function() {
       var generatorSpy = spyOn(HighlightGenerator, 'highlightMatches');
       var content = 'test just test';
       var $fixture = setFixtures(content);
-      checker.addWarning($fixture, 'just', 'warning message');
-      expect(generatorSpy).toHaveBeenCalledWith('warning message', 'jns-warning');
+      checker.addWarning($fixture, 'just', 'warning message', 'compose');
+      expect(generatorSpy).toHaveBeenCalledWith('warning message', 'jns-warning', 'compose');
     });
 
     it('adds a warning for a single keyword', function() {

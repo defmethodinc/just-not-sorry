@@ -41,13 +41,14 @@ describe('HighlightGenerator', function () {
   describe('#highlightMatch', function () {
     it('generates a node that is styled and positioned', function () {
       var rect = {top: 2, left: 2, height: 10};
-      var parentRect = {top: 1, left: 1};
+      var parentRect = {top: 1, left: 1, height:1};
+      var fieldType = 'compose';
 
-      var node = HighlightGenerator.highlightMatch(rect, parentRect);
+      var node = HighlightGenerator.highlightMatch(rect, parentRect, fieldType);
       expect(node).toBeDefined();
       expect(node.nodeName).toEqual('DIV');
-      expect(node.style.top).toEqual('15px');
-      expect(node.style.left).toEqual('1.01px');
+      expect(node.style.top).toEqual('3.05px');
+      expect(node.style.left).toEqual('1.02px');
     });
   });
 
@@ -62,26 +63,26 @@ describe('HighlightGenerator', function () {
     var scroll = {top: 0, left: 0};
     var subject = function () {
       var rect = {top: 2, left: 2, height: 10};
-      var parentRect = {top: 1, left: 1};
+      var parentRect = {top: 1, left: 1, height: 1};
       return HighlightGenerator.transformCoordinatesRelativeToParent(rect, parentRect, scroll);
     };
 
     it('returns the top position relative to the parent top position and offset by 90% of the rectangle', function () {
-      expect(subject().top).toEqual(15);
+      expect(subject().top).toBeCloseTo(3.05);
     });
 
     it('returns the left position relative to the parent left position', function () {
-      expect(subject().left).toBeCloseTo(1.01);
+      expect(subject().left).toBeCloseTo(1.02);
     });
 
     it('offsets the top position when the window is vertically scrolled', function () {
       scroll = {top: 10, left: 0};
-      expect(subject().top).toBeCloseTo(25);
+      expect(subject().top).toBeCloseTo(3.05);
     });
 
     it('offsets the left position when the window is horizontally scrolled', function () {
       scroll = {top: 0, left: 10};
-      expect(subject().left).toBeCloseTo(11.01);
+      expect(subject().left).toBeCloseTo(11.02);
     });
   });
 

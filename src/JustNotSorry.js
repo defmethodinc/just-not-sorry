@@ -1,10 +1,11 @@
 'use strict';
 
-function setWarnings(target) {
-  warningChecker.addWarnings(target);
+function setWarnings(target, fieldType) {
+  warningChecker.removeWarnings(target)
+  warningChecker.addWarnings(target, fieldType);
   ['focus', 'keydown'].forEach(function(event) {
     target.addEventListener(event, function() {
-      warningChecker.addWarnings(target);
+      warningChecker.addWarnings(target, fieldType);
     }, {once: true});
   });
 }
@@ -16,14 +17,25 @@ function removeWarnings(target) {
 }
 
 function checkForWarnings() {
-  var target;
+  var targets;
+  var fieldType;
   var observer = new MutationObserver(function(mutation) {
-    if (!target) {
-      target = document.querySelector('div[contentEditable=true]');
-      setWarnings(target);
+    if (targets != document.querySelectorAll('div[contentEditable=true]')) {
+      targets = document.querySelectorAll('div[contentEditable=true]');
+      targets.forEach((target) => {
+        if (target.getAttribute('aria-label') === 'Reply') {
+          fieldType = 'reply';
+          setWarnings(target, fieldType)
+        } else {
+          fieldType = 'compose';
+          setWarnings(target, fieldType);
+        }
+      });
     } else {
-      setWarnings(target);
-      removeWarnings(target);
+      targets.forEach((target) => {
+        setWarnings(target, fieldType);
+        removeWarnings(target);
+      });
     }
   });
   observer.observe(document, {characterData: true, subtree: true});
