@@ -4,17 +4,17 @@ function WarningChecker(options) {
   this.warningClass = options.warningClass || 'jns-warning';
 }
 
-WarningChecker.prototype.addWarning = function addWarning(node, keyword, message) {
+WarningChecker.prototype.addWarning = function addWarning(node, keyword, message, fieldType) {
   'use strict';
-  var pattern = new RegExp(keyword, 'ig');
-  domRegexpMatch(node, pattern, HighlightGenerator.highlightMatches(message, this.warningClass));
+  var pattern = new RegExp('\\b(' + keyword + ')\\b', 'ig');
+  domRegexpMatch(node, pattern, HighlightGenerator.highlightMatches(message, this.warningClass, fieldType));
 };
 
-WarningChecker.prototype.addWarnings = function addWarnings(node) {
+WarningChecker.prototype.addWarnings = function addWarnings(node, fieldType) {
   'use strict';
   var _this = this;
   this.warnings.forEach(function(warning) {
-    _this.addWarning(node, warning.keyword, warning.message);
+    _this.addWarning(node, warning.keyword, warning.message, fieldType);
   });
 };
 

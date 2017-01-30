@@ -21,14 +21,14 @@ describe('WarningChecker', function() {
       var generatorSpy = spyOn(HighlightGenerator, 'highlightMatches');
       var content = 'test just test';
       var $fixture = setFixtures(content);
-      checker.addWarning($fixture, 'just', 'warning message');
-      expect(generatorSpy).toHaveBeenCalledWith('warning message', 'jns-warning');
+      checker.addWarning($fixture, 'just', 'warning message', 'compose gmail');
+      expect(generatorSpy).toHaveBeenCalledWith('warning message', 'jns-warning', 'compose gmail');
     });
 
     it('adds a warning for a single keyword', function() {
       var content = 'test just test';
       var $fixture = setFixtures(content);
-      checker.addWarning($fixture[0], 'just', 'warning message');
+      checker.addWarning($fixture[0], 'just', 'warning message', 'compose gmail');
       expect($fixture.find('div.jns-warning').length).toEqual(1);
     });
 
@@ -42,35 +42,35 @@ describe('WarningChecker', function() {
     it('adds multiple warnings when keyword is matched multiple times', function() {
       var content = 'test just test just test';
       var $fixture = setFixtures(content);
-      checker.addWarning($fixture[0], 'just', 'warning message');
+      checker.addWarning($fixture[0], 'just', 'warning message', 'compose gmail');
       expect($fixture.find('div.jns-warning').length).toEqual(2);
     });
 
     it('adds a title element to provide a message in a tooltip', function() {
       var content = 'test just test sorry test';
       var $fixture = setFixtures(content);
-      checker.addWarning($fixture[0], 'just', 'warning message');
+      checker.addWarning($fixture[0], 'just', 'warning message', 'compose gmail');
       expect($fixture.find('div.jns-warning')[0].title).toEqual('warning message');
     });
 
     it('matches case insensitive', function() {
       var content = 'jUsT kidding';
       var $fixture = setFixtures(content);
-      checker.addWarning($fixture[0], 'just', 'warning message');
+      checker.addWarning($fixture[0], 'just', 'warning message', 'compose gmail');
       expect($fixture.find('div.jns-warning').length).toEqual(1);
     });
 
     it('catches keywords with punctuation', function() {
       var content = 'just. test';
       var $fixture = setFixtures(content);
-      checker.addWarning($fixture[0], 'just', 'warning message');
+      checker.addWarning($fixture[0], 'just', 'warning message', 'compose gmail');
       expect($fixture.find('div.jns-warning').length).toEqual(1);
     });
 
     it('matches phrases', function() {
       var content = 'my cat is so sorry because of you';
       var $fixture = setFixtures(content);
-      checker.addWarning($fixture[0], 'so sorry', 'warning message');
+      checker.addWarning($fixture[0], 'so sorry', 'warning message', 'compose gmail');
       expect($fixture.find('div.jns-warning').length).toEqual(1);
     });
   });
@@ -103,7 +103,7 @@ describe('WarningChecker', function() {
       it('adds warnings to all keywords', function() {
         var content = 'I am just so sorry. Yes, just.';
         var $fixture = setFixtures(content);
-        checker.addWarnings($fixture[0]);
+        checker.addWarnings($fixture[0], 'compose gmail');
         expect($fixture.find('div.warning1').length).toEqual(3);
         expect($fixture.find('div.warning1[title="test"]').length).toEqual(2);
         expect($fixture.find('div.warning1[title="test 2"]').length).toEqual(1);

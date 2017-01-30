@@ -1,12 +1,12 @@
 var HighlightGenerator = window.HighlightGenerator = {};
 
-HighlightGenerator.highlightMatches = function highlightMatches(message, warningClass) {
+HighlightGenerator.highlightMatches = function highlightMatches(message, warningClass, fieldType) {
   return function (currMatch, rangeToHighlight) {
     var parentNode = this;
     var parentRect = parentNode.getBoundingClientRect();
     var rectsToHighlight = rangeToHighlight.getClientRects();
     for (var i = 0; i < rectsToHighlight.length; i++) {
-      var highlightNode = HighlightGenerator.highlightMatch(rectsToHighlight[i], parentRect);
+      var highlightNode = HighlightGenerator.highlightMatch(rectsToHighlight[i], parentRect, fieldType);
       highlightNode.title = message;
       highlightNode.className = warningClass;
       parentNode.appendChild(highlightNode);
@@ -14,12 +14,12 @@ HighlightGenerator.highlightMatches = function highlightMatches(message, warning
   }
 };
 
-HighlightGenerator.highlightMatch = function highlightMatch(rect, parentRect) {
+HighlightGenerator.highlightMatch = function highlightMatch(rect, parentRect, fieldType) {
   var highlightNode = HighlightGenerator.generateHighlightNode();
   var scrollTop = document.documentElement.scrollTop || document.body.scrollTop;
   var scrollLeft = document.documentElement.scrollLeft || document.body.scrollLeft;
   var scroll = {top: scrollTop, left: scrollLeft};
-  var coords = HighlightGenerator.transformCoordinatesRelativeToParent(rect, parentRect, scroll);
+  var coords = HighlightGenerator.transformCoordinatesRelativeToParent(rect, parentRect, scroll, fieldType);
   HighlightGenerator.setNodeStyle(highlightNode, rect, coords);
   return highlightNode;
 };
@@ -28,16 +28,34 @@ HighlightGenerator.generateHighlightNode = function generateHighlightNode() {
   return document.createElement('div');
 };
 
-HighlightGenerator.transformCoordinatesRelativeToParent = function transformCoordinatesRelativeToParent(rect, parentRect, scroll) {
+HighlightGenerator.transformCoordinatesRelativeToParent = function transformCoordinatesRelativeToParent(rect, parentRect, scroll, fieldType) {
   var coords = {};
   if (HighlightGenerator.getHostname() === 'inbox.google.com') {
-    coords.top = (rect.top + scroll.top - parentRect.top + (rect.height * 0.9));
-    coords.left = (rect.left + scroll.left - parentRect.left);
-    return coords;
+    fieldType = fieldType + ' inbox';
+    if (fieldType === 'compose inbox') {
+      coords.top = (rect.top - parentRect.top + (rect.height * 0.9));
+      coords.left = (rect.left + scroll.left - parentRect.left);
+      return coords;
+    } else if (fieldType === 'reply inbox') {
+      coords.top = (rect.top - parentRect.top + (rect.height * 0.6));
+      coords.left = ((rect.left - 20) + scroll.left - parentRect.left);
+      return coords;
+    }
   } else if (HighlightGenerator.getHostname() === 'mail.google.com') {
-    coords.top = (rect.top + scroll.top - parentRect.top + (rect.height * 1.4));
-    coords.left = ((rect.left * 1.005) + scroll.left - parentRect.left);
-    return coords;
+    fieldType = fieldType + ' gmail';
+    if (fieldType === 'compose gmail') {
+      coords.top = (rect.top - parentRect.top + (rect.height * 1.2));
+      coords.left = ((rect.left * 1.01) + scroll.left - parentRect.left);
+      return coords;
+    } else if (fieldType === 'reply gmail') {
+      coords.top = (rect.top - parentRect.top + (parentRect.height * 0.12));
+      coords.left = (rect.left + scroll.left - parentRect.left);
+      return coords;
+    } else if (fieldType === 'forward gmail') {
+      coords.top = (rect.top - parentRect.top + (parentRect.height * 0.04) - 10);
+      coords.left = (rect.left + scroll.left - parentRect.left);
+      return coords;
+    }
   }
 };
 

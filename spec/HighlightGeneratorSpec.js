@@ -41,13 +41,14 @@ describe('HighlightGenerator', function () {
   describe('#highlightMatch', function () {
     it('generates a node that is styled and positioned', function () {
       var rect = {top: 2, left: 2, height: 10};
-      var parentRect = {top: 1, left: 1};
+      var parentRect = {top: 1, left: 1, height:1};
+      var fieldType = 'compose';
 
-      var node = HighlightGenerator.highlightMatch(rect, parentRect);
+      var node = HighlightGenerator.highlightMatch(rect, parentRect, fieldType);
       expect(node).toBeDefined();
       expect(node.nodeName).toEqual('DIV');
-      expect(node.style.top).toEqual('15px');
-      expect(node.style.left).toEqual('1.01px');
+      expect(node.style.top).toEqual('13px');
+      expect(node.style.left).toEqual('1.02px');
     });
   });
 
@@ -59,31 +60,150 @@ describe('HighlightGenerator', function () {
   });
 
   describe('#transformCoordinatesRelativeToParent', function () {
-    var scroll = {top: 0, left: 0};
-    var subject = function () {
-      var rect = {top: 2, left: 2, height: 10};
-      var parentRect = {top: 1, left: 1};
-      return HighlightGenerator.transformCoordinatesRelativeToParent(rect, parentRect, scroll);
-    };
+    describe('when provider is Gmail', function () {
+      describe('and field type is compose', function () {
+        var scroll = {top: 0, left: 0};
+        var subject = function () {
+          var rect = {top: 2, left: 2, height: 10};
+          var parentRect = {top: 1, left: 1, height: 1};
+          var fieldType = 'compose gmail';
+          return HighlightGenerator.transformCoordinatesRelativeToParent(rect, parentRect, scroll, fieldType);
+        };
 
-    it('returns the top position relative to the parent top position and offset by 90% of the rectangle', function () {
-      expect(subject().top).toEqual(15);
+        it('returns the top position relative to the parent top position and offset by 90% of the rectangle', function () {
+          expect(subject().top).toBeCloseTo(13);
+        });
+
+        it('returns the left position relative to the parent left position', function () {
+          expect(subject().left).toBeCloseTo(1.02);
+        });
+
+        it('offsets the top position when the window is vertically scrolled', function () {
+          scroll = {top: 10, left: 0};
+          expect(subject().top).toBeCloseTo(13);
+        });
+
+        it('offsets the left position when the window is horizontally scrolled', function () {
+          scroll = {top: 0, left: 10};
+          expect(subject().left).toBeCloseTo(11.02);
+        });
+      });
+
+      describe('and field type is reply', function () {
+        var scroll = {top: 0, left: 0};
+        var subject = function () {
+          var rect = {top: 2, left: 2, height: 10};
+          var parentRect = {top: 1, left: 1, height: 1};
+          var fieldType = 'reply gmail';
+          return HighlightGenerator.transformCoordinatesRelativeToParent(rect, parentRect, scroll, fieldType);
+        };
+
+        it('returns the top position relative to the parent top position and offset by 90% of the rectangle', function () {
+          expect(subject().top).toBeCloseTo(1.12);
+        });
+
+        it('returns the left position relative to the parent left position', function () {
+          expect(subject().left).toBeCloseTo(1);
+        });
+
+        it('offsets the top position when the window is vertically scrolled', function () {
+          scroll = {top: 10, left: 0};
+          expect(subject().top).toBeCloseTo(1.12);
+        });
+
+        it('offsets the left position when the window is horizontally scrolled', function () {
+          scroll = {top: 0, left: 10};
+          expect(subject().left).toBeCloseTo(11);
+        });
+      });
+
+      describe('and field type is forward', function () {
+        var scroll = {top: 0, left: 0};
+        var subject = function () {
+          var rect = {top: 2, left: 2, height: 10};
+          var parentRect = {top: 1, left: 1, height: 1};
+          var fieldType = 'forward gmail';
+          return HighlightGenerator.transformCoordinatesRelativeToParent(rect, parentRect, scroll, fieldType);
+        };
+
+        it('returns the top position relative to the parent top position and offset by 90% of the rectangle', function () {
+          expect(subject().top).toBeCloseTo(-8.96);
+        });
+
+        it('returns the left position relative to the parent left position', function () {
+          expect(subject().left).toBeCloseTo(1);
+        });
+
+        it('offsets the top position when the window is vertically scrolled', function () {
+          scroll = {top: 10, left: 0};
+          expect(subject().top).toBeCloseTo(-8.96);
+        });
+
+        it('offsets the left position when the window is horizontally scrolled', function () {
+          scroll = {top: 0, left: 10};
+          expect(subject().left).toBeCloseTo(11);
+        });
+      });
     });
 
-    it('returns the left position relative to the parent left position', function () {
-      expect(subject().left).toBeCloseTo(1.01);
-    });
+    describe('when provider is Inbox', function () {
+      describe('and field type is compose', function () {
+        var scroll = {top: 0, left: 0};
+        var subject = function () {
+          var rect = {top: 2, left: 2, height: 10};
+          var parentRect = {top: 1, left: 1, height: 1};
+          var fieldType = 'compose inbox';
+          return HighlightGenerator.transformCoordinatesRelativeToParent(rect, parentRect, scroll, fieldType);
+        };
 
-    it('offsets the top position when the window is vertically scrolled', function () {
-      scroll = {top: 10, left: 0};
-      expect(subject().top).toBeCloseTo(25);
-    });
+        it('returns the top position relative to the parent top position and offset by 90% of the rectangle', function () {
+          expect(subject().top).toBeCloseTo(13);
+        });
 
-    it('offsets the left position when the window is horizontally scrolled', function () {
-      scroll = {top: 0, left: 10};
-      expect(subject().left).toBeCloseTo(11.01);
-    });
+        it('returns the left position relative to the parent left position', function () {
+          expect(subject().left).toBeCloseTo(1.02);
+        });
+
+        it('offsets the top position when the window is vertically scrolled', function () {
+          scroll = {top: 10, left: 0};
+          expect(subject().top).toBeCloseTo(13);
+        });
+
+        it('offsets the left position when the window is horizontally scrolled', function () {
+          scroll = {top: 0, left: 10};
+          expect(subject().left).toBeCloseTo(11.02);
+        });
+      });
+
+      describe('and field type is reply', function () {
+        var scroll = {top: 0, left: 0};
+        var subject = function () {
+          var rect = {top: 2, left: 2, height: 10};
+          var parentRect = {top: 1, left: 1, height: 1};
+          var fieldType = 'reply inbox';
+          return HighlightGenerator.transformCoordinatesRelativeToParent(rect, parentRect, scroll, fieldType);
+        };
+
+        it('returns the top position relative to the parent top position and offset by 90% of the rectangle', function () {
+          expect(subject().top).toBeCloseTo(1.12);
+        });
+
+        it('returns the left position relative to the parent left position', function () {
+          expect(subject().left).toBeCloseTo(1);
+        });
+
+        it('offsets the top position when the window is vertically scrolled', function () {
+          scroll = {top: 10, left: 0};
+          expect(subject().top).toBeCloseTo(1.12);
+        });
+
+        it('offsets the left position when the window is horizontally scrolled', function () {
+          scroll = {top: 0, left: 10};
+          expect(subject().left).toBeCloseTo(11);
+        });
+      });
   });
+
 
   describe('#setNodeStyle', function () {
     var node;
