@@ -1,7 +1,6 @@
 'use strict';
 
 function setWarnings(target) {
-  warningChecker.removeWarnings(target);
   warningChecker.addWarnings(target);
   ['focus', 'keydown'].forEach(function(event) {
     target.addEventListener(event, function() {
