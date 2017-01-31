@@ -17,13 +17,22 @@ function removeWarnings(target) {
 }
 
 function checkForWarnings() {
-  var targets;
+  var target
   var fieldType;
   var observer = new MutationObserver(function(mutation) {
-    targets = []
-    targets = document.querySelectorAll('div[contentEditable=true]');
-    console.log(targets)
-    targets.forEach((target) => {
+    target = null;
+    document.querySelectorAll('div[contentEditable=true]').forEach((field) => {
+      [field, document.activeElement].reduce((a, b) => {
+        if (a != b) {
+          target = document.activeElement;
+        }
+        if (target === null) {
+          target = field;
+        }
+      });
+    });
+    if (target) {
+      fieldType = null;
       // Inbox
       if (target.getAttribute('aria-label') === 'Reply') {
         fieldType = 'reply';
@@ -50,7 +59,7 @@ function checkForWarnings() {
           removeWarnings(target)
         }
       }
-    });
+    }
   });
   observer.observe(document, {characterData: true, subtree: true});
 }
