@@ -36,29 +36,25 @@ function checkForWarnings() {
       // Inbox
       if (target.getAttribute('aria-label') === 'Reply') {
         fieldType = 'reply';
-        setWarnings(target, fieldType)
-        removeWarnings(target)
+      } else if (target.getAttribute('aria-label') === 'Body') {
+          fieldType = 'compose';
       //Gmail
       } else if (target.getAttribute('aria-label') === 'Message Body') {
         var parentNode = mutation[0].target.parentNode;
         parentNode.childNodes.forEach((node) => {
           if (node.className === 'gmail_quote') {
             fieldType = 'forward';
-            setWarnings(target, fieldType);
-            removeWarnings(target);
           }
         });
         if (parentNode.nextSibling && fieldType != 'forward') {
           fieldType = 'reply';
-          setWarnings(target, fieldType);
-          removeWarnings(target);
         }
         if (fieldType != 'forward' && fieldType != 'reply') {
           fieldType = 'compose';
-          setWarnings(target, fieldType);
-          removeWarnings(target)
         }
       }
+      setWarnings(target, fieldType)
+      removeWarnings(target)
     }
   });
   observer.observe(document, {characterData: true, subtree: true});
