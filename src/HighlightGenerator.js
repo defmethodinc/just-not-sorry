@@ -41,9 +41,19 @@ HighlightGenerator.transformCoordinatesRelativeToParent = function transformCoor
       return coords;
     }
   } else if (HighlightGenerator.getHostname() === 'mail.google.com') {
-    coords.top = (rect.top - parentRect.top + (rect.height * 1.2) + (parentRect.height * 0.04) - 12);
-    coords.left = ((rect.left * 1.01) + scroll.left - parentRect.left);
-    return coords;
+    if (fieldType === 'compose') {
+      coords.top = (rect.top - parentRect.top + (rect.height * 1.2));
+      coords.left = ((rect.left * 1.01) + scroll.left - parentRect.left);
+      return coords;
+    } else if (fieldType === 'reply') {
+      coords.top = (rect.top - parentRect.top + (parentRect.height * 0.12));
+      coords.left = (rect.left + scroll.left - parentRect.left);
+      return coords;
+    } else if (fieldType === 'forward') {
+      coords.top = (rect.top - parentRect.top + (parentRect.height * 0.04) - 10);
+      coords.left = (rect.left + scroll.left - parentRect.left);
+      return coords;
+    }
   }
 };
 
