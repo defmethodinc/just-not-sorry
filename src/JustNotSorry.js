@@ -37,7 +37,7 @@ function checkForWarnings() {
       if (target.getAttribute('aria-label') === 'Reply') {
         fieldType = 'reply';
       } else if (target.getAttribute('aria-label') === 'Body') {
-          fieldType = 'compose';
+        fieldType = 'compose';
       //Gmail
       } else if (target.getAttribute('aria-label') === 'Message Body') {
         var parentNode = mutation[0].target.parentNode;
