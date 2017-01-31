@@ -31,6 +31,7 @@ HighlightGenerator.generateHighlightNode = function generateHighlightNode() {
 HighlightGenerator.transformCoordinatesRelativeToParent = function transformCoordinatesRelativeToParent(rect, parentRect, scroll, fieldType) {
   var coords = {};
   if (HighlightGenerator.getHostname() === 'inbox.google.com') {
+    fieldType = fieldType + ' inbox';
     if (fieldType === 'compose inbox') {
       coords.top = (rect.top - parentRect.top + (rect.height * 0.9));
       coords.left = (rect.left + scroll.left - parentRect.left);
@@ -41,6 +42,7 @@ HighlightGenerator.transformCoordinatesRelativeToParent = function transformCoor
       return coords;
     }
   } else if (HighlightGenerator.getHostname() === 'mail.google.com') {
+    fieldType = fieldType + ' gmail';
     if (fieldType === 'compose gmail') {
       coords.top = (rect.top - parentRect.top + (rect.height * 1.2));
       coords.left = ((rect.left * 1.01) + scroll.left - parentRect.left);
