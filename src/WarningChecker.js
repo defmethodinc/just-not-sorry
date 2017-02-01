@@ -6,7 +6,7 @@ function WarningChecker(options) {
 
 WarningChecker.prototype.addWarning = function addWarning(node, keyword, message, fieldType) {
   'use strict';
-  var pattern = new RegExp(keyword, 'ig');
+  var pattern = new RegExp('\\b(' + keyword + ')\\b', 'ig');
   domRegexpMatch(node, pattern, HighlightGenerator.highlightMatches(message, this.warningClass, fieldType));
 };
 

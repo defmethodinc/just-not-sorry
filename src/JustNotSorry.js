@@ -1,22 +1,12 @@
 'use strict';
 
-function setWarnings(target, fieldType) {
-  warningChecker.removeWarnings(target)
-  warningChecker.addWarnings(target, fieldType);
-  ['focus', 'keydown'].forEach(function(event) {
-    target.addEventListener(event, function() {
-      warningChecker.addWarnings(target, fieldType);
-    }, {once: true});
-  });
-}
-
-function removeWarnings(target) {
+function removeWarningsOnBlur(target) {
   target.onblur = function() {
     warningChecker.removeWarnings(target);
   }
 }
 
-function checkForWarnings() {
+function checkForWarnings(warningChecker) {
   var target
   var fieldType;
   var observer = new MutationObserver(function(mutation) {
@@ -46,19 +36,20 @@ function checkForWarnings() {
             fieldType = 'forward';
           }
         });
-        if (parentNode.nextSibling && fieldType != 'forward') {
+        if ((parentNode.parentNode.nextSibling && parentNode.parentNode.nextSibling.className === 'aO8' && fieldType != 'forward') || (parentNode.nextSibling && parentNode.nextSibling.className === 'aO8' && fieldType != 'forward')) {
           fieldType = 'reply';
         }
         if (fieldType != 'forward' && fieldType != 'reply') {
           fieldType = 'compose';
         }
       }
-      setWarnings(target, fieldType)
-      removeWarnings(target)
+      warningChecker.removeWarnings(target);
+      warningChecker.addWarnings(target, fieldType);
+      removeWarningsOnBlur(target);
     }
   });
   observer.observe(document, {characterData: true, subtree: true});
 }
 
 var warningChecker = new WarningChecker(WARNINGS);
-checkForWarnings();
+checkForWarnings(warningChecker);
