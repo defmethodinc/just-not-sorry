@@ -11,7 +11,7 @@ chrome.runtime.onInstalled.addListener(function() {
       {
         conditions: [
           new chrome.declarativeContent.PageStateMatcher({
-            pageUrl: { urlContains: 'mail.google.com' },
+            pageUrl: { urlContains: 'google.com' },
           })
         ],
         actions: [ new chrome.declarativeContent.ShowPageAction() ]
