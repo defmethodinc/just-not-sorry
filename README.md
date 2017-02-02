@@ -43,17 +43,16 @@ Open 'SpecRunner.html' in your web browser to run the test suite.
 
 ### Libraries Used
 For production:
-  * [gmail.js](https://github.com/KartikTalwar/gmail.js)
   * [head.js](http://headjs.com/)
   * [dom-regexp-match](https://github.com/webmodules/dom-regexp-match)
   * [chrome-platform-analytics](https://github.com/GoogleChrome/chrome-platform-analytics)
-  * [jQuery](https://jquery.com/)
   * Based on [gmail-chrome-extension-boilerplate](https://github.com/KartikTalwar/gmail-chrome-extension-boilerplate)
 
 For test:
   * [jasmine.js](http://jasmine.github.io/)
   * [jasmine-jquery.js](https://github.com/velesin/jasmine-jquery)
+  * [jQuery](https://jquery.com/)
 
 ### License
 
-Just Not Sorry is Copyright © 2015-16 Cyrus Innovation, Inc. It is free software, and may be redistributed under the terms specified in the (MIT) LICENSE file.
+Just Not Sorry is Copyright © 2015-17 Def Method, Inc. It is free software, and may be redistributed under the terms specified in the (MIT) LICENSE file.
