@@ -6,50 +6,70 @@ function removeWarningsOnBlur(target) {
   }
 }
 
-function checkForWarnings(warningChecker) {
-  var target
-  var fieldType;
-  var observer = new MutationObserver(function(mutation) {
-    target = null;
-    document.querySelectorAll('div[contentEditable=true]').forEach((field) => {
-      [field, document.activeElement].reduce((a, b) => {
-        if (a != b) {
-          target = document.activeElement;
-        }
-        if (target === null) {
-          target = field;
-        }
-      });
-    });
-    if (target) {
-      fieldType = null;
-      // Inbox
-      if (target.getAttribute('aria-label') === 'Reply') {
-        fieldType = 'reply';
-      } else if (target.getAttribute('aria-label') === 'Body') {
-        fieldType = 'compose';
-      //Gmail
-      } else if (target.getAttribute('aria-label') === 'Message Body') {
-        var parentNode = mutation[0].target.parentNode;
-        parentNode.childNodes.forEach((node) => {
-          if (node.className === 'gmail_quote') {
-            fieldType = 'forward';
-          }
-        });
-        if ((parentNode.parentNode.nextSibling && parentNode.parentNode.nextSibling.className === 'aO8' && fieldType != 'forward') || (parentNode.nextSibling && parentNode.nextSibling.className === 'aO8' && fieldType != 'forward')) {
-          fieldType = 'reply';
-        }
-        if (fieldType != 'forward' && fieldType != 'reply') {
-          fieldType = 'compose';
-        }
-      }
-      warningChecker.removeWarnings(target);
-      warningChecker.addWarnings(target, fieldType);
-      removeWarningsOnBlur(target);
-    }
+var warningChecker = new WarningChecker(WARNINGS);
+
+var addTextEventListener = function(mutation) {
+  ['focus', 'keyup'].forEach(function(action) {
+    document.querySelector('div[contentEditable=true]').addEventListener(action, checkForWarnings(warningChecker, mutation))
   });
-  observer.observe(document, {characterData: true, subtree: true});
 }
 
-var warningChecker = new WarningChecker(WARNINGS);
-checkForWarnings(warningChecker);
+var removeTextEventListener = function() {
+  ['focus', 'keyup'].forEach(function(action) {
+    document.querySelector('div[contentEditable=true]').removeEventListener(action, checkForWarnings(warningChecker, action))
+  });
+}
+
+var observer = new MutationObserver(function(mutation) {
+  console.log('mutation')
+  if (document.querySelector('div[contentEditable=true]')) {
+    addTextEventListener(mutation);
+    removeTextEventListener();
+    addTextEventListener(mutation);
+  }
+});
+
+function checkForWarnings(warningChecker, mutation) {
+  var target
+  var fieldType;
+  target = document.querySelector('div[contentEditable=true]');
+
+  document.querySelectorAll('div[contentEditable=true]').forEach((field) => {
+    var active = document.activeElement;
+    [field, active].reduce((a, b) => {
+      if (a != b) {
+        target = active;
+      }
+      if (target === null) {
+        target = field;
+      }
+    });
+  });
+
+  fieldType = null;
+  // Inbox
+  if (target.getAttribute('aria-label') === 'Reply') {
+    fieldType = 'reply';
+  } else if (target.getAttribute('aria-label') === 'Body') {
+    fieldType = 'compose';
+  }
+  //Gmail
+  if (target.getAttribute('aria-label') === 'Message Body') {
+    Array.from(target.children).forEach(function(child) {
+      if (child.className ==='gmail_quote') {
+        fieldType = 'forward';
+      }
+    });
+    if (fieldType != 'forward' && target.nextSibling) {
+      fieldType = 'reply';
+    }
+    if (fieldType != 'forward' && fieldType != 'reply') {
+      fieldType = 'compose';
+    }
+  }
+  warningChecker.removeWarnings(target);
+  warningChecker.addWarnings(target, fieldType);
+  removeWarningsOnBlur(target);
+}
+
+observer.observe(document, {characterData: true, attributes: true, subtree: true})
