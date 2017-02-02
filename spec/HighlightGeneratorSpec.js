@@ -66,7 +66,7 @@ describe('HighlightGenerator', function () {
         var subject = function () {
           var rect = {top: 2, left: 2, height: 10};
           var parentRect = {top: 1, left: 1, height: 1};
-          var fieldType = 'compose gmail';
+          var fieldType = 'compose';
           return HighlightGenerator.transformCoordinatesRelativeToParent(rect, parentRect, scroll, fieldType);
         };
 
@@ -94,7 +94,7 @@ describe('HighlightGenerator', function () {
         var subject = function () {
           var rect = {top: 2, left: 2, height: 10};
           var parentRect = {top: 1, left: 1, height: 1};
-          var fieldType = 'reply gmail';
+          var fieldType = 'reply';
           return HighlightGenerator.transformCoordinatesRelativeToParent(rect, parentRect, scroll, fieldType);
         };
 
@@ -122,7 +122,7 @@ describe('HighlightGenerator', function () {
         var subject = function () {
           var rect = {top: 2, left: 2, height: 10};
           var parentRect = {top: 1, left: 1, height: 1};
-          var fieldType = 'forward gmail';
+          var fieldType = 'forward';
           return HighlightGenerator.transformCoordinatesRelativeToParent(rect, parentRect, scroll, fieldType);
         };
 
@@ -152,7 +152,7 @@ describe('HighlightGenerator', function () {
         var subject = function () {
           var rect = {top: 2, left: 2, height: 10};
           var parentRect = {top: 1, left: 1, height: 1};
-          var fieldType = 'compose inbox';
+          var fieldType = 'compose';
           return HighlightGenerator.transformCoordinatesRelativeToParent(rect, parentRect, scroll, fieldType);
         };
 
@@ -180,7 +180,7 @@ describe('HighlightGenerator', function () {
         var subject = function () {
           var rect = {top: 2, left: 2, height: 10};
           var parentRect = {top: 1, left: 1, height: 1};
-          var fieldType = 'reply inbox';
+          var fieldType = 'reply';
           return HighlightGenerator.transformCoordinatesRelativeToParent(rect, parentRect, scroll, fieldType);
         };
 
@@ -202,8 +202,8 @@ describe('HighlightGenerator', function () {
           expect(subject().left).toBeCloseTo(11);
         });
       });
+    });
   });
-
 
   describe('#setNodeStyle', function () {
     var node;
