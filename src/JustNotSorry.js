@@ -21,11 +21,9 @@ var removeTextEventListener = function() {
 }
 
 var observer = new MutationObserver(function(mutation) {
-  console.log('mutation')
   if (document.querySelector('div[contentEditable=true]')) {
     addTextEventListener(mutation);
     removeTextEventListener();
-    addTextEventListener(mutation);
   }
 });
 
