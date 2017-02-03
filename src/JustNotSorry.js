@@ -9,13 +9,13 @@ function removeWarningsOnBlur(target) {
 var warningChecker = new WarningChecker(WARNINGS);
 
 var addTextEventListener = function(mutation) {
-  ['focus', 'keyup'].forEach(function(action) {
+  ['focus', 'input'].forEach(function(action) {
     document.querySelector('div[contentEditable=true]').addEventListener(action, checkForWarnings(warningChecker, mutation))
   });
 }
 
 var removeTextEventListener = function() {
-  ['focus', 'keyup'].forEach(function(action) {
+  ['focus', 'input'].forEach(function(action) {
     document.querySelector('div[contentEditable=true]').removeEventListener(action, checkForWarnings(warningChecker, action))
   });
 }
