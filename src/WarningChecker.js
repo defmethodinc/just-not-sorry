@@ -20,7 +20,7 @@ WarningChecker.prototype.addWarnings = function addWarnings(node, fieldType) {
 
 WarningChecker.prototype.removeWarnings = function removeWarnings(node) {
   'use strict';
-  var elementsToRemove = node.getElementsByClassName(this.warningClass);
+  var elementsToRemove = document.getElementsByClassName(this.warningClass);
   for (var i = elementsToRemove.length; i--;) {
     elementsToRemove[i].remove();
   }

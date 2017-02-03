@@ -9,7 +9,7 @@ HighlightGenerator.highlightMatches = function highlightMatches(message, warning
       var highlightNode = HighlightGenerator.highlightMatch(rectsToHighlight[i], parentRect, fieldType);
       highlightNode.title = message;
       highlightNode.className = warningClass;
-      parentNode.appendChild(highlightNode);
+      parentNode.parentNode.appendChild(highlightNode);
     }
   }
 };

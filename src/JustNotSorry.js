@@ -58,7 +58,7 @@ function checkForWarnings(warningChecker, mutation) {
         fieldType = 'forward';
       }
     });
-    if (fieldType != 'forward' && target.nextSibling) {
+    if (fieldType != 'forward' && target.nextSibling && target.nextSibling.className === 'aO8') {
       fieldType = 'reply';
     }
     if (fieldType != 'forward' && fieldType != 'reply') {
