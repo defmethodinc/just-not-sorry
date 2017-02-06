@@ -1,62 +1,73 @@
-function refresh(f) {
-  'use strict';
-  if ((/loading/.test(document.readyState)) ||
-      (window.jQuery === undefined) ||
-      (window.Gmail === undefined) ||
-      (window.WARNINGS === undefined)) {
-    setTimeout('refresh(' + f + ')', 10);
-  } else {
-    f();
+'use strict';
+
+function removeWarningsOnBlur(target) {
+  target.onblur = function() {
+    warningChecker.removeWarnings(target);
   }
 }
 
-var JustNotSorry = function() {
-  'use strict';
-  var gmail;
-  var warningChecker;
+var warningChecker = new WarningChecker(WARNINGS);
 
-  function addWarningsOnFocusIn(compose) {
-    var $target = compose.$el;
-    $target.focusin(function(e) {
-      var body = compose.dom('body');
-      var editor = body.parent();
-      if (e.target === body.get(0)) {
-        warningChecker.addWarnings(editor);
+var addTextEventListener = function(mutation) {
+  ['focus', 'input'].forEach(function(action) {
+    document.querySelector('div[contentEditable=true]').addEventListener(action, checkForWarnings(warningChecker, mutation))
+  });
+}
+
+var removeTextEventListener = function() {
+  ['focus', 'input'].forEach(function(action) {
+    document.querySelector('div[contentEditable=true]').removeEventListener(action, checkForWarnings(warningChecker, action))
+  });
+}
+
+var observer = new MutationObserver(function(mutation) {
+  if (document.querySelector('div[contentEditable=true]')) {
+    addTextEventListener(mutation);
+    removeTextEventListener();
+  }
+});
+
+function checkForWarnings(warningChecker, mutation) {
+  var target
+  var fieldType;
+  target = document.querySelector('div[contentEditable=true]');
+
+  document.querySelectorAll('div[contentEditable=true]').forEach((field) => {
+    var active = document.activeElement;
+    [field, active].reduce((a, b) => {
+      if (a != b) {
+        target = active;
+      }
+      if (target === null) {
+        target = field;
       }
     });
-  }
+  });
 
-  function removeWarningsOnFocusOut(compose) {
-    var $target = compose.$el;
-    $target.focusout(function(e) {
-      var body = compose.dom('body');
-      var editor = body.parent();
-      if (e.target === body.get(0)) {
-        warningChecker.removeWarnings(editor);
+  fieldType = null;
+  // Inbox
+  if (target.getAttribute('aria-label') === 'Reply' || target.getAttribute('aria-label') === 'Reply to all') {
+    fieldType = 'reply';
+  } else if (target.getAttribute('aria-label') === 'Body') {
+    fieldType = 'compose';
+  }
+  //Gmail
+  if (target.getAttribute('aria-label') === 'Message Body') {
+    Array.from(target.children).forEach(function(child) {
+      if (child.className ==='gmail_quote') {
+        fieldType = 'forward';
       }
     });
+    if (fieldType != 'forward' && target.nextSibling && target.nextSibling.className === 'aO8') {
+      fieldType = 'reply';
+    }
+    if (fieldType != 'forward' && fieldType != 'reply') {
+      fieldType = 'compose';
+    }
   }
+  warningChecker.removeWarnings(target.parentNode);
+  warningChecker.addWarnings(target.parentNode, fieldType);
+  removeWarningsOnBlur(target.parentNode);
+}
 
-  function updateWarningsOnMutation(compose) {
-    var target = compose.$el.get(0);
-    var observer = new MutationObserver(function() {
-      var body = compose.dom('body');
-      var editor = body.parent();
-      warningChecker.removeWarnings(editor);
-      warningChecker.addWarnings(editor);
-    });
-    observer.observe(target, {characterData: true, subtree: true});
-  }
-
-  function checkForWarnings(compose) {
-    addWarningsOnFocusIn(compose);
-    removeWarningsOnFocusOut(compose);
-    updateWarningsOnMutation(compose);
-  }
-
-  gmail = new Gmail();
-  warningChecker = new WarningChecker(WARNINGS);
-  gmail.observe.on('compose', checkForWarnings);
-};
-
-refresh(JustNotSorry);
+observer.observe(document, {characterData: true, attributes: true, subtree: true})

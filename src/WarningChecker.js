@@ -4,22 +4,24 @@ function WarningChecker(options) {
   this.warningClass = options.warningClass || 'jns-warning';
 }
 
-WarningChecker.prototype.addWarning = function addWarning($content, keyword, message) {
+WarningChecker.prototype.addWarning = function addWarning(node, keyword, message, fieldType) {
   'use strict';
-  var pattern = new RegExp('\\b(' + keyword + ')(?!($))\\b', 'ig');
-  domRegexpMatch($content.get(0), pattern, HighlightGenerator.highlightMatches(message, this.warningClass));
+  var pattern = new RegExp('\\b(' + keyword + ')\\b', 'ig');
+  domRegexpMatch(node, pattern, HighlightGenerator.highlightMatches(message, this.warningClass, fieldType));
 };
 
-WarningChecker.prototype.addWarnings = function addWarnings($content) {
+WarningChecker.prototype.addWarnings = function addWarnings(node, fieldType) {
   'use strict';
   var _this = this;
-  $.each(_this.warnings, function(index, warning) {
-    _this.addWarning($content, warning.keyword, warning.message);
+  this.warnings.forEach(function(warning) {
+    _this.addWarning(node, warning.keyword, warning.message, fieldType);
   });
 };
 
-WarningChecker.prototype.removeWarnings = function removeWarnings($content) {
+WarningChecker.prototype.removeWarnings = function removeWarnings(node) {
   'use strict';
-  var $elementsToRemove = $content.find('div.' + this.warningClass);
-  $elementsToRemove.remove();
+  var elementsToRemove = document.getElementsByClassName(this.warningClass);
+  for (var i = elementsToRemove.length; i--;) {
+    elementsToRemove[i].remove();
+  }
 };
