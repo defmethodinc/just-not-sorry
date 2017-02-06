@@ -46,7 +46,6 @@ function checkForWarnings(warningChecker, mutation) {
 
   fieldType = null;
   // Inbox
-  console.log('target', target)
   if (target.getAttribute('aria-label') === 'Reply' || target.getAttribute('aria-label') === 'Reply to all') {
     fieldType = 'reply';
   } else if (target.getAttribute('aria-label') === 'Body') {
