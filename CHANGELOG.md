@@ -2,7 +2,7 @@
 
 This file is a record of all changes, including unreleased ones, made to version releases of Just Not Sorry.
 
-## [Unreleased]
+## [1.5.0] - 2017-02-06
 ### Added
 - Just Not Sorry now works with Google Inbox and Gmail.
 
@@ -14,14 +14,14 @@ This file is a record of all changes, including unreleased ones, made to version
 
 - Testing has been updated and all tests are passing.
 
-- As a result of these changes, the last known bug from before (cursor descending beyond the last paragraph in the composition area) has been changed to a bug where the cursor will jump to unexpected places within the composition area when the user presses the down arrow key beyond the last paragraph.
-
 - A new argument, `fieldType`, has been added. This argument is passed through many functions and allows us to differentiate between when a user is writing in a compose box, a reply box, and a forward box.
 
 - The existing bug, where the underline will not follow a keyword after a carriage return has been fixed on Gmail (although there is noticable delay) and persists on Inbox (or will sometimes follow with much more delay).
 
 ### Fixed
 - When a user completes typing of a keyword, underline will immediately come into place, instead of waiting until the keystroke following the completion of the keyword.
+
+- Underline aligment has been tweaked.
 
 ## [1.0.0] - 2016-04-03
 ### Overview
@@ -40,8 +40,8 @@ When a keyword has begun to be deleted, the underline disappears. Underlines wil
 
 - If ths user loads a reply message that has already been started, additional misplaced highlights appear.
 
-[Unreleased]: https://github.com/cyrusinnovation/just-not-sorry/compare/inbox-support-spike
-[1.0.0]: https://github.com/cyrusinnovation/just-not-sorry
+[1.5.0]: https://github.com/cyrusinnovation/just-not-sorry
+[1.0.0]: https://github.com/defmethodinc/just-not-sorry/releases/tag/v1.0.0
 [`Gmail.js`]: https://github.com/KartikTalwar/gmail.js/tree/master
 [`jQuery`]: https://jquery.com/
 [`warnings.js`]: https://github.com/cyrusinnovation/just-not-sorry/blob/master/src/Warnings.js
