@@ -47,8 +47,8 @@ describe('HighlightGenerator', function () {
       var node = HighlightGenerator.highlightMatch(rect, parentRect, fieldType);
       expect(node).toBeDefined();
       expect(node.nodeName).toEqual('DIV');
-      expect(node.style.top).toEqual('13px');
-      expect(node.style.left).toEqual('1.02px');
+      expect(node.style.top).toEqual('11px');
+      expect(node.style.left).toEqual('3px');
     });
   });
 
@@ -71,21 +71,21 @@ describe('HighlightGenerator', function () {
         };
 
         it('returns the top position relative to the parent top position and offset by 90% of the rectangle', function () {
-          expect(subject().top).toBeCloseTo(13);
+          expect(subject().top).toBeCloseTo(11);
         });
 
         it('returns the left position relative to the parent left position', function () {
-          expect(subject().left).toBeCloseTo(1.02);
+          expect(subject().left).toBeCloseTo(3);
         });
 
         it('offsets the top position when the window is vertically scrolled', function () {
           scroll = {top: 10, left: 0};
-          expect(subject().top).toBeCloseTo(13);
+          expect(subject().top).toBeCloseTo(11);
         });
 
         it('offsets the left position when the window is horizontally scrolled', function () {
           scroll = {top: 0, left: 10};
-          expect(subject().left).toBeCloseTo(11.02);
+          expect(subject().left).toBeCloseTo(13);
         });
       });
 
@@ -127,7 +127,7 @@ describe('HighlightGenerator', function () {
         };
 
         it('returns the top position relative to the parent top position and offset by 90% of the rectangle', function () {
-          expect(subject().top).toBeCloseTo(-8.96);
+          expect(subject().top).toBeCloseTo(1.02);
         });
 
         it('returns the left position relative to the parent left position', function () {
@@ -136,7 +136,7 @@ describe('HighlightGenerator', function () {
 
         it('offsets the top position when the window is vertically scrolled', function () {
           scroll = {top: 10, left: 0};
-          expect(subject().top).toBeCloseTo(-8.96);
+          expect(subject().top).toBeCloseTo(1.02);
         });
 
         it('offsets the left position when the window is horizontally scrolled', function () {
@@ -157,21 +157,21 @@ describe('HighlightGenerator', function () {
         };
 
         it('returns the top position relative to the parent top position and offset by 90% of the rectangle', function () {
-          expect(subject().top).toBeCloseTo(13);
+          expect(subject().top).toBeCloseTo(11);
         });
 
         it('returns the left position relative to the parent left position', function () {
-          expect(subject().left).toBeCloseTo(1.02);
+          expect(subject().left).toBeCloseTo(3);
         });
 
         it('offsets the top position when the window is vertically scrolled', function () {
           scroll = {top: 10, left: 0};
-          expect(subject().top).toBeCloseTo(13);
+          expect(subject().top).toBeCloseTo(11);
         });
 
         it('offsets the left position when the window is horizontally scrolled', function () {
           scroll = {top: 0, left: 10};
-          expect(subject().left).toBeCloseTo(11.02);
+          expect(subject().left).toBeCloseTo(13);
         });
       });
 

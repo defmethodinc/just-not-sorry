@@ -46,7 +46,8 @@ function checkForWarnings(warningChecker, mutation) {
 
   fieldType = null;
   // Inbox
-  if (target.getAttribute('aria-label') === 'Reply') {
+  console.log('target', target)
+  if (target.getAttribute('aria-label') === 'Reply' || target.getAttribute('aria-label') === 'Reply to all') {
     fieldType = 'reply';
   } else if (target.getAttribute('aria-label') === 'Body') {
     fieldType = 'compose';
@@ -65,9 +66,9 @@ function checkForWarnings(warningChecker, mutation) {
       fieldType = 'compose';
     }
   }
-  warningChecker.removeWarnings(target);
-  warningChecker.addWarnings(target, fieldType);
-  removeWarningsOnBlur(target);
+  warningChecker.removeWarnings(target.parentNode);
+  warningChecker.addWarnings(target.parentNode, fieldType);
+  removeWarningsOnBlur(target.parentNode);
 }
 
 observer.observe(document, {characterData: true, attributes: true, subtree: true})

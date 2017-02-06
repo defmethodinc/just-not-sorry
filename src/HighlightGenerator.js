@@ -9,7 +9,7 @@ HighlightGenerator.highlightMatches = function highlightMatches(message, warning
       var highlightNode = HighlightGenerator.highlightMatch(rectsToHighlight[i], parentRect, fieldType);
       highlightNode.title = message;
       highlightNode.className = warningClass;
-      parentNode.parentNode.appendChild(highlightNode);
+      parentNode.appendChild(highlightNode);
     }
   }
 };
@@ -31,28 +31,21 @@ HighlightGenerator.generateHighlightNode = function generateHighlightNode() {
 HighlightGenerator.transformCoordinatesRelativeToParent = function transformCoordinatesRelativeToParent(rect, parentRect, scroll, fieldType) {
   var coords = {};
   if (HighlightGenerator.getHostname() === 'inbox.google.com') {
-    fieldType = fieldType + ' inbox';
-    if (fieldType === 'compose inbox') {
-      coords.top = (rect.top - parentRect.top + (rect.height * 0.9));
-      coords.left = (rect.left + scroll.left - parentRect.left);
-      return coords;
-    } else if (fieldType === 'reply inbox') {
-      coords.top = (rect.top - parentRect.top + (rect.height * 0.6));
-      coords.left = ((rect.left - 20) + scroll.left - parentRect.left);
-      return coords;
-    }
+    coords.top = (rect.top - parentRect.top + (rect.height * 0.6));
+    coords.left = (rect.left + scroll.left - parentRect.left);
+    return coords;
   } else if (HighlightGenerator.getHostname() === 'mail.google.com') {
     fieldType = fieldType + ' gmail';
     if (fieldType === 'compose gmail') {
-      coords.top = (rect.top - parentRect.top + (rect.height * 1.2));
-      coords.left = ((rect.left * 1.01) + scroll.left - parentRect.left);
+      coords.top = (rect.top - parentRect.top + rect.height);
+      coords.left = (rect.left + scroll.left - parentRect.left + 2);
       return coords;
     } else if (fieldType === 'reply gmail') {
       coords.top = (rect.top - parentRect.top + (parentRect.height * 0.12));
       coords.left = (rect.left + scroll.left - parentRect.left);
       return coords;
     } else if (fieldType === 'forward gmail') {
-      coords.top = (rect.top - parentRect.top + (parentRect.height * 0.04) - 10);
+      coords.top = (rect.top - parentRect.top + (parentRect.height * 0.02));
       coords.left = (rect.left + scroll.left - parentRect.left);
       return coords;
     }
