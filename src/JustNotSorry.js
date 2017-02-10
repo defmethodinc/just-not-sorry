@@ -70,4 +70,4 @@ function checkForWarnings(warningChecker, mutation) {
   removeWarningsOnBlur(target.parentNode);
 }
 
-observer.observe(document, {characterData: true, attributes: true, subtree: true})
+observer.observe(document, {characterData: true, subtree: true})
