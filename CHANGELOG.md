@@ -2,6 +2,10 @@
 
 This file is a record of all changes, including unreleased ones, made to version releases of Just Not Sorry.
 
+## [1.5.1] - 2017-02-12
+### Fixed
+- With 1.5.0, if the user was also using certain other extensions, Just Not Sorry underline triggers would cause the browser's tab to immediately crash. This has been resolved by making the mutation observer less sensitive (removing the `attributes` option).
+
 ## [1.5.0] - 2017-02-06
 ### Added
 - Just Not Sorry now works with Google Inbox and Gmail.
@@ -40,7 +44,8 @@ When a keyword has begun to be deleted, the underline disappears. Underlines wil
 
 - If ths user loads a reply message that has already been started, additional misplaced highlights appear.
 
-[1.5.0]: https://github.com/cyrusinnovation/just-not-sorry
+[1.5.1]: https://github.com/defmethodinc/just-not-sorry
+[1.5.0]: https://github.com/defmethodinc/just-not-sorry/releases/tag/v1.5.0
 [1.0.0]: https://github.com/defmethodinc/just-not-sorry/releases/tag/v1.0.0
 [`Gmail.js`]: https://github.com/KartikTalwar/gmail.js/tree/master
 [`jQuery`]: https://jquery.com/
