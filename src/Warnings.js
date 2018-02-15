@@ -97,5 +97,11 @@ var WARNINGS = {
       source:  'http://www.vogue.com/13362056/things-working-women-should-never-email/',
       message: 'Don\'t lessen the impact of what you say before ' +
                'you say it. --Alexandra Macon', },
+    { keyword: 'I\'m just being honest here|If I\'m being honest|Honestly|to be honest|if I\'m honest|to be perfectly honest|in all honesty',
+      source:  'https://lifehacker.com/the-verbal-tee-ups-that-often-reveal-dishonesty-1505870461',
+      message: 'Tee-ups like \'to be honest\' often signal insincerity ' +
+               'and can make a reader shut down. ' + 
+               'Also, if you have to announce your honesty now' +
+               ', maybe you aren\'t always truthful.', },
   ],
 };
