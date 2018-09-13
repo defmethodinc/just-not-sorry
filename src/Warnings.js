@@ -97,5 +97,9 @@ var WARNINGS = {
       source:  'http://www.vogue.com/13362056/things-working-women-should-never-email/',
       message: 'Don\'t lessen the impact of what you say before ' +
                'you say it. --Alexandra Macon', },
+    { keyword: 'I guess',
+      source:  'https://www.inc.com/mary-rezek/cut-kinda-sorta-i-guess-how-to-end-your-filler-word-bad-habits.html',
+      message: 'Filler words disable your message, detracting from your ability ' +
+               'to be clear, understood, and credible. --Mary Rezek', },
   ],
 };
