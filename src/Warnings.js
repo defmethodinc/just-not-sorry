@@ -103,5 +103,10 @@ var WARNINGS = {
     { keyword: 'I guess',
       source:  'https://www.inc.com/mary-rezek/cut-kinda-sorta-i-guess-how-to-end-your-filler-word-bad-habits.html',
       message: 'If you\'re sure of something, \"guessing\" detracts from your message and opens doubt in the reader\'s mind.', },
+    { keyword: '!!!',
+      source:  'https://www.theatlantic.com/technology/archive/2018/06/exclamation-point-inflation/563774/?utm_source=feed',
+      message: 'We get it, you\'re excited!!! Use that many exclamation points with your friends,' +
+               'not your coworkers or clients. This is not social media.' +
+               '--Julie Beck', },
   ],
 };
