@@ -1,5 +1,6 @@
 var scriptsToLoad = [
   chrome.extension.getURL('lib/dom-regexp-match-1.1.0.js'),
+  chrome.extension.getURL('lib/jquery-3.3.1.min.js'),
   chrome.extension.getURL('src/HighlightGenerator.js'),
   chrome.extension.getURL('src/WarningChecker.js'),
   chrome.extension.getURL('src/Warnings.js'),

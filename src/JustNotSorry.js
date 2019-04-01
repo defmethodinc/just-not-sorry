@@ -70,4 +70,31 @@ function checkForWarnings(warningChecker, mutation) {
   removeWarningsOnBlur(target.parentNode);
 }
 
+function isNear(element, distance, event) {
+  let left = element.offset().left - 2,
+    top = element.offset().top - distance,
+    right = left + element.width(),
+    bottom = top + element.height() + distance,
+    x = event.pageX,
+    y = event.pageY;
+  return (x > left && x < right && y > top && y < bottom);
+};
+
+function getYOffset(element){
+  let yOffset = 20; // Set default
+  try { yOffset = parseInt(element.getAttribute('triggerHeight')) } catch (err) {}
+  return yOffset;
+}
+
+$('body').mousemove(function (e) {
+ $('.jns-warning').each(function() {
+    var yOffset = getYOffset($(this)[0]);
+      if(isNear($(this), yOffset, event) ) {
+        $(this).children('.jns-message').fadeIn();
+      } else {
+        $(this).children('.jns-message').fadeOut();     
+      };
+  });
+});
+
 observer.observe(document, {characterData: true, subtree: true})
