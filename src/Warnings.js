@@ -22,7 +22,7 @@ var WARNINGS = {
       source:  'http://www.fastcompany.com/3049609/the-future-of-work/4-types-of-useless-phrases-you-need-to-eliminate-from-your-emails',
       message: '"I think" undermines your idea and displays an overall lack of ' +
                'self-confidence. --Lydia Dishman', },
-    { keyword: 'I\'m no expert|We\'re no expert',
+    { keyword: 'I\'m no expert|We\'re no expert|We\'re no experts|We\'re not experts',
       source:  'http://www.fastcompany.com/3049609/the-future-of-work/4-types-of-useless-phrases-you-need-to-eliminate-from-your-emails',
       message: '"I\'m no expert" undermines your idea and displays an overall ' +
               'lack of self-confidence. --Lydia Dishman', },
