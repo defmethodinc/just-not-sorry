@@ -43,7 +43,7 @@ var WARNINGS = {
       source:  'http://www.strategicserendipityforlife.com/documents/Articles/Communication_8TipsForFearlessCommunicationInTheWorkplace.pdf',
       message: 'This qualifier weakens the message as well as the authority of the writer. --Victoria Simon, Ph.D. and Holly Pedersen, Ph.D.',
     },
-    { keyword: 'does that make sense',
+    { keyword: 'does that make sense|did that make sense|does this make sense|did this make sense',
       source:  'http://goop.com/how-women-undermine-themselves-with-words/',
       message: '"does that make sense" comes across either as condescending ' +
                '(like your audience can\'t understand) or it implies you feel ' +
