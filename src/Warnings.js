@@ -93,7 +93,7 @@ var WARNINGS = {
       source:  'http://www.vogue.com/13362056/things-working-women-should-never-email/',
       message: 'Like they said in school, there are no stupid ' +
                'questions. Well, sometimes there are--but ask, don\'t caveat. --Alexandra Macon', },
-    { keyword: 'I may be wrong|I might be wrong',
+    { keyword: 'I may be wrong|I might be wrong|I could be wrong',
       source:  'http://www.vogue.com/13362056/things-working-women-should-never-email/',
       message: 'Don\'t lessen the impact of what you say before ' +
                'you say it. --Alexandra Macon', },
