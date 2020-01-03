@@ -14,7 +14,7 @@ The Chrome Extension can be found at https://chrome.google.com/webstore/detail/j
 ## Contributing
 
 ### Requests to add or change warning phrases
-Please [create a GitHub issue](https://github.com/cyrusinnovation/just-not-sorry/issues/new) with your request.
+Please [create a GitHub issue](https://github.com/defmethodinc/just-not-sorry/issues/new) with your request.
 
 If you're a developer, you're welcome to submit a pull request.  Please run the tests before submitting, as they will validate the format of the message.
 
@@ -39,7 +39,7 @@ Open 'SpecRunner.html' in your web browser to run the test suite.
      Use [semantic versioning](http://semver.org/) to determine how to increment the version number
   1. Run the `package.sh` shell script to generate a zip file
   1. Go to [Chrome Developer Dashboard](https://chrome.google.com/webstore/developer/dashboard) and edit the existing app. Upload the new zip file and then publish the changes (button is at the very bottom)
-  1. Tag the new release in [GitHub](https://github.com/cyrusinnovation/just-not-sorry/releases) and include release notes
+  1. Tag the new release in [GitHub](https://github.com/defmethodinc/just-not-sorry/releases) and include release notes
 
 ### Libraries Used
 For production:

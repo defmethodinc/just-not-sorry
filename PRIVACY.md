@@ -52,7 +52,7 @@ According to CalOPPA we agree to the following:
 Users will be notified of any privacy policy changes:
   * On our Privacy Policy Page
 Users are able to change their personal information:
-  * By emailing us info@cyrusinnovation.com
+  * By emailing us info@defmethod.com
 
 ### How does our site handle do not track signals?
 
@@ -83,9 +83,9 @@ We also agree to the individual redress principle, which requires that individua
 If there are any questions regarding this privacy policy you may contact us using the information below.
 
 ```
-http://www.cyrusinnovation.com
-902 Broadway, 6th Floor
-New York, NY 10010
+http://www.defmethod.com
+336 W 37th St, #480
+New York, NY 10018
 USA
-info@cyrusinnovation.com
+info@defmethod.com
 ```
