@@ -49,5 +49,5 @@ When a keyword has begun to be deleted, the underline disappears. Underlines wil
 [1.0.0]: https://github.com/defmethodinc/just-not-sorry/releases/tag/v1.0.0
 [`Gmail.js`]: https://github.com/KartikTalwar/gmail.js/tree/master
 [`jQuery`]: https://jquery.com/
-[`warnings.js`]: https://github.com/cyrusinnovation/just-not-sorry/blob/master/src/Warnings.js
+[`warnings.js`]: https://github.com/defmethodinc/just-not-sorry/blob/master/src/Warnings.js
 [`dom-regexp-match`]: https://github.com/webmodules/dom-regexp-match
