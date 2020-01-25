@@ -22,7 +22,7 @@ var WARNINGS = {
       source:  'http://www.fastcompany.com/3049609/the-future-of-work/4-types-of-useless-phrases-you-need-to-eliminate-from-your-emails',
       message: '"I think" undermines your idea and displays an overall lack of ' +
                'self-confidence. --Lydia Dishman', },
-    { keyword: 'I\'m no expert|We\'re no expert',
+    { keyword: 'I\'m no expert|We\'re no expert|We\'re no experts|We\'re not experts',
       source:  'http://www.fastcompany.com/3049609/the-future-of-work/4-types-of-useless-phrases-you-need-to-eliminate-from-your-emails',
       message: '"I\'m no expert" undermines your idea and displays an overall ' +
               'lack of self-confidence. --Lydia Dishman', },
@@ -43,7 +43,7 @@ var WARNINGS = {
       source:  'http://www.strategicserendipityforlife.com/documents/Articles/Communication_8TipsForFearlessCommunicationInTheWorkplace.pdf',
       message: 'This qualifier weakens the message as well as the authority of the writer. --Victoria Simon, Ph.D. and Holly Pedersen, Ph.D.',
     },
-    { keyword: 'does that make sense',
+    { keyword: 'does that make sense|did that make sense|does this make sense|did this make sense',
       source:  'http://goop.com/how-women-undermine-themselves-with-words/',
       message: '"does that make sense" comes across either as condescending ' +
                '(like your audience can\'t understand) or it implies you feel ' +
@@ -52,7 +52,7 @@ var WARNINGS = {
                'to the other party to let you know if they are confused about ' +
                'something, rather than implying that you "didn\'t make sense." ' +
                '--Tara Sophia Mohr', },
-    { keyword: 'try|trying',
+    { keyword: 'try|trying|tried',
       source:  'http://www.lifehack.org/articles/communication/7-things-not-to-say-and-7-things-to-start-saying.html',
       message: '"Do or do not. There is no try." --Yoda' },
     { keyword: 'I should',
@@ -93,7 +93,7 @@ var WARNINGS = {
       source:  'http://www.vogue.com/13362056/things-working-women-should-never-email/',
       message: 'Like they said in school, there are no stupid ' +
                'questions. Well, sometimes there are--but ask, don\'t caveat. --Alexandra Macon', },
-    { keyword: 'I may be wrong|I might be wrong',
+    { keyword: 'I may be wrong|I might be wrong|I could be wrong',
       source:  'http://www.vogue.com/13362056/things-working-women-should-never-email/',
       message: 'Don\'t lessen the impact of what you say before ' +
                'you say it. --Alexandra Macon', },
