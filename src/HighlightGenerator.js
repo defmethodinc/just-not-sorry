@@ -37,7 +37,7 @@ HighlightGenerator.transformCoordinatesRelativeToParent = function transformCoor
   } else if (HighlightGenerator.getHostname() === 'mail.google.com') {
     fieldType = fieldType + ' gmail';
     if (fieldType === 'compose gmail') {
-      coords.top = (rect.top - parentRect.top + rect.height - 5);
+      coords.top = (rect.top - parentRect.top + rect.height);
       coords.left = (rect.left + scroll.left - parentRect.left + 2);
       return coords;
     } else if (fieldType === 'reply gmail') {
@@ -45,7 +45,7 @@ HighlightGenerator.transformCoordinatesRelativeToParent = function transformCoor
       coords.left = (rect.left + scroll.left - parentRect.left);
       return coords;
     } else if (fieldType === 'forward gmail') {
-      coords.top = (rect.top - parentRect.top + (parentRect.height * 0.052));
+      coords.top = (rect.top - parentRect.top + (parentRect.height * 0.02));
       coords.left = (rect.left + scroll.left - parentRect.left);
       return coords;
     }
