@@ -19,7 +19,7 @@ HighlightGenerator.highlightMatch = function highlightMatch(rect, parentRect, fi
   var scrollTop = document.documentElement.scrollTop || document.body.scrollTop;
   var scrollLeft = document.documentElement.scrollLeft || document.body.scrollLeft;
   var scroll = {top: scrollTop, left: scrollLeft};
-  var coords = HighlightGenerator.transformCoordinatesRelativeToParent(rect, parentRect, scroll, fieldType);
+  var coords = HighlightGenerator.transformCoordinatesRelativeToParent(rect, parentRect, scroll);
   HighlightGenerator.setNodeStyle(highlightNode, rect, coords);
   return highlightNode;
 };
@@ -30,26 +30,9 @@ HighlightGenerator.generateHighlightNode = function generateHighlightNode() {
 
 HighlightGenerator.transformCoordinatesRelativeToParent = function transformCoordinatesRelativeToParent(rect, parentRect, scroll, fieldType) {
   var coords = {};
-  if (HighlightGenerator.getHostname() === 'inbox.google.com') {
-    coords.top = (rect.top - parentRect.top + (rect.height * 0.6));
-    coords.left = (rect.left + scroll.left - parentRect.left);
-    return coords;
-  } else if (HighlightGenerator.getHostname() === 'mail.google.com') {
-    fieldType = fieldType + ' gmail';
-    if (fieldType === 'compose gmail') {
-      coords.top = (rect.top - parentRect.top + rect.height);
-      coords.left = (rect.left + scroll.left - parentRect.left);
-      return coords;
-    } else if (fieldType === 'reply gmail') {
-      coords.top = (rect.top - parentRect.top + (parentRect.height * 0.12));
-      coords.left = (rect.left + scroll.left - parentRect.left);
-      return coords;
-    } else if (fieldType === 'forward gmail') {
-      coords.top = (rect.top - parentRect.top + (parentRect.height * 0.02));
-      coords.left = (rect.left + scroll.left - parentRect.left);
-      return coords;
-    }
-  }
+  coords.top = (rect.top - parentRect.top + rect.height);
+  coords.left = (rect.left - parentRect.left);
+  return coords;
 };
 
 HighlightGenerator.setNodeStyle = function positionNode(node, rect, coords) {
