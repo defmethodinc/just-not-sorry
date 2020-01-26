@@ -1,12 +1,12 @@
 var HighlightGenerator = window.HighlightGenerator = {};
 
-HighlightGenerator.highlightMatches = function highlightMatches(message, warningClass, fieldType) {
+HighlightGenerator.highlightMatches = function highlightMatches(message, warningClass) {
   return function (currMatch, rangeToHighlight) {
     var parentNode = this;
     var parentRect = parentNode.getBoundingClientRect();
     var rectsToHighlight = rangeToHighlight.getClientRects();
     for (var i = 0; i < rectsToHighlight.length; i++) {
-      var highlightNode = HighlightGenerator.highlightMatch(rectsToHighlight[i], parentRect, fieldType);
+      var highlightNode = HighlightGenerator.highlightMatch(rectsToHighlight[i], parentRect);
       highlightNode.title = message;
       highlightNode.className = warningClass;
       parentNode.appendChild(highlightNode);
@@ -14,12 +14,9 @@ HighlightGenerator.highlightMatches = function highlightMatches(message, warning
   }
 };
 
-HighlightGenerator.highlightMatch = function highlightMatch(rect, parentRect, fieldType) {
+HighlightGenerator.highlightMatch = function highlightMatch(rect, parentRect) {
   var highlightNode = HighlightGenerator.generateHighlightNode();
-  var scrollTop = document.documentElement.scrollTop || document.body.scrollTop;
-  var scrollLeft = document.documentElement.scrollLeft || document.body.scrollLeft;
-  var scroll = {top: scrollTop, left: scrollLeft};
-  var coords = HighlightGenerator.transformCoordinatesRelativeToParent(rect, parentRect, scroll);
+  var coords = HighlightGenerator.transformCoordinatesRelativeToParent(rect, parentRect);
   HighlightGenerator.setNodeStyle(highlightNode, rect, coords);
   return highlightNode;
 };

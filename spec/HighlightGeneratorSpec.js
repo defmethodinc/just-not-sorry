@@ -42,9 +42,8 @@ describe('HighlightGenerator', function () {
     it('generates a node that is styled and positioned', function () {
       var rect = {top: 2, left: 2, height: 10};
       var parentRect = {top: 1, left: 1, height:1};
-      var fieldType = 'compose';
 
-      var node = HighlightGenerator.highlightMatch(rect, parentRect, fieldType);
+      var node = HighlightGenerator.highlightMatch(rect, parentRect);
       expect(node).toBeDefined();
       expect(node.nodeName).toEqual('DIV');
       expect(node.style.top).toEqual('11px');
@@ -60,11 +59,10 @@ describe('HighlightGenerator', function () {
   });
 
   describe('#transformCoordinatesRelativeToParent', function () {
-    var scroll = {top: 0, left: 0};
     var subject = function () {
       var rect = {top: 30, left: 2, height: 10};
       var parentRect = {top: 1, left: 1, height: 100};
-      return HighlightGenerator.transformCoordinatesRelativeToParent(rect, parentRect, scroll);
+      return HighlightGenerator.transformCoordinatesRelativeToParent(rect, parentRect);
     };
 
     it('returns the top position relative to the parent top position', function () {
@@ -72,16 +70,6 @@ describe('HighlightGenerator', function () {
     });
 
     it('returns the left position relative to the parent left position', function () {
-      expect(subject().left).toBeCloseTo(1);
-    });
-
-    it('does not offset the top position when the window is vertically scrolled', function () {
-      scroll = {top: 10, left: 0};
-      expect(subject().top).toBeCloseTo(39);
-    });
-
-    it('does not offset the left position when the window is horizontally scrolled', function () {
-      scroll = {top: 0, left: 10};
       expect(subject().left).toBeCloseTo(1);
     });
   });

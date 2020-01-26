@@ -29,7 +29,6 @@ var observer = new MutationObserver(function(mutation) {
 
 function checkForWarnings(warningChecker, mutation) {
   var target
-  var fieldType;
   target = document.querySelector('div[contentEditable=true]');
 
   document.querySelectorAll('div[contentEditable=true]').forEach((field) => {
@@ -44,29 +43,8 @@ function checkForWarnings(warningChecker, mutation) {
     });
   });
 
-  fieldType = null;
-  // Inbox
-  if (target.getAttribute('aria-label') === 'Reply' || target.getAttribute('aria-label') === 'Reply to all') {
-    fieldType = 'reply';
-  } else if (target.getAttribute('aria-label') === 'Body') {
-    fieldType = 'compose';
-  }
-  //Gmail
-  if (target.getAttribute('aria-label') === 'Message Body') {
-    Array.from(target.children).forEach(function(child) {
-      if (child.className ==='gmail_quote') {
-        fieldType = 'forward';
-      }
-    });
-    if (fieldType != 'forward' && target.nextSibling && target.nextSibling.className === 'aO8') {
-      fieldType = 'reply';
-    }
-    if (fieldType != 'forward' && fieldType != 'reply') {
-      fieldType = 'compose';
-    }
-  }
   warningChecker.removeWarnings(target.parentNode);
-  warningChecker.addWarnings(target.parentNode, fieldType);
+  warningChecker.addWarnings(target.parentNode);
   removeWarningsOnBlur(target.parentNode);
 }
 
