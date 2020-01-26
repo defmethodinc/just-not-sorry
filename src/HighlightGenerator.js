@@ -41,7 +41,3 @@ HighlightGenerator.setNodeStyle = function positionNode(node, rect, coords) {
   node.style.position = 'absolute';
   node.style.padding = '0px';
 };
-
-HighlightGenerator.getHostname = function() {
-  return document.location.hostname;
-};

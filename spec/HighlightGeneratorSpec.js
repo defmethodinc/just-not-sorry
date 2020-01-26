@@ -1,8 +1,4 @@
 describe('HighlightGenerator', function () {
-  beforeEach(function() {
-    var host = spyOn(HighlightGenerator, 'getHostname').and.returnValue('mail.google.com')
-  });
-
   describe('#highlightMatches', function () {
     var warningClass = 'test-warning';
     var message = 'test';
