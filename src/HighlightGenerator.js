@@ -38,7 +38,7 @@ HighlightGenerator.transformCoordinatesRelativeToParent = function transformCoor
     fieldType = fieldType + ' gmail';
     if (fieldType === 'compose gmail') {
       coords.top = (rect.top - parentRect.top + rect.height);
-      coords.left = (rect.left + scroll.left - parentRect.left + 2);
+      coords.left = (rect.left + scroll.left - parentRect.left);
       return coords;
     } else if (fieldType === 'reply gmail') {
       coords.top = (rect.top - parentRect.top + (parentRect.height * 0.12));
@@ -56,7 +56,7 @@ HighlightGenerator.setNodeStyle = function positionNode(node, rect, coords) {
   node.style.top = coords.top + 'px';
   node.style.left = coords.left + 'px';
   node.style.width = (rect.width) + 'px';
-  node.style.height = (rect.height * 0.25) + 'px';
+  node.style.height = (rect.height * 0.2) + 'px';
   node.style.zIndex = 10;
   node.style.position = 'absolute';
   node.style.padding = '0px';
