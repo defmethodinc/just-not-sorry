@@ -27,7 +27,7 @@ HighlightGenerator.generateHighlightNode = function generateHighlightNode() {
 
 HighlightGenerator.transformCoordinatesRelativeToParent = function transformCoordinatesRelativeToParent(rect, parentRect, scroll, fieldType) {
   var coords = {};
-  coords.top = (rect.top - parentRect.top + rect.height);
+  coords.top = (rect.top - parentRect.top + rect.height - 3);
   coords.left = (rect.left - parentRect.left);
   return coords;
 };

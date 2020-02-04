@@ -42,7 +42,7 @@ describe('HighlightGenerator', function () {
       var node = HighlightGenerator.highlightMatch(rect, parentRect);
       expect(node).toBeDefined();
       expect(node.nodeName).toEqual('DIV');
-      expect(node.style.top).toEqual('11px');
+      expect(node.style.top).toEqual('8px');
       expect(node.style.left).toEqual('1px');
     });
   });
@@ -62,7 +62,7 @@ describe('HighlightGenerator', function () {
     };
 
     it('returns the top position relative to the parent top position', function () {
-      expect(subject().top).toBeCloseTo(39);
+      expect(subject().top).toBeCloseTo(36);
     });
 
     it('returns the left position relative to the parent left position', function () {
