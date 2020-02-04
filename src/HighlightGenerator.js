@@ -1,4 +1,5 @@
 var HighlightGenerator = window.HighlightGenerator = {};
+const HIGHLIGHT_YPOS_ADJUSTMENT = 3;
 
 HighlightGenerator.highlightMatches = function highlightMatches(message, warningClass) {
   return function (currMatch, rangeToHighlight) {
@@ -27,13 +28,13 @@ HighlightGenerator.generateHighlightNode = function generateHighlightNode() {
 
 HighlightGenerator.transformCoordinatesRelativeToParent = function transformCoordinatesRelativeToParent(rect, parentRect, scroll, fieldType) {
   var coords = {};
-  coords.top = (rect.top - parentRect.top + rect.height - 3);
+  coords.top = (rect.top - parentRect.top + rect.height);
   coords.left = (rect.left - parentRect.left);
   return coords;
 };
 
 HighlightGenerator.setNodeStyle = function positionNode(node, rect, coords) {
-  node.style.top = coords.top + 'px';
+  node.style.top = (coords.top - HIGHLIGHT_YPOS_ADJUSTMENT) + 'px';
   node.style.left = coords.left + 'px';
   node.style.width = (rect.width) + 'px';
   node.style.height = (rect.height * 0.2) + 'px';

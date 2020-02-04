@@ -62,7 +62,7 @@ describe('HighlightGenerator', function () {
     };
 
     it('returns the top position relative to the parent top position', function () {
-      expect(subject().top).toBeCloseTo(36);
+      expect(subject().top).toBeCloseTo(39);
     });
 
     it('returns the left position relative to the parent left position', function () {
@@ -74,7 +74,7 @@ describe('HighlightGenerator', function () {
     var node;
     beforeEach(function () {
       var rect = {width: 20, height: 12};
-      var coords = {top: 5, left: 0};
+      var coords = {top: 8, left: 0};
       node = document.createElement('DIV');
       HighlightGenerator.setNodeStyle(node, rect, coords);
     });
