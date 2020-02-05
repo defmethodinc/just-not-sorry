@@ -48,4 +48,10 @@ function checkForWarnings(warningChecker, mutation) {
   removeWarningsOnBlur(target.parentNode);
 }
 
-observer.observe(document, {characterData: true, subtree: true})
+var loadObserver = setInterval(function() {
+  var editableDiv = document.querySelector('div[contentEditable=true]');
+  if (editableDiv != null) {
+    clearInterval(loadObserver);
+    observer.observe(editableDiv, {characterData: true, subtree: true, childList: true});
+  }
+}, 1000);
