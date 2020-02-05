@@ -1,12 +1,13 @@
 var HighlightGenerator = window.HighlightGenerator = {};
+const HIGHLIGHT_YPOS_ADJUSTMENT = 3;
 
-HighlightGenerator.highlightMatches = function highlightMatches(message, warningClass, fieldType) {
+HighlightGenerator.highlightMatches = function highlightMatches(message, warningClass) {
   return function (currMatch, rangeToHighlight) {
     var parentNode = this;
     var parentRect = parentNode.getBoundingClientRect();
     var rectsToHighlight = rangeToHighlight.getClientRects();
     for (var i = 0; i < rectsToHighlight.length; i++) {
-      var highlightNode = HighlightGenerator.highlightMatch(rectsToHighlight[i], parentRect, fieldType);
+      var highlightNode = HighlightGenerator.highlightMatch(rectsToHighlight[i], parentRect);
       highlightNode.title = message;
       highlightNode.className = warningClass;
       parentNode.appendChild(highlightNode);
@@ -14,12 +15,9 @@ HighlightGenerator.highlightMatches = function highlightMatches(message, warning
   }
 };
 
-HighlightGenerator.highlightMatch = function highlightMatch(rect, parentRect, fieldType) {
+HighlightGenerator.highlightMatch = function highlightMatch(rect, parentRect) {
   var highlightNode = HighlightGenerator.generateHighlightNode();
-  var scrollTop = document.documentElement.scrollTop || document.body.scrollTop;
-  var scrollLeft = document.documentElement.scrollLeft || document.body.scrollLeft;
-  var scroll = {top: scrollTop, left: scrollLeft};
-  var coords = HighlightGenerator.transformCoordinatesRelativeToParent(rect, parentRect, scroll, fieldType);
+  var coords = HighlightGenerator.transformCoordinatesRelativeToParent(rect, parentRect);
   HighlightGenerator.setNodeStyle(highlightNode, rect, coords);
   return highlightNode;
 };
@@ -30,38 +28,17 @@ HighlightGenerator.generateHighlightNode = function generateHighlightNode() {
 
 HighlightGenerator.transformCoordinatesRelativeToParent = function transformCoordinatesRelativeToParent(rect, parentRect, scroll, fieldType) {
   var coords = {};
-  if (HighlightGenerator.getHostname() === 'inbox.google.com') {
-    coords.top = (rect.top - parentRect.top + (rect.height * 0.6));
-    coords.left = (rect.left + scroll.left - parentRect.left);
-    return coords;
-  } else if (HighlightGenerator.getHostname() === 'mail.google.com') {
-    fieldType = fieldType + ' gmail';
-    if (fieldType === 'compose gmail') {
-      coords.top = (rect.top - parentRect.top + rect.height - 5);
-      coords.left = (rect.left + scroll.left - parentRect.left + 2);
-      return coords;
-    } else if (fieldType === 'reply gmail') {
-      coords.top = (rect.top - parentRect.top + (parentRect.height * 0.12));
-      coords.left = (rect.left + scroll.left - parentRect.left);
-      return coords;
-    } else if (fieldType === 'forward gmail') {
-      coords.top = (rect.top - parentRect.top + (parentRect.height * 0.052));
-      coords.left = (rect.left + scroll.left - parentRect.left);
-      return coords;
-    }
-  }
+  coords.top = (rect.top - parentRect.top + rect.height);
+  coords.left = (rect.left - parentRect.left);
+  return coords;
 };
 
 HighlightGenerator.setNodeStyle = function positionNode(node, rect, coords) {
-  node.style.top = coords.top + 'px';
+  node.style.top = (coords.top - HIGHLIGHT_YPOS_ADJUSTMENT) + 'px';
   node.style.left = coords.left + 'px';
   node.style.width = (rect.width) + 'px';
-  node.style.height = (rect.height * 0.25) + 'px';
+  node.style.height = (rect.height * 0.2) + 'px';
   node.style.zIndex = 10;
   node.style.position = 'absolute';
   node.style.padding = '0px';
-};
-
-HighlightGenerator.getHostname = function() {
-  return document.location.hostname;
 };
