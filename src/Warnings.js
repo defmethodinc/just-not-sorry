@@ -89,7 +89,7 @@ var WARNINGS = {
                '2. They demonstrate insecurity; and ' +
                '3. They tell the reader what he already knows. Remove that phrase, or any similar phrase, ' +
                'and get to the point. --David Bowman', },
-    { keyword: 'This might be a stupid question',
+    { keyword: 'This might be a stupid question | This might be a silly idea',
       source:  'http://www.vogue.com/13362056/things-working-women-should-never-email/',
       message: 'Like they said in school, there are no stupid ' +
                'questions. Well, sometimes there are--but ask, don\'t caveat. --Alexandra Macon', },
@@ -103,6 +103,10 @@ var WARNINGS = {
     { keyword: 'I guess',
       source:  'https://www.inc.com/mary-rezek/cut-kinda-sorta-i-guess-how-to-end-your-filler-word-bad-habits.html',
       message: 'If you\'re sure of something, \"guessing\" detracts from your message and opens doubt in the reader\'s mind.', },
+    { keyword: 'Maybe',
+      source:  'https://www.monster.com/career-advice/article/7-words-that-make-you-sound-less-confident-in-emails-0916',
+      message: 'By adding \"maybe"\ to your sentence, it makes it seem like you aren\'t confident in your answer/suggestion. Say what you mean. If you mean no, say no, if you mean yes, say yes.' 
+    },
     { keyword: '!!!',
       source:  'https://www.theatlantic.com/technology/archive/2018/06/exclamation-point-inflation/563774/?utm_source=feed',
       message: 'We get it, you\'re excited!!! Use that many exclamation points with your friends,' +
