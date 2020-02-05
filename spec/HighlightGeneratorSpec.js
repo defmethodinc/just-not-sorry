@@ -42,7 +42,7 @@ describe('HighlightGenerator', function () {
       var node = HighlightGenerator.highlightMatch(rect, parentRect);
       expect(node).toBeDefined();
       expect(node.nodeName).toEqual('DIV');
-      expect(node.style.top).toEqual('11px');
+      expect(node.style.top).toEqual('8px');
       expect(node.style.left).toEqual('1px');
     });
   });
@@ -74,7 +74,7 @@ describe('HighlightGenerator', function () {
     var node;
     beforeEach(function () {
       var rect = {width: 20, height: 12};
-      var coords = {top: 5, left: 0};
+      var coords = {top: 8, left: 0};
       node = document.createElement('DIV');
       HighlightGenerator.setNodeStyle(node, rect, coords);
     });

@@ -1,4 +1,5 @@
 var HighlightGenerator = window.HighlightGenerator = {};
+const HIGHLIGHT_YPOS_ADJUSTMENT = 3;
 
 HighlightGenerator.highlightMatches = function highlightMatches(message, warningClass) {
   return function (currMatch, rangeToHighlight) {
@@ -33,7 +34,7 @@ HighlightGenerator.transformCoordinatesRelativeToParent = function transformCoor
 };
 
 HighlightGenerator.setNodeStyle = function positionNode(node, rect, coords) {
-  node.style.top = coords.top + 'px';
+  node.style.top = (coords.top - HIGHLIGHT_YPOS_ADJUSTMENT) + 'px';
   node.style.left = coords.left + 'px';
   node.style.width = (rect.width) + 'px';
   node.style.height = (rect.height * 0.2) + 'px';
