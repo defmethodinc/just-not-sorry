@@ -1,14 +1,11 @@
 'use strict';
 
 var warningChecker = new WarningChecker(WARNINGS);
-
 var editableDivCount = 0;
-
-var contentEditableDivs = [];
 
 var observer = new MutationObserver(function(mutations) {
   if (mutations[0]) {
-    mutations.forEach(function(mutation){
+    mutations.forEach(function(mutation) {
       if (mutation.type != 'characterData' && mutation.target.hasAttribute('contentEditable')) {
         id = mutation.target.id;
         if (id) {
@@ -53,7 +50,7 @@ var documentObserver = new MutationObserver(function(mutations) {
     editableDivCount = divCount;
     var id;
     if (mutations[0]) {
-      mutations.forEach(function(mutation){
+      mutations.forEach(function(mutation) {
         if (mutation.type == 'childList' && mutation.target.hasAttribute('contentEditable')) {
           id = mutation.target.id;
           if (id) {
@@ -69,4 +66,4 @@ function getEditableDivs() {
   return document.querySelectorAll('div[contentEditable=true]');
 }
 
-documentObserver.observe(document, {characterData: true, subtree: true, childList: true});
+documentObserver.observe(document, {subtree: true, childList: true});
