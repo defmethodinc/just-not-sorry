@@ -1,3 +1,22 @@
 .jns-warning {
-  border-bottom: 2px dashed #FF9933;
+	border-top: 2px dashed #F93;
+	cursor:text;
+}
+.jns-message {
+	position: absolute;
+	background-color: #EFEFEF;
+	border: 1px solid #CCC;
+	padding: 8px;
+	width: 300px;
+	top: 4px;
+	left: 0px;
+	z-index: 11;
+	font-size:12px;
+	line-height:16px;
+	box-shadow: 1px 1px 6px 1px #CCC;
+	transition: opacity 0.75s;
+	opacity: 0;
+}
+.visible {
+  opacity: 1;
 }

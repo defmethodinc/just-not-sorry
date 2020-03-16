@@ -1,5 +1,6 @@
 var HighlightGenerator = window.HighlightGenerator = {};
 const HIGHLIGHT_YPOS_ADJUSTMENT = 3;
+const MESSAGE_OFFSET = 440; // Offset accounting for width of .jns-message and other padding/margins
 
 HighlightGenerator.highlightMatches = function highlightMatches(message, warningClass) {
   return function (currMatch, rangeToHighlight) {
@@ -8,9 +9,20 @@ HighlightGenerator.highlightMatches = function highlightMatches(message, warning
     var rectsToHighlight = rangeToHighlight.getClientRects();
     for (var i = 0; i < rectsToHighlight.length; i++) {
       var highlightNode = HighlightGenerator.highlightMatch(rectsToHighlight[i], parentRect);
-      highlightNode.title = message;
+      var messageNode = HighlightGenerator.generateHighlightNode();
+      var scroll = HighlightGenerator.generateScroll();
+      var coords = HighlightGenerator.transformCoordinatesRelativeToParent(rectsToHighlight[i], parentRect);
       highlightNode.className = warningClass;
-      parentNode.appendChild(highlightNode);
+      highlightNode.setAttribute('triggerHeight', rectsToHighlight[i].height);
+      highlightNode.style.zIndex = parentRect.height - coords.top + 200;
+      messageNode.className = "jns-message";
+      messageNode.innerHTML = message;
+      var windowWidth = Math.max(document.documentElement.clientWidth, window.innerWidth || 0);
+      var messageRight = (rectsToHighlight[i].left + scroll.left) + MESSAGE_OFFSET;
+      if(messageRight > windowWidth) {
+          messageNode.style.left = (windowWidth - messageRight) + 'px';
+      }
+      parentNode.appendChild(highlightNode).appendChild(messageNode);
     }
   }
 };
@@ -24,6 +36,12 @@ HighlightGenerator.highlightMatch = function highlightMatch(rect, parentRect) {
 
 HighlightGenerator.generateHighlightNode = function generateHighlightNode() {
   return document.createElement('div');
+};
+
+HighlightGenerator.generateScroll = function generateScroll() {
+    let scrollTop = document.documentElement.scrollTop || document.body.scrollTop;
+    let scrollLeft = document.documentElement.scrollLeft || document.body.scrollLeft;
+    return {top: scrollTop, left: scrollLeft};
 };
 
 HighlightGenerator.transformCoordinatesRelativeToParent = function transformCoordinatesRelativeToParent(rect, parentRect, scroll, fieldType) {

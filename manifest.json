@@ -3,7 +3,7 @@
   "name": "Just Not Sorry -- the Gmail Plug-in",
   "short_name": "JustNotSorry",
   "author": "Steve Brudz, Manish Kakwani, Tami Reiss, and Eric Tillberg of Def Method",
-  "version": "1.6.0",
+  "version": "1.6.1",
   "description": "A Gmail Plug-in that warns you when you write emails using words which undermine your message",
   "icons": { "16": "img/JustNotSorry-16.png",
              "48": "img/JustNotSorry-48.png",

@@ -42,6 +42,7 @@ var applyEventListeners = function(id) {
   targetDiv.addEventListener('focus', addObserver);
   targetDiv.addEventListener('input', checkForWarnings);
   targetDiv.addEventListener('blur', removeObserver);
+  targetDiv.addEventListener('mousemove', checkDistanceFromWarnings);
 }
 
 var documentObserver = new MutationObserver(function(mutations) {
@@ -65,5 +66,49 @@ var documentObserver = new MutationObserver(function(mutations) {
 function getEditableDivs() {
   return document.querySelectorAll('div[contentEditable=true]');
 }
+
+function isNear(element, distance, event) {
+  let rect = getRectDimensions(element);
+  let left = rect.left - 2,
+    top = rect.top - distance,
+    right = left + rect.width,
+    bottom = top + rect.height + distance,
+    x = event.pageX,
+    y = event.pageY;
+  return (x > left && x < right && y > top && y < bottom); 
+};
+
+function getYOffset(element){
+  let yOffset = 20; // Set default
+  try { yOffset = parseInt(element.getAttribute('triggerHeight')) } catch (err) {}
+  return yOffset;
+}
+
+function getRectDimensions(element) {
+  let rect = element.getBoundingClientRect();
+  return ({
+    top: rect.top + document.body.scrollTop,
+    left: rect.left + document.body.scrollLeft,
+    width: parseFloat(getComputedStyle(element, null).width.replace("px", "")),
+    height: parseFloat(getComputedStyle(element, null).height.replace("px", ""))
+  });
+}
+
+var checkDistanceFromWarnings = function (e) {
+    var elements = document.querySelectorAll('.jns-warning');
+    console.log("el length: " + elements.length);
+    Array.prototype.forEach.call(elements, function(el, i) {
+      let yOffset = getYOffset(el);
+      // console.log("Y: " + yOffset);
+      console.log(isNear(el,yOffset,e));
+      // Assume jns-message is first element for performance
+      let messageDiv = el.children[0];
+      if (isNear(el,getYOffset(el),e) && !(messageDiv.classList.contains('visible'))) {
+          messageDiv.classList.toggle('visible');
+      } else if ((messageDiv.classList.contains('visible'))) {
+          messageDiv.classList.toggle('visible');
+      }
+    });
+};
 
 documentObserver.observe(document, {subtree: true, childList: true});
