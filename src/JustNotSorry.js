@@ -96,17 +96,14 @@ function getRectDimensions(element) {
 
 var checkDistanceFromWarnings = function (e) {
     var elements = document.querySelectorAll('.jns-warning');
-    console.log("el length: " + elements.length);
     Array.prototype.forEach.call(elements, function(el, i) {
       let yOffset = getYOffset(el);
-      // console.log("Y: " + yOffset);
-      console.log(isNear(el,yOffset,e));
-      // Assume jns-message is first element for performance
+      // For performance, assume jns-message is first element
       let messageDiv = el.children[0];
-      if (isNear(el,getYOffset(el),e) && !(messageDiv.classList.contains('visible'))) {
-          messageDiv.classList.toggle('visible');
-      } else if ((messageDiv.classList.contains('visible'))) {
-          messageDiv.classList.toggle('visible');
+      if (isNear(el,getYOffset(el),e)) {
+        messageDiv.classList.add('visible');
+      } else {
+        messageDiv.classList.remove('visible');
       }
     });
 };

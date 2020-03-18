@@ -1,5 +1,5 @@
 var HighlightGenerator = window.HighlightGenerator = {};
-const HIGHLIGHT_YPOS_ADJUSTMENT = 3;
+const HIGHLIGHT_YPOS_ADJUSTMENT = 0;
 const MESSAGE_OFFSET = 440; // Offset accounting for width of .jns-message and other padding/margins
 
 HighlightGenerator.highlightMatches = function highlightMatches(message, warningClass) {
