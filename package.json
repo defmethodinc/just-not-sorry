@@ -1,0 +1,23 @@
+{
+  "name": "just-not-sorry",
+  "description": "Gmail Plug-in that warns you when you write emails using words which undermine your message",
+  "version": "1.7.0",
+  "author": "Steve Brudz, Manish Kakwani, Tami Reiss, and Eric Tillberg of Def Method",
+  "license": "MIT",
+  "repository": "https://github.com/defmethodinc/just-not-sorry",
+  "homepage": "https://github.com/defmethodinc/just-not-sorry",
+  "bugs": "https://github.com/defmethodinc/just-not-sorry/issues/new",
+  "scripts": {
+    "test": "gulp jasmine-headless-chrome",
+    "test:watch": "gulp jasmine-browser"
+  },
+  "devDependencies": {
+    "gulp": "^4.0.2",
+    "gulp-jasmine-browser": "^4.1.0",
+    "gulp-open": "^3.0.1",
+    "gulp-watch": "^5.0.1",
+    "jasmine-core": "^3.5.0",
+    "puppeteer": "^2.1.1"
+  },
+  "dependencies": {}
+}
