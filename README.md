@@ -50,7 +50,7 @@ npm test
 To run the tests in the browser, use:
 
 ```
-npm test:watch
+npm run test:watch
 ```
 
 and then open http://localhost:8888 in a web browser.
