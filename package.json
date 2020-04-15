@@ -17,7 +17,8 @@
     "gulp-open": "^3.0.1",
     "gulp-watch": "^5.0.1",
     "jasmine-core": "^3.5.0",
-    "puppeteer": "^2.1.1"
+    "puppeteer": "^2.1.1",
+    "semantic-release": "^17.0.4"
   },
   "dependencies": {}
 }
