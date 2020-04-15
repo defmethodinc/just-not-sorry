@@ -31,7 +31,29 @@ If you're a developer, you're welcome to submit a pull request.  Please run the 
 Use [JSCS](http://jscs.info/) with the AirBnB preset.
 
 ### Jasmine Tests
-Open 'SpecRunner.html' in your web browser to run the test suite.
+Tests are written using [jasmine](https://jasmine.github.io/). They can either be run from the command line using headless chrome or run within a browser window.
+
+First, make sure that node.js and npm are installed.  Then in the project root, run:
+
+```
+npm install
+```
+
+This will install the required packages to run the tests, including a headless version of Chrome that will be controlled via Puppeteer.
+
+To run the headless tests, use:
+
+```
+npm test
+```
+
+To run the tests in the browser, use:
+
+```
+npm run test:watch
+```
+
+and then open http://localhost:8888 in a web browser.
 
 ### To Publish a New Version to Chrome Webstore
   1. Make sure all the tests pass
@@ -55,4 +77,4 @@ For test:
 
 ### License
 
-Just Not Sorry is Copyright © 2015-17 Def Method, Inc. It is free software, and may be redistributed under the terms specified in the (MIT) LICENSE file.
+Just Not Sorry is Copyright © 2015-20 Def Method, Inc. It is free software, and may be redistributed under the terms specified in the (MIT) LICENSE file.
