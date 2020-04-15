@@ -12,13 +12,28 @@
     "test:watch": "gulp jasmine-browser"
   },
   "devDependencies": {
+    "commitizen": "^4.0.4",
+    "cz-conventional-changelog": "^3.1.0",
     "gulp": "^4.0.2",
     "gulp-jasmine-browser": "^4.1.0",
     "gulp-open": "^3.0.1",
     "gulp-watch": "^5.0.1",
+    "husky": "^4.2.5",
     "jasmine-core": "^3.5.0",
     "puppeteer": "^2.1.1",
     "semantic-release": "^17.0.4"
   },
-  "dependencies": {}
+  "dependencies": {},
+  "husky": {
+    "hooks": {
+      "pre-commit": "npm test",
+      "pre-push": "npm test",
+      "prepare-commit-msg": "exec < /dev/tty && git cz --hook || true"
+    }
+  },
+  "config": {
+    "commitizen": {
+      "path": "./node_modules/cz-conventional-changelog"
+    }
+  }
 }
