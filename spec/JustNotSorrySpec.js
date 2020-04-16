@@ -34,6 +34,29 @@ describe('JustNotSorry', function () {
       dispatchEventOnElement(target, 'focus');
       expect(observer.observe).toHaveBeenCalled();
     });
+
+    describe('when a global id variable is set', function() {
+      beforeEach(function() {
+        window.id = 'test value';
+      });
+
+      afterEach(function() {
+        delete window.id;
+      });
+
+      it('keeps that global variable unchanged', function(done) {
+        const target = document.getElementById('div-2');
+        target.addEventListener('focus', addObserver);
+        dispatchEventOnElement(target, 'focus');
+
+        target.innerHTML = '<br/>';
+
+        setTimeout(function () {
+          expect(id).toEqual('test value');
+          done();
+        });
+      });
+    });
   });
 
   describe('#removeObserver', function() {
