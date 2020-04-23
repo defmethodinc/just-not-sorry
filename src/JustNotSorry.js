@@ -23,12 +23,14 @@ var observer = new MutationObserver(function(mutations) {
 });
 
 var addObserver = function() {
+  this.addEventListener('input', checkForWarnings);
   warningChecker.addWarnings(this.parentNode);
-  observer.observe(this, {characterData: true, subtree: true, childList: true,  attributes: true});
+  observer.observe(this, {characterData: false, subtree: true, childList: true,  attributes: false});
 };
 
 var removeObserver = function() {
   warningChecker.removeWarnings(this.parentNode);
+  this.removeEventListener('input', checkForWarnings);
   observer.disconnect();
 };
 
@@ -40,7 +42,6 @@ var checkForWarnings = function() {
 var applyEventListeners = function(id) {
   var targetDiv = document.getElementById(id);
   targetDiv.addEventListener('focus', addObserver);
-  targetDiv.addEventListener('input', checkForWarnings);
   targetDiv.addEventListener('blur', removeObserver);
 };
 
@@ -48,11 +49,10 @@ var documentObserver = new MutationObserver(function(mutations) {
   var divCount = getEditableDivs().length;
   if (divCount !== editableDivCount) {
     editableDivCount = divCount;
-    var id;
     if (mutations[0]) {
       mutations.forEach(function(mutation) {
         if (mutation.type === 'childList' && mutation.target.hasAttribute('contentEditable')) {
-          id = mutation.target.id;
+          var id = mutation.target.id;
           if (id) {
             applyEventListeners(id);
           }

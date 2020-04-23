@@ -35,8 +35,19 @@ describe('JustNotSorry', function () {
       expect(observer.observe).toHaveBeenCalledWith(target, jasmine.objectContaining({childList: true}));
     });
 
-    xit('adds an input event listener that checks for warnings', function() {
+    it('starts checking for warnings', function(done) {
+      spyOn(window, 'checkForWarnings').and.callThrough();
+      let target = document.getElementById('div-1');
 
+      target.addEventListener('focus', addObserver);
+      dispatchEventOnElement(target, 'focus');
+
+      dispatchEventOnElement(target, 'input');
+
+      setTimeout(function () {
+        expect(window.checkForWarnings).toHaveBeenCalled();
+        done();
+      });
     });
 
     it('adds warnings to the content editable div', function() {
@@ -87,8 +98,22 @@ describe('JustNotSorry', function () {
       expect(warningChecker.removeWarnings).toHaveBeenCalledWith(target.parentNode);
     });
 
-    xit('removes the input event listener that checks for warnings', function() {
+    it('no longer checks for warnings on input events', function(done) {
+      spyOn(window, 'checkForWarnings').and.callThrough();
+      let target = document.getElementById('div-2');
 
+      target.addEventListener('focus', addObserver);
+      dispatchEventOnElement(target, 'focus');
+
+      target.addEventListener('blur', removeObserver);
+      dispatchEventOnElement(target, 'blur');
+
+      dispatchEventOnElement(target, 'input');
+
+      setTimeout(function () {
+        expect(window.checkForWarnings).not.toHaveBeenCalled();
+        done();
+      });
     });
 
     it('disconnects the observer', function () {
@@ -131,7 +156,7 @@ describe('JustNotSorry', function () {
       targetDiv.parentNode.removeChild(targetDiv);
     });
 
-    it('dispatches an input event when nodes are added or removed from a content editable div', function (done) {
+    it('dispatches an input event when nodes are added to a content editable div', function (done) {
       generateEditableDiv(newDivId);
       const target = document.getElementById(newDivId);
 
@@ -143,6 +168,8 @@ describe('JustNotSorry', function () {
 
       setTimeout(function () {
         dispatchEventOnElement(target, 'focus');
+        expect(warningChecker.addWarnings).toHaveBeenCalledTimes(1);
+        warningChecker.addWarnings.calls.reset();
 
         setTimeout(function () {
           let element = document.createElement('SPAN');
@@ -150,10 +177,40 @@ describe('JustNotSorry', function () {
           target.appendChild(element);
 
           setTimeout(function () {
+            expect(warningChecker.removeWarnings).toHaveBeenCalledTimes(1);
             expect(warningChecker.removeWarnings).toHaveBeenCalledWith(target.parentNode);
+            expect(warningChecker.addWarnings).toHaveBeenCalledTimes(1);
             expect(warningChecker.addWarnings).toHaveBeenCalledWith(target.parentNode);
             done();
           }, 100);
+        });
+      });
+    });
+
+    it('does not dispatch an input event when a class changes on a content editable div', function (done) {
+      generateEditableDiv(newDivId);
+      const target = document.getElementById(newDivId);
+
+      spyOn(warningChecker, 'addWarnings');
+      spyOn(warningChecker, 'removeWarnings');
+
+      // trigger documentObserver to register this content editable div
+      target.appendChild(document.createElement('BR'));
+
+      setTimeout(function () {
+        dispatchEventOnElement(target, 'focus');
+        expect(warningChecker.addWarnings).toHaveBeenCalledTimes(1);
+        warningChecker.addWarnings.calls.reset();
+
+        setTimeout(function () {
+
+          target.className = 'test';
+
+          setTimeout(function () {
+            expect(warningChecker.removeWarnings).not.toHaveBeenCalled();
+            expect(warningChecker.addWarnings).not.toHaveBeenCalled();
+            done();
+          });
         });
       });
     });
