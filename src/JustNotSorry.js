@@ -2,6 +2,7 @@
 
 var warningChecker = new WarningChecker(WARNINGS);
 var editableDivCount = 0;
+var WAIT_TIME_BEFORE_RECALC_WARNINGS = 500;
 
 // from underscore.js
 // Returns a function, that, as long as it continues to be invoked, will not
@@ -57,7 +58,7 @@ var removeObserver = function() {
 var checkForWarnings = debounce(function() {
   warningChecker.removeWarnings(this.parentNode);
   warningChecker.addWarnings(this.parentNode);
-}, 500);
+}, WAIT_TIME_BEFORE_RECALC_WARNINGS);
 
 var applyEventListeners = function(id) {
   var targetDiv = document.getElementById(id);

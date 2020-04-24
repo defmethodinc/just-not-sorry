@@ -182,7 +182,7 @@ describe('JustNotSorry', function () {
             expect(warningChecker.addWarnings).toHaveBeenCalledTimes(1);
             expect(warningChecker.addWarnings).toHaveBeenCalledWith(target.parentNode);
             done();
-          }, 510);
+          }, WAIT_TIME_BEFORE_RECALC_WARNINGS + 10);
         });
       });
     });
