@@ -4,7 +4,7 @@
   "version": "1.6.3",
   "author": "Steve Brudz, Manish Kakwani, Tami Reiss, and Eric Tillberg of Def Method",
   "license": "MIT",
-  "repository": "https://github.com/defmethodinc/just-not-sorry",
+  "repository": "git@github.com:defmethodinc/just-not-sorry.git",
   "homepage": "https://github.com/defmethodinc/just-not-sorry",
   "bugs": "https://github.com/defmethodinc/just-not-sorry/issues/new",
   "scripts": {
@@ -12,6 +12,8 @@
     "test:watch": "gulp jasmine-browser"
   },
   "devDependencies": {
+    "@semantic-release/exec": "^5.0.0",
+    "@semantic-release/git": "^9.0.0",
     "commitizen": "^4.0.4",
     "cz-conventional-changelog": "^3.1.0",
     "gulp": "^4.0.2",
