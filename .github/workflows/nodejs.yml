@@ -30,3 +30,9 @@ jobs:
         run: npm test
         env:
           CI: true
+      - name: Release
+        if: github.ref == 'master'
+        run: npx semantic-release
+      - name: Test Semantic Release
+        if: github.ref == 'semantic-release'
+        run: npx semantic-release --dry-run
