@@ -35,6 +35,8 @@
   },
   "web_accessible_resources": [
     "lib/dom-regexp-match-1.1.0.js",
+    "lib/fastdom.js",
+    "lib/fastdom-promised.js",
     "src/HighlightGenerator.js",
     "src/WarningChecker.js",
     "src/Warnings.js",

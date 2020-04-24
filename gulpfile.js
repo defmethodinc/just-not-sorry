@@ -4,6 +4,8 @@ const watch = require('gulp-watch');
 const open = require('gulp-open');
 
 const filesForTest = [
+    'lib/fastdom.js',
+    'lib/fastdom-promised.js',
     'src/Warnings.js',
     'src/WarningChecker.js',
     'src/HighlightGenerator.js',

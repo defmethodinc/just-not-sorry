@@ -7,21 +7,30 @@ function WarningChecker(options) {
 WarningChecker.prototype.addWarning = function addWarning(node, keyword, message) {
   'use strict';
   var pattern = new RegExp('\\b(' + keyword + ')\\b', 'ig');
-  domRegexpMatch(node, pattern, HighlightGenerator.highlightMatches(message, this.warningClass));
+  var promises = [];
+  var warningClass = this.warningClass;
+  var promisifiedMatchCallback = function(match, range) {
+    var matchPromise = HighlightGenerator.highlightMatches(message, warningClass).call(node, match, range);
+    promises.push(matchPromise);
+  }
+  domRegexpMatch(node, pattern, promisifiedMatchCallback);
+  return Promise.all(promises);
 };
 
 WarningChecker.prototype.addWarnings = function addWarnings(node) {
   'use strict';
   var _this = this;
-  this.warnings.forEach(function(warning) {
-    _this.addWarning(node, warning.keyword, warning.message);
-  });
+  return Promise.all(this.warnings.map(function(warning) {
+    return _this.addWarning(node, warning.keyword, warning.message);
+  }));
 };
 
 WarningChecker.prototype.removeWarnings = function removeWarnings(node) {
   'use strict';
   var elementsToRemove = document.getElementsByClassName(this.warningClass);
-  for (var i = elementsToRemove.length; i--;) {
-    elementsToRemove[i].remove();
-  }
+  return myFastdom.mutate(function () {
+    for (var i = elementsToRemove.length; i--;) {
+      node.removeChild(elementsToRemove[i]);
+    }
+  });
 };
