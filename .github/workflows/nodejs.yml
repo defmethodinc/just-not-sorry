@@ -3,7 +3,11 @@
 
 name: Node.js CI
 
-on: [push]
+on:
+  push:
+    paths-ignore:
+      - 'package.json'
+      - 'manifest.json'
 
 jobs:
   build:
@@ -45,7 +49,6 @@ jobs:
         if: github.ref == 'refs/heads/semantic-release'
         uses: cycjimmy/semantic-release-action@v2
         with:
-          dry_run: true
           semantic_version: 17.0.4
           extra_plugins: |
             @semantic-release/git
