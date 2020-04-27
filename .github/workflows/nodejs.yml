@@ -30,9 +30,25 @@ jobs:
         run: npm test
         env:
           CI: true
-      - name: Release
-        if: github.ref == 'master'
-        run: npx semantic-release
+
+  release:
+    needs: build
+
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: Check the ref
+        run: echo ${{ github.ref }}
       - name: Test Semantic Release
-        if: github.ref == 'semantic-release'
-        run: npx semantic-release --dry-run
+        if: github.ref == 'refs/heads/semantic-release'
+        uses: cycjimmy/semantic-release-action@v2
+        with:
+          dry_run: true
+          semantic_version: 17.0.4
+          extra_plugins: |
+            @semantic-release/git
+            @semantic-release/exec
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
