@@ -2,6 +2,27 @@
 
 var warningChecker = new WarningChecker(WARNINGS);
 var editableDivCount = 0;
+var WAIT_TIME_BEFORE_RECALC_WARNINGS = 500;
+
+// from underscore.js
+// Returns a function, that, as long as it continues to be invoked, will not
+// be triggered. The function will be called after it stops being called for
+// N milliseconds. If `immediate` is passed, trigger the function on the
+// leading edge, instead of the trailing.
+function debounce(func, wait, immediate) {
+  var timeout;
+  return function() {
+    var context = this, args = arguments;
+    var later = function() {
+      timeout = null;
+      if (!immediate) func.apply(context, args);
+    };
+    var callNow = immediate && !timeout;
+    clearTimeout(timeout);
+    timeout = setTimeout(later, wait);
+    if (callNow) func.apply(context, args);
+  };
+}
 
 var observer = new MutationObserver(function(mutations) {
   if (mutations[0]) {
@@ -23,24 +44,25 @@ var observer = new MutationObserver(function(mutations) {
 });
 
 var addObserver = function() {
+  this.addEventListener('input', checkForWarnings);
   warningChecker.addWarnings(this.parentNode);
-  observer.observe(this, {characterData: true, subtree: true, childList: true,  attributes: true});
+  observer.observe(this, {characterData: false, subtree: true, childList: true,  attributes: false});
 };
 
 var removeObserver = function() {
   warningChecker.removeWarnings(this.parentNode);
+  this.removeEventListener('input', checkForWarnings);
   observer.disconnect();
 };
 
-var checkForWarnings = function() {
+var checkForWarnings = debounce(function() {
   warningChecker.removeWarnings(this.parentNode);
   warningChecker.addWarnings(this.parentNode);
-};
+}, WAIT_TIME_BEFORE_RECALC_WARNINGS);
 
 var applyEventListeners = function(id) {
   var targetDiv = document.getElementById(id);
   targetDiv.addEventListener('focus', addObserver);
-  targetDiv.addEventListener('input', checkForWarnings);
   targetDiv.addEventListener('blur', removeObserver);
 };
 
@@ -48,11 +70,10 @@ var documentObserver = new MutationObserver(function(mutations) {
   var divCount = getEditableDivs().length;
   if (divCount !== editableDivCount) {
     editableDivCount = divCount;
-    var id;
     if (mutations[0]) {
       mutations.forEach(function(mutation) {
         if (mutation.type === 'childList' && mutation.target.hasAttribute('contentEditable')) {
-          id = mutation.target.id;
+          var id = mutation.target.id;
           if (id) {
             applyEventListeners(id);
           }

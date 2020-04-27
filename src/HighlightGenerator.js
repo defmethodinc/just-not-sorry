@@ -1,17 +1,28 @@
 var HighlightGenerator = window.HighlightGenerator = {};
 const HIGHLIGHT_YPOS_ADJUSTMENT = 3;
+const myFastdom = fastdom.extend(fastdomPromised);
 
 HighlightGenerator.highlightMatches = function highlightMatches(message, warningClass) {
   return function (currMatch, rangeToHighlight) {
     var parentNode = this;
-    var parentRect = parentNode.getBoundingClientRect();
-    var rectsToHighlight = rangeToHighlight.getClientRects();
-    for (var i = 0; i < rectsToHighlight.length; i++) {
-      var highlightNode = HighlightGenerator.highlightMatch(rectsToHighlight[i], parentRect);
-      highlightNode.title = message;
-      highlightNode.className = warningClass;
-      parentNode.appendChild(highlightNode);
-    }
+    return myFastdom.measure(function () {
+      var parentRect = parentNode.getBoundingClientRect();
+      var rectsToHighlight = rangeToHighlight.getClientRects();
+      var highlightNodes = [];
+      for (var i = 0; i < rectsToHighlight.length; i++) {
+        var highlightNode = HighlightGenerator.highlightMatch(rectsToHighlight[i], parentRect);
+        highlightNode.title = message;
+        highlightNode.className = warningClass;
+        highlightNodes.push(highlightNode);
+      }
+      return highlightNodes;
+    }).then(function (highlightNodes) {
+      myFastdom.mutate(function () {
+        highlightNodes.forEach(function (highlightNode) {
+          parentNode.appendChild(highlightNode);
+        });
+      })
+    });
   }
 };
 
