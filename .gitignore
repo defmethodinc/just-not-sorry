@@ -3,4 +3,4 @@ just-not-sorry*.zip
 node_modules
 .DS_Store
 dist
-manifest.json.old
+*.json.old
