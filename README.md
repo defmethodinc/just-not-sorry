@@ -60,12 +60,9 @@ npm run test:watch
 and then open http://localhost:8888 in a web browser.
 
 ### To Publish a New Version to Chrome Webstore
-  1. Make sure all the tests pass
-  1. Update the version number in `manifest.json` and commit the change to master.
-     Use [semantic versioning](http://semver.org/) to determine how to increment the version number
-  1. Run the `package.sh` shell script to generate a zip file
-  1. Go to [Chrome Developer Dashboard](https://chrome.google.com/webstore/developer/dashboard) and edit the existing app. Upload the new zip file and then publish the changes (button is at the very bottom)
-  1. Tag the new release in [GitHub](https://github.com/defmethodinc/just-not-sorry/releases) and include release notes
+This project uses the [semantic-release](https://semantic-release.gitbook.io/semantic-release/) library and [GitHub Actions](https://help.github.com/en/actions) to automate the release process. Once a pull request has been merged into the master branch, a new [GitHub release](https://github.com/defmethodinc/just-not-sorry/releases) will be created.  A zip file containing the updated files for the Chrome web store will be attached.
+
+To publish this release, download the zip file from GitHub. Find the Just Not Sorry extension on the [Chrome Developer Dashboard](https://chrome.google.com/webstore/devconsole/) (credentials available to DefMethod developers upon request), upload the zip file, and click the "Publish Item" button.
 
 ### Libraries Used
 For production:
