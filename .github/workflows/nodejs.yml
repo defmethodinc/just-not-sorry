@@ -45,8 +45,8 @@ jobs:
         uses: actions/checkout@v2
       - name: Check the ref
         run: echo ${{ github.ref }}
-      - name: Test Semantic Release
-        if: github.ref == 'refs/heads/semantic-release'
+      - name: Semantic Release
+        if: github.ref == 'refs/heads/master' || github.ref == 'refs/heads/semantic-release'
         uses: cycjimmy/semantic-release-action@v2
         with:
           semantic_version: 17.0.4
