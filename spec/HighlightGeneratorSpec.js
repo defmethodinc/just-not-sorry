@@ -1,3 +1,5 @@
+import * as HighlightGenerator from "../src/HighlightGenerator.js";
+
 describe('HighlightGenerator', function () {
   describe('#highlightMatches', function () {
     var warningClass = 'test-warning';

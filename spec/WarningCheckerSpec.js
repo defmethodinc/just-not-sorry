@@ -1,3 +1,5 @@
+import * as WarningChecker from "../src/WarningChecker.js";
+
 describe('WarningChecker', function() {
   describe('.addWarning', function() {
     var checker;

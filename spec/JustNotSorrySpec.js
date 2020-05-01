@@ -1,3 +1,5 @@
+import * as JustNotSorry from "../src/JustNotSorry.js";
+
 describe('JustNotSorry', function () {
   function generateEditableDiv(id) {
     let editableDiv = document.createElement('DIV');

@@ -4,13 +4,10 @@ const watch = require('gulp-watch');
 const open = require('gulp-open');
 
 const filesForTest = [
-    'lib/fastdom.js',
-    'lib/fastdom-promised.js',
     'src/Warnings.js',
     'src/WarningChecker.js',
     'src/HighlightGenerator.js',
     'src/JustNotSorry.js',
-    'lib/dom-regexp-match-1.1.0.js',
     'spec/lib/jquery-2.1.4.min.js',
     'spec/lib/jasmine-jquery.js',
     'spec/**/*Spec.js'
