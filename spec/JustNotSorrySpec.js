@@ -1,4 +1,6 @@
-import * as JustNotSorry from "../src/JustNotSorry.js";
+import * as JustNotSorry from '../src/JustNotSorry.js';
+
+import warningChecker from '../src/WarningChecker.js';
 
 describe('JustNotSorry', function () {
   function generateEditableDiv(id) {
@@ -13,67 +15,72 @@ describe('JustNotSorry', function () {
     target.dispatchEvent(event);
   }
 
-  beforeAll(function() {
-      generateEditableDiv('div-1');
-      generateEditableDiv('div-2');
-      generateEditableDiv('div-3');
+  beforeAll(function () {
+    generateEditableDiv('div-1');
+    generateEditableDiv('div-2');
+    generateEditableDiv('div-3');
   });
 
-  describe('#getEditableDivs', function() {
+  describe('#getEditableDivs', function () {
     it('returns an array of all content editable divs within the document', function () {
       let divs = getEditableDivs();
       expect(divs.length).toEqual(3);
     });
   });
 
-  describe('#addObserver', function() {
+  describe('#addObserver', function () {
     it('adds an observer that listens for structural changes to the content editable div', function () {
       let target = document.getElementById('div-1');
       spyOn(observer, 'observe');
 
-      target.addEventListener('focus', addObserver);
+      target.addEventListener('focus', JustNotSorry.addObserver);
       expect(observer.observe).not.toHaveBeenCalled();
       dispatchEventOnElement(target, 'focus');
-      expect(observer.observe).toHaveBeenCalledWith(target, jasmine.objectContaining({childList: true}));
+      expect(observer.observe).toHaveBeenCalledWith(
+        target,
+        jasmine.objectContaining({ childList: true })
+      );
     });
 
-    it('starts checking for warnings', function(done) {
-      spyOn(window, 'checkForWarnings').and.callThrough();
+    it('starts checking for warnings', function (done) {
+      spyOn(JustNotSorry, 'checkForWarnings').and.callThrough();
       let target = document.getElementById('div-1');
 
-      target.addEventListener('focus', addObserver);
+      target.addEventListener('focus', JustNotSorry.addObserver);
       dispatchEventOnElement(target, 'focus');
 
       dispatchEventOnElement(target, 'input');
 
       setTimeout(function () {
-        expect(window.checkForWarnings).toHaveBeenCalled();
+        expect(JustNotSorry.checkForWarnings).toHaveBeenCalled();
         done();
       });
     });
 
-    it('adds warnings to the content editable div', function() {
+    it('adds warnings to the content editable div', function () {
       let target = document.getElementById('div-1');
       spyOn(warningChecker, 'addWarnings');
 
-      target.addEventListener('focus', addObserver);
+      target.addEventListener('focus', JustNotSorry.addObserver);
       dispatchEventOnElement(target, 'focus');
 
-      expect(warningChecker.addWarnings).toHaveBeenCalledWith(target.parentNode);
+      expect(warningChecker.addWarnings).toHaveBeenCalledWith(
+        target.parentNode
+      );
     });
 
-    describe('when a global id variable is set', function() {
-      beforeEach(function() {
+    describe('when a global id variable is set', function () {
+      beforeEach(function () {
         window.id = 'test value';
       });
 
-      afterEach(function() {
+      afterEach(function () {
         delete window.id;
       });
 
-      it('keeps that global variable unchanged', function(done) {
+      it('keeps that global variable unchanged', function (done) {
         const target = document.getElementById('div-2');
-        target.addEventListener('focus', addObserver);
+        target.addEventListener('focus', JustNotSorry.addObserver);
         dispatchEventOnElement(target, 'focus');
 
         target.appendChild(document.createElement('BR'));
@@ -86,34 +93,37 @@ describe('JustNotSorry', function () {
     });
   });
 
-  describe('#removeObserver', function() {
-    it('removes any existing warnings', function() {
+  describe('#removeObserver', function () {
+    it('removes any existing warnings', function () {
       let target = document.getElementById('div-2');
-      spyOn(warningChecker, 'removeWarnings');
 
-      target.addEventListener('focus', addObserver);
+      spyOn(warningChecker.prototype, 'removeWarnings');
+
+      target.addEventListener('focus', JustNotSorry.addObserver);
       dispatchEventOnElement(target, 'focus');
 
-      target.addEventListener('blur', removeObserver);
+      target.addEventListener('blur', JustNotSorry.removeObserver);
       dispatchEventOnElement(target, 'blur');
 
-      expect(warningChecker.removeWarnings).toHaveBeenCalledWith(target.parentNode);
+      expect(warningChecker.prototype.removeWarnings).toHaveBeenCalledWith(
+        target.parentNode
+      );
     });
 
-    it('no longer checks for warnings on input events', function(done) {
-      spyOn(window, 'checkForWarnings').and.callThrough();
+    it('no longer checks for warnings on input events', function (done) {
+      spyOn(JustNotSorry, 'checkForWarnings').and.callThrough();
       let target = document.getElementById('div-2');
 
-      target.addEventListener('focus', addObserver);
+      target.addEventListener('focus', JustNotSorry.addObserver);
       dispatchEventOnElement(target, 'focus');
 
-      target.addEventListener('blur', removeObserver);
+      target.addEventListener('blur', JustNotSorry.removeObserver);
       dispatchEventOnElement(target, 'blur');
 
       dispatchEventOnElement(target, 'input');
 
       setTimeout(function () {
-        expect(window.checkForWarnings).not.toHaveBeenCalled();
+        expect(JustNotSorry.checkForWarnings).not.toHaveBeenCalled();
         done();
       });
     });
@@ -123,29 +133,29 @@ describe('JustNotSorry', function () {
       spyOn(observer, 'observe');
       spyOn(observer, 'disconnect');
 
-      target.addEventListener('focus', addObserver);
+      target.addEventListener('focus', JustNotSorry.addObserver);
       dispatchEventOnElement(target, 'focus');
       expect(observer.observe).toHaveBeenCalled();
 
-      target.addEventListener('blur', removeObserver);
+      target.addEventListener('blur', JustNotSorry.removeObserver);
       dispatchEventOnElement(target, 'blur');
       expect(observer.disconnect).toHaveBeenCalled();
     });
   });
 
-  describe('#checkForWarnings', function() {
+  describe('#checkForWarnings', function () {
     it('updates warnings each time input is triggered', function () {
       let target = document.getElementById('div-3');
-      spyOn(window, 'checkForWarnings');
+      spyOn(JustNotSorry, 'checkForWarnings');
       spyOn(warningChecker, 'addWarnings');
       spyOn(warningChecker, 'removeWarnings');
 
-      target.addEventListener('input', checkForWarnings);
+      target.addEventListener('input', JustNotSorry.checkForWarnings);
       dispatchEventOnElement(target, 'input');
       dispatchEventOnElement(target, 'input');
       dispatchEventOnElement(target, 'input');
 
-      let callCount = window.checkForWarnings.calls.count();
+      let callCount = JustNotSorry.checkForWarnings.calls.count();
       expect(callCount).toEqual(3);
     });
   });
@@ -180,9 +190,13 @@ describe('JustNotSorry', function () {
 
           setTimeout(function () {
             expect(warningChecker.removeWarnings).toHaveBeenCalledTimes(1);
-            expect(warningChecker.removeWarnings).toHaveBeenCalledWith(target.parentNode);
+            expect(warningChecker.removeWarnings).toHaveBeenCalledWith(
+              target.parentNode
+            );
             expect(warningChecker.addWarnings).toHaveBeenCalledTimes(1);
-            expect(warningChecker.addWarnings).toHaveBeenCalledWith(target.parentNode);
+            expect(warningChecker.addWarnings).toHaveBeenCalledWith(
+              target.parentNode
+            );
             done();
           }, WAIT_TIME_BEFORE_RECALC_WARNINGS + 10);
         });
@@ -205,7 +219,6 @@ describe('JustNotSorry', function () {
         warningChecker.addWarnings.calls.reset();
 
         setTimeout(function () {
-
           target.className = 'test';
 
           setTimeout(function () {
@@ -239,7 +252,10 @@ describe('JustNotSorry', function () {
       setTimeout(function () {
         dispatchEventOnElement(targetDiv, 'focus');
         expect(observer.observe).toHaveBeenCalledTimes(1);
-        expect(observer.observe).toHaveBeenCalledWith(targetDiv, jasmine.objectContaining({subtree: true, childList: true}));
+        expect(observer.observe).toHaveBeenCalledWith(
+          targetDiv,
+          jasmine.objectContaining({ subtree: true, childList: true })
+        );
         done();
       });
     });

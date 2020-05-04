@@ -27,11 +27,13 @@
     "gulp-watch": "^5.0.1",
     "husky": "^4.2.5",
     "jasmine-core": "^3.5.0",
+    "jquery": "^2.1.4",
     "puppeteer": "^2.1.1",
     "semantic-release": "^17.0.4",
     "webpack": "^4.43.0",
     "webpack-cli": "^3.3.11",
-    "webpack-dev-server": "^3.10.3"
+    "webpack-dev-server": "^3.10.3",
+    "webpack-stream": "^5.2.1"
   },
   "dependencies": {
     "dom-regexp-match": "^1.1.0",

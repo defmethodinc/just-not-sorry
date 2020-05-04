@@ -28,7 +28,7 @@ function debounce(func, wait, immediate) {
   };
 }
 
-var observer = new MutationObserver(function (mutations) {
+export var observer = new MutationObserver(function (mutations) {
   if (mutations[0]) {
     mutations.forEach(function (mutation) {
       if (
@@ -50,7 +50,7 @@ var observer = new MutationObserver(function (mutations) {
   }
 });
 
-var addObserver = function () {
+export var addObserver = function () {
   this.addEventListener('input', checkForWarnings);
   warningChecker.addWarnings(this.parentNode);
   observer.observe(this, {
@@ -61,13 +61,13 @@ var addObserver = function () {
   });
 };
 
-var removeObserver = function () {
+export var removeObserver = function () {
   warningChecker.removeWarnings(this.parentNode);
   this.removeEventListener('input', checkForWarnings);
   observer.disconnect();
 };
 
-var checkForWarnings = debounce(function () {
+export var checkForWarnings = debounce(function () {
   warningChecker.removeWarnings(this.parentNode);
   warningChecker.addWarnings(this.parentNode);
 }, WAIT_TIME_BEFORE_RECALC_WARNINGS);
@@ -98,7 +98,7 @@ var documentObserver = new MutationObserver(function (mutations) {
   }
 });
 
-function getEditableDivs() {
+export function getEditableDivs() {
   return document.querySelectorAll('div[contentEditable=true]');
 }
 
