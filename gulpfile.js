@@ -25,6 +25,7 @@ gulp.task('jasmine-browser', function () {
       webpack({
         watch: true,
         output: { filename: 'spec.js' },
+        mode: 'development',
         plugins: [plugin],
       })
     )
@@ -35,6 +36,12 @@ gulp.task('jasmine-browser', function () {
 gulp.task('jasmine-headless-chrome', function () {
   return gulp
     .src(filesForTest)
+    .pipe(
+      webpack({
+        output: { filename: 'spec.js' },
+        mode: 'development',
+      })
+    )
     .pipe(jasmineBrowser.specRunner({ console: true }))
     .pipe(jasmineBrowser.headless({ driver: 'chrome' }));
 });
