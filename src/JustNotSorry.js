@@ -3,9 +3,9 @@
 import WarningChecker from './WarningChecker.js';
 import WARNINGS from './Warnings.js';
 
-var warningChecker = new WarningChecker(WARNINGS);
+export var warningChecker = new WarningChecker(WARNINGS);
 var editableDivCount = 0;
-var WAIT_TIME_BEFORE_RECALC_WARNINGS = 500;
+export var WAIT_TIME_BEFORE_RECALC_WARNINGS = 500;
 
 // from underscore.js
 // Returns a function, that, as long as it continues to be invoked, will not

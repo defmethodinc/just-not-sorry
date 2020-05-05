@@ -1,4 +1,5 @@
 import WarningChecker from '../src/WarningChecker.js';
+import $ from 'jquery';
 
 describe('WarningChecker', function () {
   describe('.addWarning', function () {
@@ -6,14 +7,6 @@ describe('WarningChecker', function () {
 
     beforeEach(function () {
       checker = new WarningChecker({});
-    });
-
-    it('delegates to domRegexpMatch', async function () {
-      var matcherSpy = spyOn(window, 'domRegexpMatch');
-      var content = 'test just test';
-      var $fixture = setFixtures(content);
-      await checker.addWarning($fixture, 'just', 'warning message');
-      expect(matcherSpy).toHaveBeenCalled();
     });
 
     it('adds a warning for a single keyword', async function (done) {
