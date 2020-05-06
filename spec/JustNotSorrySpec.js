@@ -1,4 +1,6 @@
-import * as JustNotSorry from '../src/JustNotSorry.js';
+import JustNotSorry, {
+  WAIT_TIME_BEFORE_RECALC_WARNINGS,
+} from '../src/JustNotSorry.js';
 
 import WarningChecker from '../src/WarningChecker.js';
 
@@ -202,7 +204,7 @@ describe('JustNotSorry', function () {
               target.parentNode
             );
             done();
-          }, JustNotSorry.WAIT_TIME_BEFORE_RECALC_WARNINGS + 10);
+          }, WAIT_TIME_BEFORE_RECALC_WARNINGS + 10);
         });
       });
     });

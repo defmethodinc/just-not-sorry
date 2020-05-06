@@ -24,6 +24,7 @@ gulp.task('jasmine-browser', function () {
     .pipe(
       webpack({
         watch: true,
+        devtool: 'inline-source-map',
         output: { filename: 'spec.js' },
         mode: 'development',
         plugins: [plugin],

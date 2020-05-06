@@ -4,7 +4,6 @@ import WarningChecker from './WarningChecker.js';
 import WARNINGS from './Warnings.js';
 
 export var warningChecker = new WarningChecker(WARNINGS);
-var editableDivCount = 0;
 export var WAIT_TIME_BEFORE_RECALC_WARNINGS = 500;
 
 // from underscore.js
@@ -28,78 +27,106 @@ function debounce(func, wait, immediate) {
   };
 }
 
-export var observer = new MutationObserver(function (mutations) {
-  if (mutations[0]) {
-    mutations.forEach(function (mutation) {
-      if (
-        mutation.type !== 'characterData' &&
-        mutation.target.hasAttribute('contentEditable')
-      ) {
-        var id = mutation.target.id;
-        if (id) {
-          var targetDiv = document.getElementById(id);
-          // generate input event to fire checkForWarnings again
-          var inputEvent = new Event('input', {
-            bubbles: true,
-            cancelable: true,
-          });
-          targetDiv.dispatchEvent(inputEvent);
-        }
-      }
+class JustNotSorry {
+  constructor() {
+    this.checkForWarnings = debounce(
+      this.checkForWarningsImpl,
+      WAIT_TIME_BEFORE_RECALC_WARNINGS
+    );
+    this.editableDivCount = 0;
+    this.addObserver = this.addObserver.bind(this);
+    this.removeObserver = this.removeObserver.bind(this);
+    this.documentObserver = new MutationObserver(
+      this.handleContentEditableDivChange.bind(this)
+    );
+    this.observer = new MutationObserver(
+      this.handleContentEditableContentInsert.bind(this)
+    );
+    this.initialize();
+  }
+
+  initialize() {
+    this.documentObserver.observe(document, { subtree: true, childList: true });
+  }
+
+  addObserver(event) {
+    const element = event.currentTarget;
+    this.handleWarnings = this.checkForWarnings.bind(element.parentNode);
+    element.addEventListener('input', this.handleWarnings);
+    warningChecker.addWarnings(element.parentNode);
+    this.observer.observe(element, {
+      characterData: false,
+      subtree: true,
+      childList: true,
+      attributes: false,
     });
   }
-});
 
-export var addObserver = function () {
-  this.addEventListener('input', checkForWarnings);
-  warningChecker.addWarnings(this.parentNode);
-  observer.observe(this, {
-    characterData: false,
-    subtree: true,
-    childList: true,
-    attributes: false,
-  });
-};
+  removeObserver(event) {
+    const element = event.currentTarget;
+    warningChecker.removeWarnings(element.parentNode);
+    element.removeEventListener('input', this.handleWarnings);
+    this.observer.disconnect();
+  }
 
-export var removeObserver = function () {
-  warningChecker.removeWarnings(this.parentNode);
-  this.removeEventListener('input', checkForWarnings);
-  observer.disconnect();
-};
+  checkForWarningsImpl() {
+    const parentElement = this;
+    warningChecker.removeWarnings(parentElement);
+    warningChecker.addWarnings(parentElement);
+  }
 
-export var checkForWarnings = debounce(function () {
-  warningChecker.removeWarnings(this.parentNode);
-  warningChecker.addWarnings(this.parentNode);
-}, WAIT_TIME_BEFORE_RECALC_WARNINGS);
+  applyEventListeners(id) {
+    var targetDiv = document.getElementById(id);
+    targetDiv.addEventListener('focus', this.addObserver.bind(this));
+    targetDiv.addEventListener('blur', this.removeObserver.bind(this));
+  }
 
-var applyEventListeners = function (id) {
-  var targetDiv = document.getElementById(id);
-  targetDiv.addEventListener('focus', addObserver);
-  targetDiv.addEventListener('blur', removeObserver);
-};
+  handleContentEditableDivChange(mutations) {
+    var divCount = this.getEditableDivs().length;
+    if (divCount !== this.editableDivCount) {
+      this.editableDivCount = divCount;
+      if (mutations[0]) {
+        mutations.forEach((mutation) => {
+          if (
+            mutation.type === 'childList' &&
+            mutation.target.hasAttribute('contentEditable')
+          ) {
+            var id = mutation.target.id;
+            if (id) {
+              this.applyEventListeners(id);
+            }
+          }
+        });
+      }
+    }
+  }
 
-var documentObserver = new MutationObserver(function (mutations) {
-  var divCount = getEditableDivs().length;
-  if (divCount !== editableDivCount) {
-    editableDivCount = divCount;
+  handleContentEditableContentInsert(mutations) {
     if (mutations[0]) {
-      mutations.forEach(function (mutation) {
+      mutations.forEach((mutation) => {
         if (
-          mutation.type === 'childList' &&
+          mutation.type !== 'characterData' &&
           mutation.target.hasAttribute('contentEditable')
         ) {
           var id = mutation.target.id;
           if (id) {
-            applyEventListeners(id);
+            var targetDiv = document.getElementById(id);
+            // generate input event to fire checkForWarnings again
+            var inputEvent = new Event('input', {
+              bubbles: true,
+              cancelable: true,
+            });
+            targetDiv.dispatchEvent(inputEvent);
           }
         }
       });
     }
   }
-});
-
-export function getEditableDivs() {
-  return document.querySelectorAll('div[contentEditable=true]');
+  getEditableDivs() {
+    return document.querySelectorAll('div[contentEditable=true]');
+  }
 }
 
-documentObserver.observe(document, { subtree: true, childList: true });
+const justNotSorry = new JustNotSorry();
+
+export default justNotSorry;
