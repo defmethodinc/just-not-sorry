@@ -1,4 +1,4 @@
-var WARNINGS = {
+export const WARNINGS = {
   warnings: [
     {
       keyword: 'just',
@@ -203,5 +203,3 @@ var WARNINGS = {
     },
   ],
 };
-
-export default WARNINGS;

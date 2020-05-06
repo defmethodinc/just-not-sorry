@@ -1,7 +1,7 @@
 'use strict';
 
 import WarningChecker from './WarningChecker.js';
-import WARNINGS from './Warnings.js';
+import { WARNINGS } from './Warnings.js';
 
 export var warningChecker = new WarningChecker(WARNINGS);
 export var WAIT_TIME_BEFORE_RECALC_WARNINGS = 500;

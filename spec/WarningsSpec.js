@@ -1,4 +1,4 @@
-import WARNINGS from '../src/Warnings.js';
+import { WARNINGS } from '../src/Warnings.js';
 
 describe('WARNINGS', function () {
   function isBlank(str) {
