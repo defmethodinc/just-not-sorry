@@ -23,11 +23,11 @@ describe('HighlightGenerator', function () {
     });
 
     it('appends one highlight node to the parent for each client rect in the range', async function (done) {
-      await HighlightGenerator.highlightMatches(message, warningClass).call(
-        parentNodeSpy,
-        currMatch,
-        range
-      );
+      await HighlightGenerator.highlightMatches(
+        message,
+        warningClass,
+        parentNodeSpy
+      ).call(parentNodeSpy, currMatch, range);
       requestAnimationFrame(function () {
         expect(parentNodeSpy.appendChild).toHaveBeenCalled();
         expect(parentNodeSpy.appendChild.calls.count()).toEqual(rects.length);
@@ -36,20 +36,20 @@ describe('HighlightGenerator', function () {
     });
 
     it('sets the same message on all highlight nodes', async function () {
-      await HighlightGenerator.highlightMatches(message, warningClass).call(
-        parentNodeSpy,
-        currMatch,
-        range
-      );
+      await HighlightGenerator.highlightMatches(
+        message,
+        warningClass,
+        parentNodeSpy
+      ).call(parentNodeSpy, currMatch, range);
       expect(mockNode.title).toEqual(message);
     });
 
     it('sets the warning class on the highlight nodes', async function () {
-      await HighlightGenerator.highlightMatches(message, warningClass).call(
-        parentNodeSpy,
-        currMatch,
-        range
-      );
+      await HighlightGenerator.highlightMatches(
+        message,
+        warningClass,
+        parentNodeSpy
+      ).call(parentNodeSpy, currMatch, range);
       expect(mockNode.className).toEqual(warningClass);
     });
   });

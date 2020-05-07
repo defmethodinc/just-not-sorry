@@ -19,7 +19,8 @@ class WarningChecker {
     const promisifiedMatchCallback = function (match, range) {
       const matchPromise = HighlightGenerator.highlightMatches(
         message,
-        warningClass
+        warningClass,
+        node
       ).call(node, match, range);
       promises.push(matchPromise);
     };
