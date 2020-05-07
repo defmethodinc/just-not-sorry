@@ -16,7 +16,7 @@ class WarningChecker {
     const pattern = new RegExp('\\b(' + keyword + ')\\b', 'ig');
     const promises = [];
     const warningClass = this.warningClass;
-    const promisifiedMatchCallback = function (match, range) {
+    const promisifiedMatchCallback = (match, range) => {
       const matchPromise = HighlightGenerator.highlightMatches(
         message,
         warningClass,
@@ -38,7 +38,7 @@ class WarningChecker {
 
   removeWarnings(node) {
     const elementsToRemove = document.getElementsByClassName(this.warningClass);
-    return myFastdom.mutate(function () {
+    return myFastdom.mutate(() => {
       for (var i = elementsToRemove.length; i--; ) {
         node.removeChild(elementsToRemove[i]);
       }
