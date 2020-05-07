@@ -1,0 +1,27 @@
+
+name: Publish to Chrome Web Store
+
+on:
+  release:
+    types: [published]
+
+jobs:
+  publish:
+
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Download release package
+        run: curl -o just-not-sorry-chrome.zip `jq -j '.release.assets[0].url' $GITHUB_EVENT_PATH`
+      - name: Upload to Chrome Web Store beta testers
+        if: github.event.release.prerelease
+        uses: trmcnvn/chrome-addon@v2
+        with:
+          extension: fgnoahpabaeffmkacgedecamkmddkebn # beta extension ID
+          zip: just-not-sorry-chrome.zip
+          client-id: ${{ secrets.CHROME_CLIENT_ID_DM }}
+          client-secret: ${{ secrets.CHROME_CLIENT_SECRET_DM }}
+          refresh-token: ${{ secrets.CHROME_REFRESH_TOKEN_DM }}
+          publish-target: "trustedTesters"
+
+# TODO: add publish to production Chrome Web Store
