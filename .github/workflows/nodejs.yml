@@ -34,17 +34,8 @@ jobs:
         run: npm test
         env:
           CI: true
-
-  release:
-    needs: build
-    if: github.ref == 'refs/heads/master' || github.ref == 'refs/heads/beta'
-
-    runs-on: ubuntu-latest
-
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v2
-      - name: Prepare credentials
+      - name: Semantic Release
+        if: github.ref == 'refs/heads/master' || github.ref == 'refs/heads/beta'
         env:
           GPG_PASSPHRASE: ${{ secrets.GPG_PASSPHRASE }}
           SSL_PASSPHRASE: ${{ secrets.SSL_PASSPHRASE }}
@@ -54,10 +45,4 @@ jobs:
           echo 'echo ${SSL_PASSPHRASE}' > /tmp/askpass && chmod +x /tmp/askpass
           eval "$(ssh-agent -s)"
           DISPLAY=":0.0" SSH_ASKPASS="/tmp/askpass" setsid ssh-add /tmp/git_deploy_key </dev/null
-      - name: Semantic Release
-        uses: cycjimmy/semantic-release-action@v2
-        with:
-          semantic_version: 17.0.4
-          extra_plugins: |
-            @semantic-release/git
-            @semantic-release/exec
+          npx semantic-release
