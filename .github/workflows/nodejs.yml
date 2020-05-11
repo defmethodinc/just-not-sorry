@@ -45,8 +45,11 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v2
       - name: Prepare credentials
+        env:
+          GPG_PASSPHRASE: ${{ secrets.GPG_PASSPHRASE }}
+          SSL_PASSPHRASE: ${{ secrets.SSL_PASSPHRASE }}
         run: |
-          openssl aes-256-cbc -d -K $REPO_ENC_KEY -iv $REPO_ENC_IV -in .git_deploy_key.enc -out /tmp/git_deploy_key
+          gpg --passphrase=$GPG_PASSPHRASE --batch --output /tmp/git_deploy_key --decrypt .git_deploy_key.enc
           chmod 600 /tmp/git_deploy_key
           echo 'echo ${SSL_PASSPHRASE}' > /tmp/askpass && chmod +x /tmp/askpass
           eval "$(ssh-agent -s)"
