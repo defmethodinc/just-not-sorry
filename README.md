@@ -1,3 +1,5 @@
+![](https://github.com/defmethodinc/just-not-sorry/workflows/Node.js%20CI/badge.svg) [![Commitizen friendly](https://img.shields.io/badge/commitizen-friendly-brightgreen.svg)](http://commitizen.github.io/cz-cli/)
+
 # Just Not Sorry -- the Gmail Plug-in
 Inspired by the writings of Tara Mohr and others, this Chrome Extension for Gmail will warn you when you use phrases that might be undermining your message.
 
@@ -21,25 +23,27 @@ If you're a developer, you're welcome to submit a pull request.  Please run the 
 **NOTE:** All warning phrases must include a link to an article that explains why the phrase could negatively impact someone's message.  If available, please also include alternative wording suggestions from the article.
 
 ### Development Setup
-  * `git clone` the repo
-  * Follow the [instructions on the Chrome docs](https://developer.chrome.com/extensions/getstarted#unpacked) to load the extension
-  * Go to Gmail and open a compose window
-  * If you make changes to the code, click the Reload link on the `chrome://extensions` page and then reload your Gmail tab to pick up the changes.
-  * Errors will show up in the console
+
+Prerequisites:
+* [git](https://git-scm.com/)
+* [node.js 12.X+](https://nodejs.org/)
+
+Setup:
+* `git clone` the repo
+* Run `npm install` in the project root
+* Follow the [instructions on the Chrome docs](https://developer.chrome.com/extensions/getstarted#unpacked) to load the extension
+* Go to Gmail and open a compose window
+* If you make changes to the code, click the Reload link on the `chrome://extensions` page and then reload your Gmail tab to pick up the changes.
+* Errors will show up in the console
 
 ### Coding Standards
 Use [JSCS](http://jscs.info/) with the AirBnB preset.
 
+### Commit Message Conventions
+Commit messages are required to follow the [AngularJS's commit message convention](https://github.com/angular/angular/blob/master/CONTRIBUTING.md#-commit-message-guidelines).  This allows us to automatically increment the version numbering of the extension using the [SemVer](https://semver.org/) standard and generate release notes.  We use the [Commitizen](https://github.com/commitizen/cz-cli) library to provide interactive prompts to help generate the commit messages.  Once you've run `npm install` as instructed in the development setup section, Commitizen will be run whenever you execute the `git commit` command.
+
 ### Jasmine Tests
 Tests are written using [jasmine](https://jasmine.github.io/). They can either be run from the command line using headless chrome or run within a browser window.
-
-First, make sure that node.js and npm are installed.  Then in the project root, run:
-
-```
-npm install
-```
-
-This will install the required packages to run the tests, including a headless version of Chrome that will be controlled via Puppeteer.
 
 To run the headless tests, use:
 
@@ -56,12 +60,9 @@ npm run test:watch
 and then open http://localhost:8888 in a web browser.
 
 ### To Publish a New Version to Chrome Webstore
-  1. Make sure all the tests pass
-  1. Update the version number in `manifest.json` and commit the change to master.
-     Use [semantic versioning](http://semver.org/) to determine how to increment the version number
-  1. Run the `package.sh` shell script to generate a zip file
-  1. Go to [Chrome Developer Dashboard](https://chrome.google.com/webstore/developer/dashboard) and edit the existing app. Upload the new zip file and then publish the changes (button is at the very bottom)
-  1. Tag the new release in [GitHub](https://github.com/defmethodinc/just-not-sorry/releases) and include release notes
+This project uses the [semantic-release](https://semantic-release.gitbook.io/semantic-release/) library and [GitHub Actions](https://help.github.com/en/actions) to automate the release process. Once a pull request has been merged into the master branch, a new [GitHub release](https://github.com/defmethodinc/just-not-sorry/releases) will be created.  A zip file containing the updated files for the Chrome web store will be attached.
+
+To publish this release, download the zip file from GitHub. Find the Just Not Sorry extension on the [Chrome Developer Dashboard](https://chrome.google.com/webstore/devconsole/) (credentials available to DefMethod developers upon request), upload the zip file, and click the "Publish Item" button.
 
 ### Libraries Used
 For production:

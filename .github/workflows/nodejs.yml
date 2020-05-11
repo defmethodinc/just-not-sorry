@@ -3,7 +3,11 @@
 
 name: Node.js CI
 
-on: [push]
+on:
+  push:
+    paths-ignore:
+      - 'package.json'
+      - 'manifest.json'
 
 jobs:
   build:
@@ -30,3 +34,22 @@ jobs:
         run: npm test
         env:
           CI: true
+
+  release:
+    needs: build
+    if: github.ref == 'refs/heads/master' || github.ref == 'refs/heads/beta'
+
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: Semantic Release
+        uses: cycjimmy/semantic-release-action@v2
+        with:
+          semantic_version: 17.0.4
+          extra_plugins: |
+            @semantic-release/git
+            @semantic-release/exec
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

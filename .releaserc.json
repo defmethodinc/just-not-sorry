@@ -1,0 +1,39 @@
+{
+  "branches": [
+    "master",
+    { "name": "beta", "prerelease": "beta" }
+  ],
+  "plugins": [
+    "@semantic-release/commit-analyzer",
+    [
+      "@semantic-release/release-notes-generator",
+      {
+        "linkCompare": false
+      }
+    ],
+    [
+      "@semantic-release/exec",
+      {
+        "prepareCmd": "./package.sh ${nextRelease.version}"
+      }
+    ],
+    [
+      "@semantic-release/github",
+      {
+        "assets": [
+          {
+            "path": "dist/just-not-sorry-chrome.zip",
+            "name": "just-not-sorry-${nextRelease.gitTag}.zip",
+            "label": "Chrome Web Store package"
+          }
+        ]
+      }
+    ],
+    [
+      "@semantic-release/git",
+      {
+        "assets": ["package.json", "manifest.json"]
+      }
+    ]
+  ]
+}
