@@ -44,6 +44,13 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v2
+      - name: Prepare credentials
+        run: |
+          - openssl aes-256-cbc -d -K $REPO_ENC_KEY -iv $REPO_ENC_IV -in .git_deploy_key.enc -out /tmp/git_deploy_key
+          - chmod 600 /tmp/git_deploy_key
+          - echo 'echo ${SSL_PASSPHRASE}' > /tmp/askpass && chmod +x /tmp/askpass
+          - eval "$(ssh-agent -s)"
+          - DISPLAY=":0.0" SSH_ASKPASS="/tmp/askpass" setsid ssh-add /tmp/git_deploy_key </dev/null
       - name: Semantic Release
         uses: cycjimmy/semantic-release-action@v2
         with:
@@ -51,5 +58,3 @@ jobs:
           extra_plugins: |
             @semantic-release/git
             @semantic-release/exec
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
