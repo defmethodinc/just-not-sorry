@@ -10,7 +10,8 @@
   "scripts": {
     "test": "gulp jasmine-headless-chrome",
     "test:watch": "gulp jasmine-browser",
-    "build": "webpack --config webpack.config.js"
+    "build": "webpack --config webpack.config.js",
+    "format": "prettier --loglevel warn --write \"{src,spec}/*.{js,css}\" \"*.{md,css,json,js}\""
   },
   "devDependencies": {
     "@semantic-release/exec": "^5.0.0",
@@ -28,6 +29,7 @@
     "husky": "^4.2.5",
     "jasmine-core": "^3.5.0",
     "jquery": "^3.5.1",
+    "prettier": "^2.0.5",
     "puppeteer": "^2.1.1",
     "semantic-release": "^17.0.4",
     "webpack": "^4.43.0",
