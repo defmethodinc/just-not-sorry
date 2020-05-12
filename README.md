@@ -1,4 +1,4 @@
-![](https://github.com/defmethodinc/just-not-sorry/workflows/Node.js%20CI/badge.svg) [![Commitizen friendly](https://img.shields.io/badge/commitizen-friendly-brightgreen.svg)](http://commitizen.github.io/cz-cli/)
+![](https://github.com/defmethodinc/just-not-sorry/workflows/Node.js%20CI/badge.svg) [![Commitizen friendly](https://img.shields.io/badge/commitizen-friendly-brightgreen.svg)](http://commitizen.github.io/cz-cli/) [![code style: prettier](https://img.shields.io/badge/code_style-prettier-ff69b4.svg?style=flat-square)](https://github.com/prettier/prettier)
 
 # Just Not Sorry -- the Gmail Plug-in
 
@@ -44,7 +44,7 @@ Setup:
 
 ### Coding Standards
 
-Use [JSCS](http://jscs.info/) with the AirBnB preset.
+[Prettier](https://prettier.io/) is used to enforce code style and [eslint](https://eslint.org/) is used to check for best practices. Both are enforced automatically at commit time using [lint-staged](https://github.com/okonet/lint-staged) and [husky](https://github.com/typicode/husky).
 
 ### Commit Message Conventions
 
@@ -78,7 +78,6 @@ To publish this release, download the zip file from GitHub. Find the Just Not So
 
 For production:
 
-- [head.js](http://headjs.com/)
 - [dom-regexp-match](https://github.com/webmodules/dom-regexp-match)
 - [chrome-platform-analytics](https://github.com/GoogleChrome/chrome-platform-analytics)
 - Based on [gmail-chrome-extension-boilerplate](https://github.com/KartikTalwar/gmail-chrome-extension-boilerplate)
