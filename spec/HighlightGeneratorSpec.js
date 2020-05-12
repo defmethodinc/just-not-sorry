@@ -1,3 +1,5 @@
+import HighlightGenerator from '../src/HighlightGenerator.js';
+
 describe('HighlightGenerator', function () {
   describe('#highlightMatches', function () {
     var warningClass = 'test-warning';
@@ -9,38 +11,53 @@ describe('HighlightGenerator', function () {
     var parentNodeSpy, currMatch, range;
 
     beforeEach(function () {
-      mockNode = {title: 'another title'};
+      mockNode = { title: 'another title' };
       spyOn(HighlightGenerator, 'highlightMatch').and.returnValue(mockNode);
-      parentNodeSpy = jasmine.createSpyObj('parentNode', ['getBoundingClientRect', 'appendChild']);
+      parentNodeSpy = jasmine.createSpyObj('parentNode', [
+        'getBoundingClientRect',
+        'appendChild',
+      ]);
       currMatch = jasmine.createSpy();
       range = jasmine.createSpyObj('range', ['getClientRects']);
       range.getClientRects.and.returnValue(rects);
     });
 
     it('appends one highlight node to the parent for each client rect in the range', async function (done) {
-      await HighlightGenerator.highlightMatches(message, warningClass).call(parentNodeSpy, currMatch, range);
+      await HighlightGenerator.highlightMatches(
+        message,
+        warningClass,
+        parentNodeSpy
+      ).call(parentNodeSpy, currMatch, range);
       requestAnimationFrame(function () {
         expect(parentNodeSpy.appendChild).toHaveBeenCalled();
         expect(parentNodeSpy.appendChild.calls.count()).toEqual(rects.length);
         done();
-      })
+      });
     });
 
     it('sets the same message on all highlight nodes', async function () {
-      await HighlightGenerator.highlightMatches(message, warningClass).call(parentNodeSpy, currMatch, range);
+      await HighlightGenerator.highlightMatches(
+        message,
+        warningClass,
+        parentNodeSpy
+      ).call(parentNodeSpy, currMatch, range);
       expect(mockNode.title).toEqual(message);
     });
 
-    it('sets the warning class on the highlight nodes', async function() {
-      await HighlightGenerator.highlightMatches(message, warningClass).call(parentNodeSpy, currMatch, range);
+    it('sets the warning class on the highlight nodes', async function () {
+      await HighlightGenerator.highlightMatches(
+        message,
+        warningClass,
+        parentNodeSpy
+      ).call(parentNodeSpy, currMatch, range);
       expect(mockNode.className).toEqual(warningClass);
     });
   });
 
   describe('#highlightMatch', function () {
     it('generates a node that is styled and positioned', function () {
-      var rect = {top: 2, left: 2, height: 10};
-      var parentRect = {top: 1, left: 1, height:1};
+      var rect = { top: 2, left: 2, height: 10 };
+      var parentRect = { top: 1, left: 1, height: 1 };
 
       var node = HighlightGenerator.highlightMatch(rect, parentRect);
       expect(node).toBeDefined();
@@ -59,9 +76,12 @@ describe('HighlightGenerator', function () {
 
   describe('#transformCoordinatesRelativeToParent', function () {
     var subject = function () {
-      var rect = {top: 30, left: 2, height: 10};
-      var parentRect = {top: 1, left: 1, height: 100};
-      return HighlightGenerator.transformCoordinatesRelativeToParent(rect, parentRect);
+      var rect = { top: 30, left: 2, height: 10 };
+      var parentRect = { top: 1, left: 1, height: 100 };
+      return HighlightGenerator.transformCoordinatesRelativeToParent(
+        rect,
+        parentRect
+      );
     };
 
     it('returns the top position relative to the parent top position', function () {
@@ -76,8 +96,8 @@ describe('HighlightGenerator', function () {
   describe('#setNodeStyle', function () {
     var node;
     beforeEach(function () {
-      var rect = {width: 20, height: 12};
-      var coords = {top: 8, left: 0};
+      var rect = { width: 20, height: 12 };
+      var coords = { top: 8, left: 0 };
       node = document.createElement('DIV');
       HighlightGenerator.setNodeStyle(node, rect, coords);
     });

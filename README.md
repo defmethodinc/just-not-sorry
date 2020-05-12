@@ -31,7 +31,8 @@ Prerequisites:
 Setup:
 * `git clone` the repo
 * Run `npm install` in the project root
-* Follow the [instructions on the Chrome docs](https://developer.chrome.com/extensions/getstarted#unpacked) to load the extension
+* Run `npm run build` in the project root to build the extension
+* Follow the [instructions on the Chrome docs](https://developer.chrome.com/extensions/getstarted#unpacked) to load the unpacked extension using the build subdirectory
 * Go to Gmail and open a compose window
 * If you make changes to the code, click the Reload link on the `chrome://extensions` page and then reload your Gmail tab to pick up the changes.
 * Errors will show up in the console
