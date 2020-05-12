@@ -51,9 +51,7 @@ export default class HighlightGenerator {
 
   static transformCoordinatesRelativeToParent(
     rect,
-    parentRect,
-    scroll,
-    fieldType
+    parentRect
   ) {
     let coords = {};
     coords.top = rect.top - parentRect.top + rect.height;

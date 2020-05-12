@@ -26,6 +26,7 @@ describe('JustNotSorry', function () {
   describe('#getEditableDivs', function () {
     it('returns an array of all content editable divs within the document', function () {
       let divs = JustNotSorry.getEditableDivs();
+
       expect(divs.length).toEqual(3);
     });
   });
@@ -36,8 +37,10 @@ describe('JustNotSorry', function () {
       spyOn(JustNotSorry.observer, 'observe');
 
       target.addEventListener('focus', JustNotSorry.addObserver);
+
       expect(JustNotSorry.observer.observe).not.toHaveBeenCalled();
       dispatchEventOnElement(target, 'focus');
+
       expect(JustNotSorry.observer.observe).toHaveBeenCalledWith(
         target,
         jasmine.objectContaining({ childList: true })
@@ -54,6 +57,7 @@ describe('JustNotSorry', function () {
       dispatchEventOnElement(target, 'input');
 
       setTimeout(function () {
+        // eslint-disable-next-line jasmine/prefer-toHaveBeenCalledWith
         expect(JustNotSorry.checkForWarnings).toHaveBeenCalled();
         done();
       });
@@ -88,7 +92,7 @@ describe('JustNotSorry', function () {
         target.appendChild(document.createElement('BR'));
 
         setTimeout(function () {
-          expect(id).toEqual('test value');
+          expect(window.id).toEqual('test value');
           done();
         });
       });
@@ -137,11 +141,13 @@ describe('JustNotSorry', function () {
 
       target.addEventListener('focus', JustNotSorry.addObserver);
       dispatchEventOnElement(target, 'focus');
-      expect(JustNotSorry.observer.observe).toHaveBeenCalled();
+
+      expect(JustNotSorry.observer.observe).toHaveBeenCalledWith(target, jasmine.anything());
 
       target.addEventListener('blur', JustNotSorry.removeObserver);
       dispatchEventOnElement(target, 'blur');
-      expect(JustNotSorry.observer.disconnect).toHaveBeenCalled();
+
+      expect(JustNotSorry.observer.disconnect).toHaveBeenCalledWith();
     });
   });
 
@@ -158,6 +164,7 @@ describe('JustNotSorry', function () {
       dispatchEventOnElement(target, 'input');
 
       let callCount = JustNotSorry.checkForWarnings.calls.count();
+
       expect(callCount).toEqual(3);
     });
   });
@@ -182,6 +189,7 @@ describe('JustNotSorry', function () {
 
       setTimeout(function () {
         dispatchEventOnElement(target, 'focus');
+
         expect(WarningChecker.prototype.addWarnings).toHaveBeenCalledTimes(1);
         WarningChecker.prototype.addWarnings.calls.reset();
 
@@ -194,12 +202,15 @@ describe('JustNotSorry', function () {
             expect(
               WarningChecker.prototype.removeWarnings
             ).toHaveBeenCalledTimes(1);
+
             expect(
               WarningChecker.prototype.removeWarnings
             ).toHaveBeenCalledWith(target.parentNode);
+
             expect(WarningChecker.prototype.addWarnings).toHaveBeenCalledTimes(
               1
             );
+
             expect(WarningChecker.prototype.addWarnings).toHaveBeenCalledWith(
               target.parentNode
             );
@@ -221,6 +232,7 @@ describe('JustNotSorry', function () {
 
       setTimeout(function () {
         dispatchEventOnElement(target, 'focus');
+
         expect(WarningChecker.prototype.addWarnings).toHaveBeenCalledTimes(1);
         WarningChecker.prototype.addWarnings.calls.reset();
 
@@ -231,6 +243,7 @@ describe('JustNotSorry', function () {
             expect(
               WarningChecker.prototype.removeWarnings
             ).not.toHaveBeenCalled();
+
             expect(WarningChecker.prototype.addWarnings).not.toHaveBeenCalled();
             done();
           });
@@ -245,6 +258,7 @@ describe('JustNotSorry', function () {
     beforeEach(function () {
       generateEditableDiv(newDivId);
     });
+
     afterEach(function () {
       var targetDiv = document.getElementById(newDivId);
       targetDiv.parentNode.removeChild(targetDiv);
@@ -259,6 +273,7 @@ describe('JustNotSorry', function () {
 
       setTimeout(function () {
         dispatchEventOnElement(targetDiv, 'focus');
+
         expect(JustNotSorry.observer.observe).toHaveBeenCalledTimes(1);
         expect(JustNotSorry.observer.observe).toHaveBeenCalledWith(
           targetDiv,

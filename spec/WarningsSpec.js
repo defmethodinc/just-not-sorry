@@ -17,15 +17,17 @@ describe('WARNINGS', function () {
 
   // from http://stackoverflow.com/a/14313213
   function findNonASCIIChars(str) {
+    // eslint-disable-next-line no-control-regex
     return str.match(/[^\x00-\x7F]+/g);
   }
 
   function findIndexOfFirstNonASCIIChar(str) {
+    // eslint-disable-next-line no-control-regex
     return str.search(/[^\x00-\x7F]+/);
   }
 
   it('has a root element', function () {
-    expect(WARNINGS.hasOwnProperty('warnings')).toBeTruthy();
+    expect(Object.prototype.hasOwnProperty.call(WARNINGS, 'warnings')).toBeTruthy();
   });
 
   it('contains an array of warnings', function () {
@@ -38,7 +40,7 @@ describe('WARNINGS', function () {
       function () {
         describe('the keyword', function () {
           it('should be present', function () {
-            expect(warning.hasOwnProperty('keyword')).toBeTruthy();
+            expect(Object.prototype.hasOwnProperty.call(warning, 'keyword')).toBeTruthy();
           });
 
           it('should be non-blank', function () {
@@ -47,13 +49,14 @@ describe('WARNINGS', function () {
 
           it('should be a valid regular expression', function () {
             var regex = new RegExp(warning.keyword, 'gi');
+
             expect(regex.test(warning.keyword)).toBeTruthy();
           });
         });
 
         describe('the source', function () {
           it('should be present', function () {
-            expect(warning.hasOwnProperty('source')).toBeTruthy();
+            expect(Object.prototype.hasOwnProperty.call(warning, 'source')).toBeTruthy();
           });
 
           it('should be non-blank', function () {
@@ -67,7 +70,7 @@ describe('WARNINGS', function () {
 
         describe('the message', function () {
           it('should be present', function () {
-            expect(warning.hasOwnProperty('message')).toBeTruthy();
+            expect(Object.prototype.hasOwnProperty.call(warning, 'message')).toBeTruthy();
           });
 
           it('should be non-blank', function () {

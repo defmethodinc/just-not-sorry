@@ -11,7 +11,8 @@
     "test": "gulp jasmine-headless-chrome",
     "test:watch": "gulp jasmine-browser",
     "build": "webpack --config webpack.config.js",
-    "format": "prettier --loglevel warn --write \"{src,spec}/*.{js,css}\" \"*.{md,css,json,js}\""
+    "format": "prettier --loglevel warn --write \"{src,spec}/*.{js,css}\" \"*.{md,css,json,js}\"",
+    "lint": "eslint . --cache --fix"
   },
   "devDependencies": {
     "@semantic-release/exec": "^5.0.0",
@@ -22,12 +23,17 @@
     "commitizen": "^4.0.4",
     "copy-webpack-plugin": "^5.1.1",
     "cz-conventional-changelog": "^3.1.0",
+    "eslint": "^7.0.0",
+    "eslint-config-prettier": "^6.11.0",
+    "eslint-plugin-import": "^2.20.2",
+    "eslint-plugin-jasmine": "^4.1.1",
     "gulp": "^4.0.2",
     "gulp-jasmine-browser": "^4.1.0",
     "gulp-open": "^3.0.1",
     "gulp-watch": "^5.0.1",
     "husky": "^4.2.5",
     "jasmine-core": "^3.5.0",
+    "jasmine-jquery": "^2.1.1",
     "jquery": "^3.5.1",
     "prettier": "^2.0.5",
     "puppeteer": "^2.1.1",

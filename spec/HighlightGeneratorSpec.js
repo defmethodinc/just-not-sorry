@@ -29,7 +29,7 @@ describe('HighlightGenerator', function () {
         parentNodeSpy
       ).call(parentNodeSpy, currMatch, range);
       requestAnimationFrame(function () {
-        expect(parentNodeSpy.appendChild).toHaveBeenCalled();
+        expect(parentNodeSpy.appendChild).toHaveBeenCalledWith(mockNode);
         expect(parentNodeSpy.appendChild.calls.count()).toEqual(rects.length);
         done();
       });
@@ -41,6 +41,7 @@ describe('HighlightGenerator', function () {
         warningClass,
         parentNodeSpy
       ).call(parentNodeSpy, currMatch, range);
+
       expect(mockNode.title).toEqual(message);
     });
 
@@ -50,6 +51,7 @@ describe('HighlightGenerator', function () {
         warningClass,
         parentNodeSpy
       ).call(parentNodeSpy, currMatch, range);
+
       expect(mockNode.className).toEqual(warningClass);
     });
   });
@@ -60,6 +62,7 @@ describe('HighlightGenerator', function () {
       var parentRect = { top: 1, left: 1, height: 1 };
 
       var node = HighlightGenerator.highlightMatch(rect, parentRect);
+
       expect(node).toBeDefined();
       expect(node.nodeName).toEqual('DIV');
       expect(node.style.top).toEqual('8px');
@@ -70,6 +73,7 @@ describe('HighlightGenerator', function () {
   describe('#generateHighlightNode', function () {
     it('returns a DIV', function () {
       var node = HighlightGenerator.generateHighlightNode();
+
       expect(node.nodeName).toEqual('DIV');
     });
   });
