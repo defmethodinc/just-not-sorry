@@ -27,7 +27,7 @@
     "gulp-watch": "^5.0.1",
     "husky": "^4.2.5",
     "jasmine-core": "^3.5.0",
-    "jquery": "^2.1.4",
+    "jquery": "^3.5.0",
     "puppeteer": "^2.1.1",
     "semantic-release": "^17.0.4",
     "webpack": "^4.43.0",
