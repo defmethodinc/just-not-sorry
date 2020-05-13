@@ -12,9 +12,10 @@
     "test:watch": "gulp jasmine-browser",
     "build": "webpack --config webpack.config.js",
     "build:watch": "webpack --config webpack.config.js --watch",
-    "run:webext": "web-ext run --source-dir ./build/ --start-url gmail.com",
-    "start:firefox": "concurrently \"npm:build:watch\" \"npm:run:webext\"",
-    "start:chrome": "concurrently \"npm:build:watch\" \"npm:run:webext -- -t chromium\"",
+    "webext:run": "web-ext run --source-dir ./build/ --start-url gmail.com",
+    "webext:lint": "web-ext lint -s ./build",
+    "start:firefox": "concurrently \"npm:build:watch\" \"npm:webext:run\"",
+    "start:chrome": "concurrently \"npm:build:watch\" \"npm:webext:run -- -t chromium\"",
     "format": "prettier --loglevel warn --write \"{src,spec}/*.{js,css}\" \"*.{md,css,json,js}\"",
     "lint": "eslint . --cache --fix"
   },
