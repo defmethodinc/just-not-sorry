@@ -11,6 +11,10 @@
     "test": "gulp jasmine-headless-chrome",
     "test:watch": "gulp jasmine-browser",
     "build": "webpack --config webpack.config.js",
+    "build:watch": "webpack --config webpack.config.js --watch",
+    "prestart:firefox": "npm run build",
+    "start:firefox": "web-ext run --source-dir ./build/",
+    "start:chrome": "web-ext run -t chromium --source-dir ./build/",
     "format": "prettier --loglevel warn --write \"{src,spec}/*.{js,css}\" \"*.{md,css,json,js}\"",
     "lint": "eslint . --cache --fix"
   },
@@ -39,6 +43,7 @@
     "prettier": "^2.0.5",
     "puppeteer": "^2.1.1",
     "semantic-release": "^17.0.4",
+    "web-ext": "^4.2.0",
     "webpack": "^4.43.0",
     "webpack-cli": "^3.3.11",
     "webpack-dev-server": "^3.11.0",
