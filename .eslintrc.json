@@ -1,0 +1,30 @@
+{
+  "env": {
+    "browser": true,
+    "es6": true
+  },
+  "extends": [
+    "eslint:recommended",
+    "plugin:import/errors",
+    "prettier"
+  ],
+  "globals": {
+    "chrome": true,
+    "analytics": true
+  },
+  "parserOptions": {
+    "sourceType": "module",
+    "ecmaVersion": 2018
+  },
+  "overrides": [
+    {
+      "files": "**/*Spec.js",
+      "env": {
+        "jasmine": true,
+        "es6": true
+      },
+      "plugins": ["jasmine"],
+      "extends": ["eslint:recommended","plugin:jasmine/recommended","prettier"]
+    }
+  ]
+}

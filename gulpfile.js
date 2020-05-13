@@ -9,8 +9,6 @@ const filesForTest = [
   'src/WarningChecker.js',
   'src/HighlightGenerator.js',
   'src/JustNotSorry.js',
-  'spec/lib/jquery-2.1.4.min.js',
-  'spec/lib/jasmine-jquery.js',
   'spec/**/*Spec.js',
 ];
 

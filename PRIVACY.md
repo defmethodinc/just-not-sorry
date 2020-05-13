@@ -4,11 +4,12 @@ This privacy policy has been compiled to better serve those who are concerned wi
 
 ### What information do we collect from the people that use our app?
 
-We do not collect any PII.  We collect anonymous information via Google analytics, including the following:
-  * Language
-  * Country and City
-  * Operating System
-  * Screen Resolution
+We do not collect any PII. We collect anonymous information via Google analytics, including the following:
+
+- Language
+- Country and City
+- Operating System
+- Screen Resolution
 
 ### When do we collect information?
 
@@ -24,7 +25,7 @@ We send all information to Google over SSL.
 
 ### Do we use 'cookies'?
 
-We use Google Analytics, which uses first party cookies to report on user interactions.  These cookies are used to store non-personally identifiable information.
+We use Google Analytics, which uses first party cookies to report on user interactions. These cookies are used to store non-personally identifiable information.
 
 See https://support.google.com/analytics/answer/6004245 for more information.
 
@@ -45,14 +46,15 @@ Users can set preferences for whether or not JustNotSorry collects usage informa
 CalOPPA is the first state law in the nation to require commercial websites and online services to post a privacy policy. The law's reach stretches well beyond California to require a person or company in the United States (and conceivably the world) that operates websites collecting personally identifiable information from California consumers to post a conspicuous privacy policy on its website stating exactly the information being collected and those individuals with whom it is being shared, and to comply with this policy. - See more at: http://consumercal.org/california-online-privacy-protection-act-caloppa/#sthash.0FdRbT51.dpuf
 
 According to CalOPPA we agree to the following:
-  * Users can use our application anonymously
-  * Once this privacy policy is created, we will add a link to it on our chrome store page
-  * Our Privacy Policy link includes the word 'Privacy', and can be easily be found on the page specified above.
+
+- Users can use our application anonymously
+- Once this privacy policy is created, we will add a link to it on our chrome store page
+- Our Privacy Policy link includes the word 'Privacy', and can be easily be found on the page specified above.
 
 Users will be notified of any privacy policy changes:
-  * On our Privacy Policy Page
-Users are able to change their personal information:
-  * By emailing us info@defmethod.com
+
+- On our Privacy Policy Page Users are able to change their personal information:
+- By emailing us info@defmethod.com
 
 ### How does our site handle do not track signals?
 
