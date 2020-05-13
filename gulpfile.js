@@ -5,10 +5,10 @@ const open = require('gulp-open');
 var webpack = require('webpack-stream');
 
 const filesForTest = [
-  'src/Warnings.js',
-  'src/WarningChecker.js',
-  'src/HighlightGenerator.js',
-  'src/JustNotSorry.js',
+  'src/components/Warnings.js',
+  'src/components/WarningChecker.js',
+  'src/components/HighlightGenerator.js',
+  'src/components/JustNotSorry.js',
   'spec/**/*Spec.js',
 ];
 

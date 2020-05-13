@@ -1,3 +1,5 @@
+import { Component } from 'preact';
+
 import domRegexpMatch from 'dom-regexp-match';
 import HighlightGenerator from './HighlightGenerator.js';
 import fastdom from 'fastdom';
@@ -5,8 +7,9 @@ import fastdomPromised from 'fastdom/extensions/fastdom-promised';
 
 const myFastdom = fastdom.extend(fastdomPromised);
 
-class WarningChecker {
+class WarningChecker extends Component {
   constructor(options) {
+    super();
     options || (options = {});
     this.warnings = options.warnings || [];
     this.warningClass = options.warningClass || 'jns-warning';

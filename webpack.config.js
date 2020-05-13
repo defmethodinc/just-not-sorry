@@ -8,11 +8,11 @@ module.exports = {
       { from: 'manifest.json' },
       { from: 'options', to: 'options' },
       { from: 'background', to: 'background' },
-      { from: 'just-not-sorry.css' },
+      // { from: 'just-not-sorry.css' },
     ]),
   ],
   mode: 'production',
-  entry: './src/JustNotSorry.js',
+  entry: './src/index.js',
   output: {
     path: path.join(__dirname, 'build'),
     filename: 'bundle.js',
@@ -20,10 +20,22 @@ module.exports = {
   module: {
     rules: [
       {
-        test: /\.js$/,
-        loader: 'babel-loader',
+        test: /\.jsx?$/,
+        exclude: /(node_modules)/,
+        use: {
+          loader: 'babel-loader',
+          options: {
+            presets: ['@babel/preset-env'],
+            plugins: [
+              ["@babel/plugin-transform-react-jsx", { "pragma":"h" }]
+            ]
+          }
+        }
       },
-    ],
+    ]
+  },
+  resolve: {
+    extensions: ['.js', '.jsx']
   },
   devtool: 'inline-source-map',
 };

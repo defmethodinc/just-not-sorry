@@ -1,4 +1,4 @@
-import WarningChecker from '../src/WarningChecker.js';
+import WarningChecker from '../src/components/WarningChecker.js';
 import $ from 'jquery';
 import 'jasmine-jquery';
 

@@ -1,11 +1,15 @@
+import { Component } from 'preact';
+
 import fastdom from 'fastdom';
 import fastdomPromised from 'fastdom/extensions/fastdom-promised';
 
 const HIGHLIGHT_YPOS_ADJUSTMENT = 3;
 const myFastdom = fastdom.extend(fastdomPromised);
 
-export default class HighlightGenerator {
-  constructor() {}
+export default class HighlightGenerator extends Component {
+  constructor() {
+    super();
+  }
 
   static highlightMatches(message, warningClass, parentNode) {
     return (currMatch, rangeToHighlight) => {
@@ -69,3 +73,5 @@ export default class HighlightGenerator {
     node.style.padding = '0px';
   }
 }
+
+

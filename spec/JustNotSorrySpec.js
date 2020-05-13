@@ -1,8 +1,8 @@
 import JustNotSorry, {
   WAIT_TIME_BEFORE_RECALC_WARNINGS,
-} from '../src/JustNotSorry.js';
+} from '../src/components/JustNotSorry.js';
 
-import WarningChecker from '../src/WarningChecker.js';
+import WarningChecker from '../src/components/WarningChecker.js';
 
 describe('JustNotSorry', function () {
   function generateEditableDiv(id) {

@@ -1,4 +1,4 @@
-import HighlightGenerator from '../src/HighlightGenerator.js';
+import HighlightGenerator from '../src/components/HighlightGenerator.js';
 
 describe('HighlightGenerator', function () {
   describe('#highlightMatches', function () {

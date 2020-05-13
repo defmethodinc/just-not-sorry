@@ -1,10 +1,11 @@
-'use strict';
+import { Component } from 'preact';
 
 import WarningChecker from './WarningChecker.js';
 import { WARNINGS } from './Warnings.js';
 
 export var warningChecker = new WarningChecker(WARNINGS);
 export var WAIT_TIME_BEFORE_RECALC_WARNINGS = 500;
+
 
 // from underscore.js
 // Returns a function, that, as long as it continues to be invoked, will not
@@ -27,8 +28,9 @@ function debounce(func, wait, immediate) {
   };
 }
 
-class JustNotSorry {
+class JustNotSorry extends Component {
   constructor() {
+    super();
     this.checkForWarnings = debounce(
       this.checkForWarningsImpl,
       WAIT_TIME_BEFORE_RECALC_WARNINGS
@@ -125,8 +127,12 @@ class JustNotSorry {
   getEditableDivs() {
     return document.querySelectorAll('div[contentEditable=true]');
   }
+
+  render() {
+    return
+  }
 }
 
-const justNotSorry = new JustNotSorry();
+// const justNotSorry = new JustNotSorry();
 
-export default justNotSorry;
+export default JustNotSorry;
