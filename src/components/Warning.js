@@ -3,47 +3,30 @@ import { Component } from 'preact';
 import Highlight from './Highlight.js';
 import Tooltip from './Tooltip.js';
 
-// import domRegexpMatch from 'dom-regexp-match';
-
 class Warning extends Component {
   constructor(props) {
     super(props);
-    // this.warnings = props.warnings || [];
-    // this.warningClass = props.warningClass || 'jns-warning';
   }
 
-  // addWarning(node, keyword, message) {
-  //   const pattern = new RegExp('\\b(' + keyword + ')\\b', 'ig');
-  //   const promises = [];
-  //   const warningClass = this.warningClass;
-  //   const promisifiedMatchCallback = (match, range) => {
-  //     const matchPromise = HighlightGenerator.highlightMatches(
-  //       message,
-  //       warningClass,
-  //       node
-  //     ).call(node, match, range);
-  //     promises.push(matchPromise);
-  //   };
-  //   domRegexpMatch(node, pattern, promisifiedMatchCallback);
-  //   return Promise.all(promises);
-  // }
+  transformCoordinatesRelativeToParent(
+    rect,
+    parentRect
+  ) {
+    let coords = {};
+    coords.top = rect.top - parentRect.top + rect.height;
+    coords.left = rect.left - parentRect.left;
+    return coords;
+  }
 
-  // addWarnings(node) {
-  //   return Promise.all(
-  //     this.warnings.map((warning) => {
-  //       return this.addWarning(node, warning.keyword, warning.message);
-  //     })
-  //   );
-  // }
-
-  // removeWarnings(node) {
-  //   const elementsToRemove = document.getElementsByClassName(this.warningClass);
-  //   return myFastdom.mutate(() => {
-  //     for (var i = elementsToRemove.length; i--; ) {
-  //       node.removeChild(elementsToRemove[i]);
-  //     }
-  //   });
-  // }
+  setNodeStyle(node, rect, coords) {
+    node.style.top = coords.top - HIGHLIGHT_YPOS_ADJUSTMENT + 'px';
+    node.style.left = coords.left + 'px';
+    node.style.width = rect.width + 'px';
+    node.style.height = rect.height * 0.2 + 'px';
+    node.style.zIndex = 10;
+    node.style.position = 'absolute';
+    node.style.padding = '0px';
+  }
 
   render() {
     return (

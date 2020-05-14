@@ -8,7 +8,7 @@ module.exports = {
       { from: 'manifest.json' },
       { from: 'options', to: 'options' },
       { from: 'background', to: 'background' },
-      // { from: 'just-not-sorry.css' },
+      { from: 'just-not-sorry.css' },
     ]),
   ],
   mode: 'production',

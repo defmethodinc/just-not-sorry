@@ -14,7 +14,7 @@
   "content_scripts": [
     {
       "matches": ["https://mail.google.com/*", "https://inbox.google.com/*"],
-      "css": ["just-not-sorry.css"],
+      "css": ["./just-not-sorry.css"],
       "js": ["bundle.js"]
     }
   ],

@@ -1,4 +1,0 @@
-JNS
-  - Warning (list of Warnings)
-    - Highlight
-    - Tooltip
