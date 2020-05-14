@@ -1,37 +1,24 @@
 import { Component } from 'preact';
 
-import WarningChecker from './WarningChecker.js';
-import { WARNINGS } from './Warnings.js';
+import Warning from './Warning.js';
+import * as Util from './util.js';
+import { WARNING_MESSAGES } from './WarningMessages.js';
 
-export var warningChecker = new WarningChecker(WARNINGS);
+export var warningChecker = new WarningChecker(WARNING_MESSAGES);
 export var WAIT_TIME_BEFORE_RECALC_WARNINGS = 500;
 
 
-// from underscore.js
-// Returns a function, that, as long as it continues to be invoked, will not
-// be triggered. The function will be called after it stops being called for
-// N milliseconds. If `immediate` is passed, trigger the function on the
-// leading edge, instead of the trailing.
-function debounce(func, wait, immediate) {
-  var timeout;
-  return function () {
-    var context = this,
-      args = arguments;
-    var later = function () {
-      timeout = null;
-      if (!immediate) func.apply(context, args);
-    };
-    var callNow = immediate && !timeout;
-    clearTimeout(timeout);
-    timeout = setTimeout(later, wait);
-    if (callNow) func.apply(context, args);
-  };
-}
-
 class JustNotSorry extends Component {
-  constructor() {
-    super();
-    this.checkForWarnings = debounce(
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      warnings: [{
+        highlight: {},
+        tooltip: {}
+      }] // will be Warning objects
+    }
+    this.checkForWarnings = Util.debounce(
       this.checkForWarningsImpl,
       WAIT_TIME_BEFORE_RECALC_WARNINGS
     );
@@ -127,9 +114,13 @@ class JustNotSorry extends Component {
   getEditableDivs() {
     return document.querySelectorAll('div[contentEditable=true]');
   }
-
+  
   render() {
-    return
+    return (
+      <div class="jns">
+        <Warning warning={this.state.warnings[0]} />
+      </div>
+    );
   }
 }
 

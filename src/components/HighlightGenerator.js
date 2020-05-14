@@ -72,6 +72,10 @@ export default class HighlightGenerator extends Component {
     node.style.position = 'absolute';
     node.style.padding = '0px';
   }
+
+  render() {
+    return;
+  }
 }
 
 

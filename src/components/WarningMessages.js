@@ -1,4 +1,4 @@
-export const WARNINGS = {
+export const WARNING_MESSAGES = {
   warnings: [
     {
       keyword: 'just',
