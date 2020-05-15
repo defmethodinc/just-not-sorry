@@ -1,14 +1,12 @@
-import { Component } from 'preact';
+import { h, Component } from 'preact';
 
-class Tooltip extends Component {
-
-  constructor(props) {
-    super(props);
-  }
-
-  render() {
-    return <div class='jns-tooltip'>{this.props.tooltip}</div>;
-  }
+function Tooltip(props) {
+  return (
+    <div class='jns-tooltip'>
+      <div class='jns-tooltip-keyword'>{props.keyword}</div>
+      <div class='jns-tooltip-message'>{props.message}</div>
+    </div>
+  );
 }
 
 export default Tooltip;

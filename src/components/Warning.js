@@ -1,4 +1,4 @@
-import { Component } from 'preact';
+import { h, Component } from 'preact';
 
 import Highlight from './Highlight.js';
 import Tooltip from './Tooltip.js';
@@ -28,11 +28,23 @@ class Warning extends Component {
     node.style.padding = '0px';
   }
 
+  renderHighlight(nodeStyles) {
+    return (
+      <Highlight styles={nodeStyles} />
+    );
+  }
+
+  renderTooltip(keyword, message) {
+    return (
+      <Tooltip keyword={keyword} message={message} />
+    );
+  }
+
   render() {
     return (
       <div class="jns-warning">
-        <Highlight highlight={this.props.warning.highlight} />
-        <Tooltip tooltip={this.props.warning.tooltip} />
+        {this.renderHighlight(this.props.value.highlight)}
+        {this.renderTooltip(this.props.value.keyword, this.props.value.message)}
       </div>
     );
   }

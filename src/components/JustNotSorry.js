@@ -116,12 +116,15 @@ class JustNotSorry extends Component {
   }
 
   addWarning(node, keyword, message) {
+    const warnings = this.state.warnings.slice();
     const pattern = new RegExp('\\b(' + keyword + ')\\b', 'ig');
     domRegexpMatch(node, pattern, () => {
-      this.state.warnings.push({
-        keyword: keyword,
-        message: message,
-        position: node
+      this.setState({
+        warnings: warnings.concat({
+          keyword: keyword,
+          message: message,
+          node: node
+        })
       });
     });
   }
@@ -132,13 +135,10 @@ class JustNotSorry extends Component {
     });
   }
 
-  removeWarnings(node) {
-    const elementsToRemove = document.getElementsByClassName(WARNING_CLASS);
-    // return myFastdom.mutate(() => {
-    //   for (var i = elementsToRemove.length; i--; ) {
-    //     node.removeChild(elementsToRemove[i]);
-    //   }
-    // });
+  removeWarnings() {
+    this.setState({
+      warnings: []
+    });
   }
   
   render() {

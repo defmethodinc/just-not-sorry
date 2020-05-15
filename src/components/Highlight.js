@@ -1,14 +1,12 @@
-import { Component } from 'preact';
+import { h, Component } from 'preact';
 
-class Highlight extends Component {
-
-  constructor(props) {
-    super(props);
-  }
-
-  render() {
-    return <div class='jns-highlight'></div>;
-  }
+function Highlight(props) {
+  return (
+    <div
+      class='jns-highlight'
+      style={props.styles}
+    ></div>
+  );
 }
 
 export default Highlight;
