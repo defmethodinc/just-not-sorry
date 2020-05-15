@@ -52,7 +52,7 @@ class JustNotSorry extends Component {
   }
 
   checkForWarnings(parentElement) {
-    Util.debounce(
+    return Util.debounce(
       this.checkForWarningsImpl(parentElement),
       WAIT_TIME_BEFORE_RECALC_WARNINGS
     );
