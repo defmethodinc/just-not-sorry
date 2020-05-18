@@ -56,7 +56,9 @@
   "dependencies": {
     "dom-regexp-match": "^1.1.0",
     "fastdom": "^1.0.9",
-    "preact": "^10.4.1"
+    "preact": "^10.4.1",
+    "prop-types": "^15.7.2",
+    "react-portal-tooltip": "^2.4.7"
   },
   "husky": {
     "hooks": {

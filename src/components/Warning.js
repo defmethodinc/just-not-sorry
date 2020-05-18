@@ -1,7 +1,7 @@
 import { h, Component } from 'preact';
 
 import Highlight from './Highlight.js';
-import Tooltip from './Tooltip.js';
+import WarningTooltip from './Tooltip.js';
 
 class Warning extends Component {
   constructor(props) {
@@ -36,7 +36,7 @@ class Warning extends Component {
 
   renderTooltip(keyword, message) {
     return (
-      <Tooltip keyword={keyword} message={message} />
+      <WarningTooltip keyword={keyword} message={message} />
     );
   }
 
