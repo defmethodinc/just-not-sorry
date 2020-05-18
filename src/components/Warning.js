@@ -26,7 +26,7 @@ class Warning extends Component {
   ) {
     let coords = {};
     coords.top = parentRect.top + rect.height + 10;
-    coords.left = parentRect.left;
+    coords.left = parentRect.left + rect.left - parentRect.left;
     return coords;
   }
 
