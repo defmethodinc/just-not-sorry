@@ -50,10 +50,10 @@ class JustNotSorry extends Component {
     element.removeEventListener('input', this.checkForWarnings);
     this.observer.disconnect();
   }
-
+  
   checkForWarnings(parentElement) {
     return Util.debounce(
-      this.checkForWarningsImpl(parentElement),
+      () => this.checkForWarningsImpl(parentElement),
       WAIT_TIME_BEFORE_RECALC_WARNINGS
     );
   }
@@ -116,18 +116,21 @@ class JustNotSorry extends Component {
   }
 
   addWarning(node, keyword, message) {
-    const warnings = this.state.warnings.slice();
+    const warningClass = WARNING_CLASS;
     const pattern = new RegExp('\\b(' + keyword + ')\\b', 'ig');
-    domRegexpMatch(node, pattern, () => {
-      this.setState({
-        warnings: warnings.concat({
-          keyword: keyword,
-          message: message,
-          node: node
-        })
+    domRegexpMatch(node, pattern, (match, range) => {
+      let newWarning = {
+        keyword: keyword,
+        message: message,
+        parentNode: node,
+        rangeToHighlight: range,
+      }
+
+      this.setState(prevState => ({
+        warnings: [...prevState.warnings, newWarning]
+        }))
       });
-    });
-  }
+    };
 
   addWarnings(node) {
     WARNING_MESSAGES.warnings.map((warning) => {
@@ -146,6 +149,7 @@ class JustNotSorry extends Component {
       <Warning key={warning.keyword}
                value={warning} />
     );
+
     return (
       <div class="jns">
         {warningList}
@@ -153,7 +157,5 @@ class JustNotSorry extends Component {
     );
   }
 }
-
-// const justNotSorry = new JustNotSorry();
 
 export default JustNotSorry;

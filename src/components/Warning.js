@@ -1,11 +1,23 @@
 import { h, Component } from 'preact';
 
 import Highlight from './Highlight.js';
-import WarningTooltip from './Tooltip.js';
+
+const HIGHLIGHT_YPOS_ADJUSTMENT = 3;
 
 class Warning extends Component {
   constructor(props) {
     super(props);
+  }
+
+  highlightStyles() {
+    let parentRect = this.props.value.parentNode.getBoundingClientRect();
+    let rectsToHighlight = this.props.value.rangeToHighlight.getClientRects();
+
+    let coords = this.transformCoordinatesRelativeToParent(
+      rectsToHighlight[0],
+      parentRect
+    );
+    return this.setNodeStyle(rectsToHighlight[0], coords);
   }
 
   transformCoordinatesRelativeToParent(
@@ -13,38 +25,31 @@ class Warning extends Component {
     parentRect
   ) {
     let coords = {};
-    coords.top = rect.top - parentRect.top + rect.height;
-    coords.left = rect.left - parentRect.left;
+    coords.top = parentRect.top + rect.height + 10;
+    coords.left = parentRect.left;
     return coords;
   }
 
-  setNodeStyle(node, rect, coords) {
-    node.style.top = coords.top - HIGHLIGHT_YPOS_ADJUSTMENT + 'px';
-    node.style.left = coords.left + 'px';
-    node.style.width = rect.width + 'px';
-    node.style.height = rect.height * 0.2 + 'px';
-    node.style.zIndex = 10;
-    node.style.position = 'absolute';
-    node.style.padding = '0px';
-  }
-
-  renderHighlight(nodeStyles) {
-    return (
-      <Highlight styles={nodeStyles} />
-    );
-  }
-
-  renderTooltip(keyword, message) {
-    return (
-      <WarningTooltip keyword={keyword} message={message} />
-    );
+  setNodeStyle(rect, coords) {
+    return {
+      top: coords.top - HIGHLIGHT_YPOS_ADJUSTMENT + 'px',
+      left: coords.left + 'px',
+      width: rect.width + 'px',
+      height: rect.height * 0.2 + 'px',
+      zIndex: 10,
+      position: 'absolute',
+      padding: '0px',
+    }
   }
 
   render() {
     return (
       <div class="jns-warning">
-        {this.renderHighlight(this.props.value.highlight)}
-        {this.renderTooltip(this.props.value.keyword, this.props.value.message)}
+        <Highlight 
+          styles={this.highlightStyles()} 
+          parent={this.props.value.parentNode} 
+          keyword={this.props.value.keyword} 
+          message={this.props.value.message} />
       </div>
     );
   }
