@@ -1,6 +1,6 @@
 import { h, Component } from 'preact';
 
-import Highlight from './Highlight.js';
+import WarningHighlight from './WarningHighlight.js';
 
 const HIGHLIGHT_YPOS_ADJUSTMENT = 3;
 
@@ -25,8 +25,8 @@ class Warning extends Component {
     parentRect
   ) {
     let coords = {};
-    coords.top = parentRect.top + rect.height + 10;
-    coords.left = parentRect.left;
+    coords.top = parentRect.top + rect.top - parentRect.top + rect.height;
+    coords.left = parentRect.left + rect.left - parentRect.left;
     return coords;
   }
 
@@ -45,7 +45,7 @@ class Warning extends Component {
   render() {
     return (
       <div class="jns-warning">
-        <Highlight 
+        <WarningHighlight 
           styles={this.highlightStyles()} 
           parent={this.props.value.parentNode} 
           keyword={this.props.value.keyword} 

@@ -1,5 +1,5 @@
 import { h, Component } from 'preact';
-import ToolTip from 'react-portal-tooltip';
+import WarningTooltip from "./WarningTooltip.js";
 
 class Highlight extends Component {
   constructor(props) {
@@ -25,11 +25,7 @@ class Highlight extends Component {
         style={this.props.styles}
         onMouseEnter={this.showTooltip.bind(this)} onMouseLeave={this.hideTooltip.bind(this)}
       >
-        <ToolTip active={this.state.isTooltipActive} position="bottom" arrow="center" parent=".jns-highlight">
-            <div>
-              <p class='jns-tooltip-message'>{this.props.message}</p>
-            </div>
-        </ToolTip>
+        <WarningTooltip message={this.props.message} isTooltipActive={this.state.isTooltipActive} />
       </div>
     );
   }

@@ -149,7 +149,7 @@ class JustNotSorry extends Component {
       <Warning key={warning.keyword}
                value={warning} />
     );
-
+    
     return (
       <div class="jns">
         {warningList}
