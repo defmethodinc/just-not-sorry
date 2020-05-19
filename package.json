@@ -58,7 +58,7 @@
     "fastdom": "^1.0.9",
     "preact": "^10.4.1",
     "prop-types": "^15.7.2",
-    "react-portal-tooltip": "^2.4.7"
+    "react-tooltip": "^4.2.6"
   },
   "husky": {
     "hooks": {

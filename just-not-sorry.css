@@ -1,3 +1,7 @@
 .jns-highlight {
   border-bottom: 2px dashed #ff9933;
 }
+
+.jns-tooltip {
+  width: 200px;
+}
