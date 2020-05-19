@@ -41,5 +41,5 @@ module.exports = {
       "react-dom": "preact/compat"
     }
   },
-  devtool: 'inline-source-map',
+  devtool: false,
 };
