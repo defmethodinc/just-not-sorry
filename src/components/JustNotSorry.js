@@ -2,7 +2,7 @@ import { h, Component } from 'preact';
 
 import Warning from './Warning.js';
 import * as Util from './util.js';
-import { WARNING_MESSAGES } from './WarningMessages.js';
+import WARNING_MESSAGES from './WarningMessages.json';
 
 import domRegexpMatch from 'dom-regexp-match';
 
@@ -133,7 +133,7 @@ class JustNotSorry extends Component {
     };
 
   addWarnings(node) {
-    WARNING_MESSAGES.warnings.map((warning) => {
+    WARNING_MESSAGES.map((warning) => {
       this.addWarning(node, warning.keyword, warning.message);
     });
   }
