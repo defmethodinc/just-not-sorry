@@ -26,17 +26,11 @@ describe('WARNING_MESSAGES', function () {
     return str.search(/[^\x00-\x7F]+/);
   }
 
-  it('has a root element', function () {
-    expect(
-      Object.prototype.hasOwnProperty.call(WARNING_MESSAGES, 'warnings')
-    ).toBeTruthy();
-  });
-
   it('contains an array of warnings', function () {
-    expect(WARNING_MESSAGES.warnings instanceof Array).toBeTruthy();
+    expect(WARNING_MESSAGES instanceof Array).toBeTruthy();
   });
 
-  WARNING_MESSAGES.warnings.forEach(function (warning, index) {
+  WARNING_MESSAGES.forEach(function (warning, index) {
     describe(
       'for warning at index ' + index + ' (keyword: "' + warning.keyword + '")',
       function () {
