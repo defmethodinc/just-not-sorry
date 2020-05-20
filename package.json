@@ -8,8 +8,8 @@
   "homepage": "https://github.com/defmethodinc/just-not-sorry",
   "bugs": "https://github.com/defmethodinc/just-not-sorry/issues/new",
   "scripts": {
-    "test": "gulp jasmine-headless-chrome",
-    "test:watch": "gulp jasmine-browser",
+    "test": "jest --verbose ./spec",
+    "test:watch": "npm run test -- --watch",
     "build": "webpack --config webpack.config.js",
     "build:watch": "webpack --config webpack.config.js --watch",
     "webext:run": "web-ext run --source-dir ./build/ --start-url gmail.com",
@@ -42,6 +42,7 @@
     "husky": "^4.2.5",
     "jasmine-core": "^3.5.0",
     "jasmine-jquery": "^2.1.1",
+    "jest": "^26.0.1",
     "jquery": "^3.5.1",
     "lint-staged": "^10.2.2",
     "prettier": "^2.0.5",
