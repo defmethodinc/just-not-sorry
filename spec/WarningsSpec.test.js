@@ -1,6 +1,6 @@
-import { WARNINGS } from '../src/components/Warnings.js';
+import WARNING_MESSAGES from '../src/components/WarningMessages.json';
 
-describe('WARNINGS', function () {
+describe('WARNING_MESSAGES', function () {
   function isBlank(str) {
     return !str || /^\s*$/.test(str);
   }
@@ -27,20 +27,24 @@ describe('WARNINGS', function () {
   }
 
   it('has a root element', function () {
-    expect(Object.prototype.hasOwnProperty.call(WARNINGS, 'warnings')).toBeTruthy();
+    expect(
+      Object.prototype.hasOwnProperty.call(WARNING_MESSAGES, 'warnings')
+    ).toBeTruthy();
   });
 
   it('contains an array of warnings', function () {
-    expect(WARNINGS.warnings instanceof Array).toBeTruthy();
+    expect(WARNING_MESSAGES.warnings instanceof Array).toBeTruthy();
   });
 
-  WARNINGS.warnings.forEach(function (warning, index) {
+  WARNING_MESSAGES.warnings.forEach(function (warning, index) {
     describe(
       'for warning at index ' + index + ' (keyword: "' + warning.keyword + '")',
       function () {
         describe('the keyword', function () {
           it('should be present', function () {
-            expect(Object.prototype.hasOwnProperty.call(warning, 'keyword')).toBeTruthy();
+            expect(
+              Object.prototype.hasOwnProperty.call(warning, 'keyword')
+            ).toBeTruthy();
           });
 
           it('should be non-blank', function () {
@@ -56,7 +60,9 @@ describe('WARNINGS', function () {
 
         describe('the source', function () {
           it('should be present', function () {
-            expect(Object.prototype.hasOwnProperty.call(warning, 'source')).toBeTruthy();
+            expect(
+              Object.prototype.hasOwnProperty.call(warning, 'source')
+            ).toBeTruthy();
           });
 
           it('should be non-blank', function () {
@@ -70,7 +76,9 @@ describe('WARNINGS', function () {
 
         describe('the message', function () {
           it('should be present', function () {
-            expect(Object.prototype.hasOwnProperty.call(warning, 'message')).toBeTruthy();
+            expect(
+              Object.prototype.hasOwnProperty.call(warning, 'message')
+            ).toBeTruthy();
           });
 
           it('should be non-blank', function () {
