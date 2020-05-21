@@ -17,7 +17,7 @@ class Warning extends Component {
     let coords = {
       top: rect.top - parentRect.top + rect.height,
       left: rect.left - parentRect.left,
-    }
+    };
 
     return this.setNodeStyle(rect, coords);
   }
@@ -31,17 +31,18 @@ class Warning extends Component {
       zIndex: 10,
       position: 'absolute',
       padding: '0px',
-    }
+    };
   }
 
   render() {
     return (
-      <div class="jns-warning">
-        <WarningHighlight 
-          styles={this.highlightStyles()} 
-          parent={this.props.value.parentNode} 
-          keyword={this.props.value.keyword} 
-          message={this.props.value.message} />
+      <div className="jns-warning">
+        <WarningHighlight
+          styles={this.highlightStyles()}
+          parent={this.props.value.parentNode}
+          keyword={this.props.value.keyword}
+          message={this.props.value.message}
+        />
       </div>
     );
   }

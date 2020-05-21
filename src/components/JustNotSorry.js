@@ -1,16 +1,12 @@
 import { h, Component } from 'preact';
-import { createPortal } from 'preact/compat';
 import ReactDOM from 'react-dom';
 
 import Warning from './Warning.js';
 import * as Util from './util.js';
 import WARNING_MESSAGES from './WarningMessages.json';
-
 import domRegexpMatch from 'dom-regexp-match';
 
-export var WARNING_CLASS = 'jns-warning';
 export var WAIT_TIME_BEFORE_RECALC_WARNINGS = 500;
-
 
 class JustNotSorry extends Component {
   constructor(props) {
@@ -18,8 +14,8 @@ class JustNotSorry extends Component {
 
     this.state = {
       editableDivCount: 0,
-      warnings: []
-    }
+      warnings: [],
+    };
 
     this.documentObserver = new MutationObserver(
       this.handleContentEditableDivChange.bind(this)
@@ -36,7 +32,10 @@ class JustNotSorry extends Component {
 
   addObserver(event) {
     const element = event.currentTarget;
-    element.addEventListener('input', this.checkForWarnings(element.parentNode));
+    element.addEventListener(
+      'input',
+      this.checkForWarnings(element.parentNode)
+    );
     this.addWarnings(element.parentNode);
     this.observer.observe(element, {
       characterData: false,
@@ -52,7 +51,7 @@ class JustNotSorry extends Component {
     element.removeEventListener('input', this.checkForWarnings);
     this.observer.disconnect();
   }
-  
+
   checkForWarnings(parentElement) {
     return Util.debounce(
       () => this.checkForWarningsImpl(parentElement),
@@ -74,7 +73,7 @@ class JustNotSorry extends Component {
   handleContentEditableDivChange(mutations) {
     var divCount = this.getEditableDivs().length;
     if (divCount !== this.state.editableDivCount) {
-      this.state.editableDivCount = divCount;
+      this.setState({ editableDivCount: divCount });
       if (mutations[0]) {
         mutations.forEach((mutation) => {
           if (
@@ -118,7 +117,6 @@ class JustNotSorry extends Component {
   }
 
   addWarning(node, keyword, message) {
-    const warningClass = WARNING_CLASS;
     const pattern = new RegExp('\\b(' + keyword + ')\\b', 'ig');
     domRegexpMatch(node, pattern, (match, range) => {
       let newWarning = {
@@ -126,13 +124,13 @@ class JustNotSorry extends Component {
         message: message,
         parentNode: node,
         rangeToHighlight: range,
-      }
+      };
 
-      this.setState(prevState => ({
-        warnings: [...prevState.warnings, newWarning]
-        }))
-      });
-    };
+      this.setState((prevState) => ({
+        warnings: [...prevState.warnings, newWarning],
+      }));
+    });
+  }
 
   addWarnings(node) {
     WARNING_MESSAGES.map((warning) => {
@@ -142,18 +140,19 @@ class JustNotSorry extends Component {
 
   removeWarnings() {
     this.setState({
-      warnings: []
+      warnings: [],
     });
   }
-  
+
   render() {
     const warningList = this.state.warnings.map((warning) =>
-      ReactDOM.createPortal(<Warning class=".jns-warning" key={warning.keyword} value={warning} />, warning.parentNode)
+      ReactDOM.createPortal(
+        <Warning class=".jns-warning" key={warning.keyword} value={warning} />,
+        warning.parentNode
+      )
     );
 
-    return (
-      <div class=".jns-warnings-list">{warningList}</div>
-    );
+    return <div className=".jns-warnings-list">{warningList}</div>;
   }
 }
 
