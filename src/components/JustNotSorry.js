@@ -1,4 +1,6 @@
 import { h, Component } from 'preact';
+import { createPortal } from 'preact/compat';
+import ReactDOM from 'react-dom';
 
 import Warning from './Warning.js';
 import * as Util from './util.js';
@@ -146,14 +148,11 @@ class JustNotSorry extends Component {
   
   render() {
     const warningList = this.state.warnings.map((warning) =>
-      <Warning key={warning.keyword}
-               value={warning} />
+      ReactDOM.createPortal(<Warning class=".jns-warning" key={warning.keyword} value={warning} />, warning.parentNode)
     );
-    
+
     return (
-      <div class="jns">
-        {warningList}
-      </div>
+      <div class=".jns-warnings-list">{warningList}</div>
     );
   }
 }

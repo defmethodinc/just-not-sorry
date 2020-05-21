@@ -12,22 +12,14 @@ class Warning extends Component {
   highlightStyles() {
     let parentRect = this.props.value.parentNode.getBoundingClientRect();
     let rectsToHighlight = this.props.value.rangeToHighlight.getClientRects();
+    let rect = rectsToHighlight[0];
 
-    let coords = this.transformCoordinatesRelativeToParent(
-      rectsToHighlight[0],
-      parentRect
-    );
-    return this.setNodeStyle(rectsToHighlight[0], coords);
-  }
+    let coords = {
+      top: rect.top - parentRect.top + rect.height,
+      left: rect.left - parentRect.left,
+    }
 
-  transformCoordinatesRelativeToParent(
-    rect,
-    parentRect
-  ) {
-    let coords = {};
-    coords.top = parentRect.top + rect.top - parentRect.top + rect.height;
-    coords.left = parentRect.left + rect.left - parentRect.left;
-    return coords;
+    return this.setNodeStyle(rect, coords);
   }
 
   setNodeStyle(rect, coords) {
