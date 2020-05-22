@@ -14,9 +14,12 @@ class Warning extends Component {
     let rectsToHighlight = this.props.value.rangeToHighlight.getClientRects();
     let rect = rectsToHighlight[0];
 
+    let top = rect ? rect.top : 0;
+    let left = rect ? rect.left : 0;
+
     let coords = {
-      top: rect.top - parentRect.top + rect.height,
-      left: rect.left - parentRect.left,
+      top: top - parentRect.top + rect.height,
+      left: left - parentRect.left,
     };
 
     return this.setNodeStyle(rect, coords);
