@@ -26,20 +26,21 @@ module.exports = {
           loader: 'babel-loader',
           options: {
             presets: ['@babel/preset-env'],
-            plugins: [
-              ["@babel/plugin-transform-react-jsx", { "pragma":"h" }]
-            ]
-          }
-        }
+            plugins: [['@babel/plugin-transform-react-jsx', { pragma: 'h' }]],
+          },
+        },
       },
-    ]
+    ],
   },
   resolve: {
     extensions: ['.js', '.jsx'],
-    "alias": {
-      "react": "preact/compat",
-      "react-dom": "preact/compat"
-    }
+    alias: {
+      react: 'preact/compat',
+      'react-dom': 'preact/compat',
+    },
   },
-  devtool: false,
+  devtool: 'inline-source-map',
+  performance: {
+    hints: process.env.NODE_ENV === 'production' ? 'warning' : false,
+  },
 };
