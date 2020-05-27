@@ -5,7 +5,7 @@ export default function WarningTooltip() {
   return (
     <ReactTooltip
       class="jns-tooltip"
-      place="right"
+      place="bottom"
       type="dark"
       effect="float"
       multiline={true}
