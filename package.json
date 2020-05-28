@@ -23,6 +23,7 @@
     "@babel/core": "^7.9.6",
     "@babel/plugin-transform-react-jsx": "^7.9.4",
     "@babel/preset-env": "^7.9.6",
+    "@os33/preact-render-spy": "^1.4.0",
     "@semantic-release/exec": "^5.0.0",
     "@semantic-release/git": "^9.0.0",
     "babel": "^6.23.0",
@@ -46,6 +47,7 @@
     "jasmine-core": "^3.5.0",
     "jasmine-jquery": "^2.1.1",
     "jest": "^26.0.1",
+    "jest-enzyme": "^7.1.2",
     "jquery": "^3.5.1",
     "lint-staged": "^10.2.2",
     "prettier": "^2.0.5",
@@ -86,5 +88,15 @@
       "prettier --write",
       "git add"
     ]
-  }
+  },
+  "jest": {
+    "moduleNameMapper": {
+      "^react$": "preact/compat",
+      "^react-dom/test-utils$": "preact/test-utils",
+      "^react-dom$": "preact/compat"
+    }
+  },
+  "snapshotSerializers": [
+    "preact-render-spy/snapshot"
+  ]
 }
