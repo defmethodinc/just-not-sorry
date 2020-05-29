@@ -1,5 +1,5 @@
 // import { h } from 'preact';
-// import Warning from '../src/components/Warning.js';
+// import Warning, { highlightStyles, setNodeStyle } from '../src/components/Warning.js';
 
 describe('Warning', () => {
   it('should return true', () => {

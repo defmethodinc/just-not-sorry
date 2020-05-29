@@ -33,7 +33,6 @@ export default function JustNotSorry() {
   };
 
   const addObserver = (event) => {
-    console.log('add observer event: ' + JSON.stringify(event));
     const element = event.currentTarget;
     element.addEventListener('input', checkForWarnings(element.parentNode));
     removeWarnings();
@@ -47,7 +46,6 @@ export default function JustNotSorry() {
   };
 
   const removeObserver = (event) => {
-    console.log('remove observer event: ' + JSON.stringify(event));
     const element = event.currentTarget;
     removeWarnings();
     element.removeEventListener('input', checkForWarnings);
@@ -146,8 +144,6 @@ export default function JustNotSorry() {
       warning.parentNode
     )
   );
-
-  console.log(warnings);
 
   return <div className=".jns-warnings-list">{warningList}</div>;
 }
