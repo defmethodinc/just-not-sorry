@@ -1,5 +1,5 @@
 import { h } from 'preact';
-import { useState, useEffect, useReducer } from 'preact/hooks';
+import { useState, useEffect } from 'preact/hooks';
 import ReactDOM from 'react-dom';
 
 import Warning from './Warning.js';
@@ -7,16 +7,44 @@ import * as Util from './util.js';
 import WARNING_MESSAGES from './WarningMessages.json';
 import domRegexpMatch from 'dom-regexp-match';
 
-export var WAIT_TIME_BEFORE_RECALC_WARNINGS = 500;
+export const WAIT_TIME_BEFORE_RECALC_WARNINGS = 500;
+
+export const getEditableDivs = () =>
+  document.querySelectorAll('div[contentEditable=true]');
+
+export const addWarning = (node, keyword, message) => {
+  const pattern = new RegExp('\\b(' + keyword + ')\\b', 'ig');
+  let warningItem;
+  domRegexpMatch(node, pattern, (match, range) => {
+    let newWarning = {
+      keyword: keyword,
+      message: message,
+      parentNode: node,
+      rangeToHighlight: range,
+    };
+    // setWarnings(prevState => [...prevState, newWarning]);
+    warningItem = newWarning;
+  });
+  return warningItem;
+};
+
+export const addWarnings = (node) => {
+  let warningItems = [];
+  WARNING_MESSAGES.map((warning) => {
+    let warningItem = addWarning(node, warning.keyword, warning.message);
+    if (warningItem) {
+      warningItems.push(warningItem);
+    }
+  });
+  return warningItems;
+};
 
 export default function JustNotSorry() {
   let documentObserver;
   let observer;
+  let editableDivCount;
 
-  const [editableDivCount, setEditableDivCount] = useState(0);
-  const [warnings, setWarnings] = useReducer((prevState, action) => {
-    return action ? [...prevState, action] : [];
-  }, []);
+  const [warnings, setWarnings] = useState([]);
 
   useEffect(() => {
     documentObserver = new MutationObserver(
@@ -26,69 +54,10 @@ export default function JustNotSorry() {
       handleContentEditableContentInsert.bind(this)
     );
     initializeObserver();
-  });
+  }, []);
 
   const initializeObserver = () => {
     documentObserver.observe(document, { subtree: true, childList: true });
-  };
-
-  const addObserver = (event) => {
-    const element = event.currentTarget;
-    element.addEventListener('input', checkForWarnings(element.parentNode));
-    removeWarnings();
-    addWarnings(element.parentNode);
-    observer.observe(element, {
-      characterData: false,
-      subtree: true,
-      childList: true,
-      attributes: false,
-    });
-  };
-
-  const removeObserver = (event) => {
-    const element = event.currentTarget;
-    removeWarnings();
-    element.removeEventListener('input', checkForWarnings);
-    observer.disconnect();
-  };
-
-  const checkForWarnings = (parentElement) => {
-    return Util.debounce(
-      () => checkForWarningsImpl(parentElement),
-      WAIT_TIME_BEFORE_RECALC_WARNINGS
-    );
-  };
-
-  const checkForWarningsImpl = (parentElement) => {
-    removeWarnings();
-    addWarnings(parentElement);
-  };
-
-  const applyEventListeners = (id) => {
-    let targetDiv = document.getElementById(id);
-    targetDiv.removeEventListener('focus', addObserver);
-    targetDiv.addEventListener('focus', addObserver.bind(this));
-    targetDiv.addEventListener('blur', removeObserver.bind(this));
-  };
-
-  const handleContentEditableDivChange = (mutations) => {
-    let divCount = getEditableDivs().length;
-    if (divCount !== editableDivCount) {
-      setEditableDivCount(divCount);
-      if (mutations[0]) {
-        mutations.forEach((mutation) => {
-          if (
-            mutation.type === 'childList' &&
-            mutation.target.hasAttribute('contentEditable')
-          ) {
-            let id = mutation.target.id;
-            if (id) {
-              applyEventListeners(id);
-            }
-          }
-        });
-      }
-    }
   };
 
   const handleContentEditableContentInsert = (mutations) => {
@@ -113,30 +82,65 @@ export default function JustNotSorry() {
     }
   };
 
-  const getEditableDivs = () =>
-    document.querySelectorAll('div[contentEditable=true]');
+  const handleContentEditableDivChange = (mutations) => {
+    let divCount = getEditableDivs().length;
+    if (divCount !== editableDivCount) {
+      editableDivCount = divCount;
+      if (mutations[0]) {
+        mutations.forEach((mutation) => {
+          if (
+            mutation.type === 'childList' &&
+            mutation.target.hasAttribute('contentEditable')
+          ) {
+            let id = mutation.target.id;
+            if (id) {
+              applyEventListeners(id);
+            }
+          }
+        });
+      }
+    }
+  };
 
-  const addWarning = (node, keyword, message) => {
-    const pattern = new RegExp('\\b(' + keyword + ')\\b', 'ig');
-    domRegexpMatch(node, pattern, (match, range) => {
-      let newWarning = {
-        keyword: keyword,
-        message: message,
-        parentNode: node,
-        rangeToHighlight: range,
-      };
+  const checkForWarnings = (parentElement) => {
+    return Util.debounce(
+      () => checkForWarningsImpl(parentElement),
+      WAIT_TIME_BEFORE_RECALC_WARNINGS
+    );
+  };
 
-      setWarnings(newWarning);
+  const checkForWarningsImpl = (parentElement) => {
+    setWarnings([]);
+    addWarnings(parentElement);
+  };
+
+  const applyEventListeners = (id) => {
+    let targetDiv = document.getElementById(id);
+    targetDiv.removeEventListener('focus', addObserver);
+    targetDiv.addEventListener('focus', addObserver.bind(this));
+    targetDiv.addEventListener('blur', removeObserver.bind(this));
+  };
+
+  const addObserver = (event) => {
+    const element = event.currentTarget;
+    element.addEventListener('input', checkForWarnings(element.parentNode));
+    setWarnings([]);
+    const warningItems = addWarnings(element.parentNode);
+    setWarnings(warningItems);
+    observer.observe(element, {
+      characterData: false,
+      subtree: true,
+      childList: true,
+      attributes: false,
     });
   };
 
-  const addWarnings = (node) => {
-    WARNING_MESSAGES.map((warning) => {
-      addWarning(node, warning.keyword, warning.message);
-    });
+  const removeObserver = (event) => {
+    const element = event.currentTarget;
+    setWarnings([]);
+    element.removeEventListener('input', checkForWarnings);
+    observer.disconnect();
   };
-
-  const removeWarnings = () => setWarnings();
 
   const warningList = warnings.map((warning) =>
     ReactDOM.createPortal(

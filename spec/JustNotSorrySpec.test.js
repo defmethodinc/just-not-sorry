@@ -2,17 +2,22 @@ import { h } from 'preact';
 // import * as JustNotSorry from '../src/components/JustNotSorry.js';
 import JustNotSorry from '../src/components/JustNotSorry.js';
 // import * as JN from '../src/components/JustNotSorry.js';
-import { shallow } from '@os33/preact-render-spy';
+// import { shallow } from '@os33/preact-render-spy';
 // import Enzyme from 'enzyme';
 // import Adapter from 'enzyme-adapter-react-16';
-
 // Enzyme.configure({ adapter: new Adapter() });
-// import {mount, shallow} from 'enzyme'
+import { configure, shallow } from 'enzyme';
+import Adapter from 'enzyme-adapter-preact-pure';
+
+configure({ adapter: new Adapter() });
+
 describe('JustNotSorry', () => {
   function generateEditableDiv(id) {
     let editableDiv = document.createElement('DIV');
     editableDiv.setAttribute('id', id);
     editableDiv.setAttribute('contentEditable', 'true');
+    const body = document.querySelector('body');
+    body.appendChild(editableDiv);
     // document.body.appendChild(editableDiv);
     // instead, mock through components
   }
@@ -32,6 +37,16 @@ describe('JustNotSorry', () => {
     it('adds an observer that listens for structural changes to the content editable div', function () {
       let justNotSorry = shallow(<JustNotSorry />);
       console.log(justNotSorry);
+
+      let target = document.getElementById('div-1');
+      console.log(document);
+      console.log(target.id);
+      target.focus();
+      expect(justNotSorry.exists()).toBeTruthy();
+
+      // check that input event listener was added to contentEditableDiv
+      // check that Warnings render
+      // check that the observer.observe method fires
 
       // let JNS = JustNotSorry.default();
       // let JNS = justNotSorry;

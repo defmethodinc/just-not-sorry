@@ -37,6 +37,7 @@ module.exports = {
     alias: {
       react: 'preact/compat',
       'react-dom': 'preact/compat',
+      'enzyme-adapter-react-16': 'enzyme-adapter-preact-pure',
     },
   },
   devtool: 'inline-source-map',
