@@ -1,21 +1,23 @@
 import { h } from 'preact';
-
 import WarningHighlight from './WarningHighlight.js';
 
 const HIGHLIGHT_YPOS_ADJUSTMENT = 3;
 
 export const calculateCoords = (parentNode, rangeToHighlight) => {
-  let parentRect = parentNode.getBoundingClientRect();
-  let rectsToHighlight = rangeToHighlight.getClientRects();
-  let rect = rectsToHighlight[0];
-
-  if (rect) {
-    let coords = {
-      top: rect.top - parentRect.top + rect.height,
-      left: rect.left - parentRect.left,
-    };
-    return coords;
+  if (parentNode && rangeToHighlight) {
+    let parentRect = parentNode.getBoundingClientRect();
+    let rectsToHighlight = rangeToHighlight.getClientRects();
+    let rect = rectsToHighlight[0];
+  
+    if (rect) {
+      let coords = {
+        top: rect.top - parentRect.top + rect.height,
+        left: rect.left - parentRect.left,
+      };
+      return coords;
+    }
   }
+  return
 };
 
 export const highlightStyles = (parentNode, rangeToHighlight) => {

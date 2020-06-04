@@ -36,11 +36,11 @@ describe('JustNotSorry', () => {
   describe('#addObserver', function () {
     it('adds an observer that listens for structural changes to the content editable div', function () {
       let justNotSorry = shallow(<JustNotSorry />);
-      console.log(justNotSorry);
+      // console.log(justNotSorry);
 
       let target = document.getElementById('div-1');
-      console.log(document);
-      console.log(target.id);
+      // console.log(document);
+      // console.log(target.id);
       target.focus();
       expect(justNotSorry.exists()).toBeTruthy();
 
