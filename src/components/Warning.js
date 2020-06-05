@@ -1,7 +1,7 @@
 import { h } from 'preact';
 import WarningHighlight from './WarningHighlight.js';
 
-const HIGHLIGHT_YPOS_ADJUSTMENT = 3;
+export const HIGHLIGHT_YPOS_ADJUSTMENT = 3;
 
 export const calculateCoords = (parentNode, rangeToHighlight) => {
   if (parentNode && rangeToHighlight) {
@@ -21,25 +21,30 @@ export const calculateCoords = (parentNode, rangeToHighlight) => {
 };
 
 export const highlightStyles = (parentNode, rangeToHighlight) => {
-  let coords = calculateCoords(parentNode, rangeToHighlight);
-  let rectsToHighlight = rangeToHighlight.getClientRects();
-  let rect = rectsToHighlight[0];
+  if (parentNode && rangeToHighlight) {
+    let coords = calculateCoords(parentNode, rangeToHighlight);
+    let rectsToHighlight = rangeToHighlight.getClientRects();
+    let rect = rectsToHighlight[0];
 
-  if (rect) {
-    return setNodeStyle(rect, coords);
+    if (rect) {
+      return setNodeStyle(rect, coords);
+    }
   }
+  return;
 };
 
 export const setNodeStyle = (rect, coords) => {
-  return {
-    top: coords.top - HIGHLIGHT_YPOS_ADJUSTMENT + 'px',
-    left: coords.left + 'px',
-    width: rect.width + 'px',
-    height: rect.height * 0.2 + 'px',
-    zIndex: 10,
-    position: 'absolute',
-    padding: '0px',
-  };
+  if (rect && coords) {
+    return {
+      top: coords.top - HIGHLIGHT_YPOS_ADJUSTMENT + 'px',
+      left: coords.left + 'px',
+      width: rect.width + 'px',
+      height: rect.height * 0.2 + 'px',
+      zIndex: 10,
+      position: 'absolute',
+      padding: '0px',
+    };
+  }
 };
 
 export const calculatePosition = (coords) => {

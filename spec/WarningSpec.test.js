@@ -1,6 +1,8 @@
 import { h } from 'preact';
 import Warning, {
-  /*highlightStyles, setNodeStyle,*/ calculateCoords,
+  highlightStyles,
+  setNodeStyle,
+  calculateCoords,
 } from '../src/components/Warning.js';
 import { configure, shallow } from 'enzyme';
 import Adapter from 'enzyme-adapter-preact-pure';
@@ -75,7 +77,6 @@ describe('#calculateCoords', () => {
   it('should return valid coords when both parentNode and rangeToHighlight are valid', () => {
     const parentNode = parent;
     const rangeToHighlight = range;
-    console.log(calculateCoords(parentNode, rangeToHighlight));
     expect(calculateCoords(parentNode, rangeToHighlight)).toEqual({
       top: 65,
       left: 0,
@@ -83,6 +84,55 @@ describe('#calculateCoords', () => {
   });
 });
 
-describe('#highlightStyles', () => {});
+describe('#highlightStyles', () => {
+  it('should return undefined if the parentNode or rangeToHighlight are invalid', () => {
+    expect(highlightStyles(null, null)).toEqual(undefined);
+    expect(highlightStyles(undefined, undefined)).toEqual(undefined);
+  });
 
-describe('#setNodeStyles', () => {});
+  it('should return valid coords when both parentNode and rangeToHighlight are valid', () => {
+    const parentNode = parent;
+    const rangeToHighlight = range;
+
+    expect(highlightStyles(parentNode, rangeToHighlight)).toEqual({
+      top: '62px',
+      left: '0px',
+      width: '39px',
+      height: '3px',
+      zIndex: 10,
+      position: 'absolute',
+      padding: '0px',
+    });
+  });
+});
+
+describe('#setNodeStyles', () => {
+  it('should return undefined if the parentNode or rangeToHighlight are invalid', () => {
+    expect(setNodeStyle(null, null)).toEqual(undefined);
+    expect(setNodeStyle(undefined, undefined)).toEqual(undefined);
+  });
+
+  it('should return a style object when both parentNode and rangeToHighlight are valid', () => {
+    const rect = {
+      bottom: 217,
+      height: 15,
+      left: 26,
+      right: 65,
+      top: 202,
+      width: 39,
+      x: 26,
+      y: 202,
+    };
+    const coords = { top: 65, left: 0 };
+
+    expect(setNodeStyle(rect, coords)).toEqual({
+      top: '62px',
+      left: '0px',
+      width: '39px',
+      height: '3px',
+      zIndex: 10,
+      position: 'absolute',
+      padding: '0px',
+    });
+  });
+});
