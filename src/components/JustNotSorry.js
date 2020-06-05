@@ -122,7 +122,6 @@ export default function JustNotSorry() {
   };
 
   const addObserver = (event) => {
-    console.log('I was called');
     const element = event.currentTarget;
     element.addEventListener('input', checkForWarnings(element.parentNode));
     setWarnings([]);
