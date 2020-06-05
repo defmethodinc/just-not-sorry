@@ -11,7 +11,10 @@
   ],
   "globals": {
     "chrome": true,
-    "analytics": true
+    "analytics": true,
+    "window": true,
+    "document": true,
+    "global": true
   },
   "parser": "babel-eslint",
   "settings": {
