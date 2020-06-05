@@ -6,12 +6,22 @@ import JustNotSorry from '../src/components/JustNotSorry.js';
 // import Enzyme from 'enzyme';
 // import Adapter from 'enzyme-adapter-react-16';
 // Enzyme.configure({ adapter: new Adapter() });
-import { configure, shallow } from 'enzyme';
+import { configure, mount } from 'enzyme';
 import Adapter from 'enzyme-adapter-preact-pure';
 
 configure({ adapter: new Adapter() });
 
 describe('JustNotSorry', () => {
+  const mutationObserverMock = jest.fn(function MutationObserver(callback) {
+    this.observe = jest.fn();
+    this.disconnect = jest.fn();
+    this.trigger = (mockedMutationList) => {
+      callback(mockedMutationList, this);
+    };
+  });
+
+  global.MutationObserver = mutationObserverMock;
+
   function generateEditableDiv(id) {
     let editableDiv = document.createElement('DIV');
     editableDiv.setAttribute('id', id);
@@ -22,10 +32,10 @@ describe('JustNotSorry', () => {
     // instead, mock through components
   }
 
-  // function dispatchEventOnElement(target, eventName) {
-  //   let event = new Event(eventName, {});
-  //   target.dispatchEvent(event);
-  // }
+  function dispatchEventOnElement(target, eventName) {
+    let event = new Event(eventName, {});
+    target.dispatchEvent(event);
+  }
 
   beforeAll(function () {
     generateEditableDiv('div-1');
@@ -35,14 +45,18 @@ describe('JustNotSorry', () => {
 
   describe('#addObserver', function () {
     it('adds an observer that listens for structural changes to the content editable div', function () {
-      let justNotSorry = shallow(<JustNotSorry />);
-      console.log(justNotSorry);
+      let justNotSorry = mount(<JustNotSorry />);
 
       let target = document.getElementById('div-1');
-      console.log(document);
-      console.log(target.id);
-      target.focus();
-      expect(justNotSorry.exists()).toBeTruthy();
+      target.addEventListener('focus', justNotSorry.addObserver);
+      dispatchEventOnElement(target, 'focus');
+
+      // There should be the document observer and the observer specifically for the target div
+      const observerInstances = mutationObserverMock.mock.instances;
+      // const observerInstance = observerInstances[observerInstances.length - 1];
+
+      expect(observerInstances.length).toBe(2);
+      // expect(observerInstance.observe).toHaveBeenCalledTimes(1); TODO: make this work
 
       // check that input event listener was added to contentEditableDiv
       // check that Warnings render
