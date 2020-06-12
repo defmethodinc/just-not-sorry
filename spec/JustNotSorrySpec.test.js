@@ -1,6 +1,9 @@
 import { h } from 'preact';
 // import * as JustNotSorry from '../src/components/JustNotSorry.js';
-import JustNotSorry, {addWarning, addWarnings} from '../src/components/JustNotSorry.js';
+import JustNotSorry, {
+  addWarning,
+  addWarnings,
+} from '../src/components/JustNotSorry.js';
 // import * as JN from '../src/components/JustNotSorry.js';
 // import { shallow } from '@os33/preact-render-spy';
 // import Enzyme from 'enzyme';
@@ -34,7 +37,11 @@ describe('JustNotSorry', () => {
     // body.appendChild(editableDiv);
     // document.body.appendChild(editableDiv);
     // instead, mock through components
-    return mount(<div id={id} contentEditable={'true'}>{innerHtml ? innerHtml : ''}</div>);
+    return mount(
+      <div id={id} contentEditable={'true'}>
+        {innerHtml ? innerHtml : ''}
+      </div>
+    );
   }
 
   // function dispatchEventOnElement(target, eventName) {
@@ -160,77 +167,107 @@ describe('JustNotSorry', () => {
     const setWarnings = jest.fn(() => [...warnings, newWarning]);
 
     it('adds a warning for a single keyword', () => {
-      const node = editableDiv2.getDOMNode()
+      const node = editableDiv2.getDOMNode();
       const newWarning = {
         keyword: 'just',
         message: 'warning message',
         parentNode: node,
         rangeToHighlight: new Range(),
-      }
+      };
 
-      const warningItem = addWarning(node, 'just', 'warning message', setWarnings)
-      expect(warningItem).toEqual(newWarning)
-    })
+      const warningItem = addWarning(
+        node,
+        'just',
+        'warning message',
+        setWarnings
+      );
+      expect(warningItem).toEqual([newWarning]);
+    });
 
     it('does not add warnings for partial matches', () => {
-      const node = editableDiv3.getDOMNode()
-      const warningItem = addWarning(node, 'just', 'warning message')
-      expect(warningItem).toBeUndefined()
-    })
+      const node = editableDiv3.getDOMNode();
+      const warningItem = addWarning(node, 'just', 'warning message');
+      expect(warningItem).toEqual([]);
+    });
 
     it('matches case insensitive', () => {
-      const node = generateEditableDiv('div-case', 'jUsT kidding').getDOMNode()
+      const node = generateEditableDiv('div-case', 'jUsT kidding').getDOMNode();
       const newWarning = {
         keyword: 'just',
         message: 'warning message',
         parentNode: node,
         rangeToHighlight: new Range(),
-      }
+      };
 
-      const warningItem = addWarning(node, 'just', 'warning message', setWarnings)
-      expect(warningItem).toMatchObject(newWarning)
-    })
+      const warningItem = addWarning(
+        node,
+        'just',
+        'warning message',
+        setWarnings
+      );
+      expect(warningItem).toMatchObject([newWarning]);
+    });
 
     it('catches keywords with punctuation', () => {
-      const node = generateEditableDiv('div-punctuation', 'just. test').getDOMNode()
+      const node = generateEditableDiv(
+        'div-punctuation',
+        'just. test'
+      ).getDOMNode();
       const newWarning = {
         keyword: 'just',
         message: 'warning message',
         parentNode: node,
         rangeToHighlight: new Range(),
-      }
-      const warningItem = addWarning(node, 'just', 'warning message', setWarnings)
-      expect(warningItem).toMatchObject(newWarning)
-    })
-    
+      };
+      const warningItem = addWarning(
+        node,
+        'just',
+        'warning message',
+        setWarnings
+      );
+      expect(warningItem).toMatchObject([newWarning]);
+    });
+
     it('matches phrases', () => {
-      const node = generateEditableDiv('div-phrase', 'my cat is so sorry because of you').getDOMNode()
+      const node = generateEditableDiv(
+        'div-phrase',
+        'my cat is so sorry because of you'
+      ).getDOMNode();
       const newWarning = {
         keyword: 'so sorry',
         message: 'warning message',
         parentNode: node,
         rangeToHighlight: new Range(),
-      }
-      const warningItem = addWarning(node, 'so sorry', 'warning message', setWarnings)
-      expect(warningItem).toMatchObject(newWarning)
-    })
+      };
+      const warningItem = addWarning(
+        node,
+        'so sorry',
+        'warning message',
+        setWarnings
+      );
+      expect(warningItem).toMatchObject([newWarning]);
+    });
   });
 
-  // describe('#addWarnings', () => {
-  //   let newWarning;
-  //   let warnings = [];
-  //   const setWarnings = jest.fn(() => [...warnings, newWarning])
+  describe('#addWarnings', () => {
+    let newWarning = {};
+    let warnings = [];
+    const setWarnings = jest.fn(() => [...warnings, newWarning]);
 
-  //   it('does nothing when given an empty string', () => {
-  //     const node = editableDiv1.getDOMNode()
-  //     const warningItems = addWarnings(node)
-  //     expect(warningItems).toHaveLength(0)
-  //   })
-    
-  //   it('adds warnings to all keywords', () => {
-  //     const node = generateEditableDiv('div-keywords', 'I am just so sorry. Yes, just.').getDOMNode()
-  //     addWarnings(node, setWarnings)
-  //     expect(warnings).toHaveLength(3)
-  //   })
-  // });
+    it('does nothing when given an empty string', () => {
+      const node = editableDiv1.getDOMNode();
+      const warningItems = addWarnings(node, setWarnings);
+      expect(warningItems).toHaveLength(0);
+    });
+
+    it('adds warnings to all keywords', () => {
+      const node = generateEditableDiv(
+        'div-keywords',
+        'I am just so sorry. Yes, just.'
+      ).getDOMNode();
+      const warningItems = addWarnings(node, setWarnings);
+      expect(warningItems[0]).toHaveLength(2);
+      expect(warningItems[1]).toHaveLength(1);
+    });
+  });
 });

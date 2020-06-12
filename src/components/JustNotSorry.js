@@ -14,6 +14,7 @@ export const getEditableDivs = () =>
 
 export const addWarning = (node, keyword, message, setWarnings) => {
   let newWarning;
+  let warningItems = [];
   const pattern = new RegExp('\\b(' + keyword + ')\\b', 'ig');
   domRegexpMatch(node, pattern, (match, range) => {
     newWarning = {
@@ -22,18 +23,27 @@ export const addWarning = (node, keyword, message, setWarnings) => {
       parentNode: node,
       rangeToHighlight: range,
     };
-    setWarnings(prevState => [...prevState, newWarning])
+    warningItems.push(newWarning);
+    setWarnings((prevState) => [...prevState, newWarning]);
   });
-  return newWarning;
+  return warningItems;
 };
 
 export const addWarnings = (node, setWarnings) => {
-  // let warningItem;
+  let allWarnings = [];
   WARNING_MESSAGES.map((warning) => {
-    addWarning(node, warning.keyword, warning.message, setWarnings);
-    // return warningItem;
+    const warningItems = addWarning(
+      node,
+      warning.keyword,
+      warning.message,
+      setWarnings
+    );
+    if (warningItems.length > 0) {
+      allWarnings = [...allWarnings, warningItems];
+    }
+    return warningItems;
   });
-  // return warningItem;
+  return allWarnings;
 };
 
 export default function JustNotSorry() {
@@ -122,8 +132,6 @@ export default function JustNotSorry() {
     const element = event.currentTarget;
     element.addEventListener('input', checkForWarnings(element.parentNode));
     setWarnings([]);
-    // const warningItems = addWarnings(element.parentNode, setWarnings);
-    // setWarnings(warningItems);
     addWarnings(element.parentNode, setWarnings);
     observer.observe(element, {
       characterData: false,
