@@ -12,31 +12,28 @@ export const WAIT_TIME_BEFORE_RECALC_WARNINGS = 500;
 export const getEditableDivs = () =>
   document.querySelectorAll('div[contentEditable=true]');
 
-export const addWarning = (node, keyword, message) => {
+export const addWarning = (node, keyword, message, setWarnings) => {
+  let newWarning;
   const pattern = new RegExp('\\b(' + keyword + ')\\b', 'ig');
-  let warningItem;
   domRegexpMatch(node, pattern, (match, range) => {
-    let newWarning = {
+    newWarning = {
       keyword: keyword,
       message: message,
       parentNode: node,
       rangeToHighlight: range,
     };
-    // setWarnings(prevState => [...prevState, newWarning]);
-    warningItem = newWarning;
+    setWarnings(prevState => [...prevState, newWarning])
   });
-  return warningItem;
+  return newWarning;
 };
 
-export const addWarnings = (node) => {
-  let warningItems = [];
+export const addWarnings = (node, setWarnings) => {
+  // let warningItem;
   WARNING_MESSAGES.map((warning) => {
-    let warningItem = addWarning(node, warning.keyword, warning.message);
-    if (warningItem) {
-      warningItems.push(warningItem);
-    }
+    addWarning(node, warning.keyword, warning.message, setWarnings);
+    // return warningItem;
   });
-  return warningItems;
+  // return warningItem;
 };
 
 export default function JustNotSorry() {
@@ -111,7 +108,7 @@ export default function JustNotSorry() {
 
   const checkForWarningsImpl = (parentElement) => {
     setWarnings([]);
-    addWarnings(parentElement);
+    addWarnings(parentElement, setWarnings);
   };
 
   const applyEventListeners = (id) => {
@@ -125,8 +122,9 @@ export default function JustNotSorry() {
     const element = event.currentTarget;
     element.addEventListener('input', checkForWarnings(element.parentNode));
     setWarnings([]);
-    const warningItems = addWarnings(element.parentNode);
-    setWarnings(warningItems);
+    // const warningItems = addWarnings(element.parentNode, setWarnings);
+    // setWarnings(warningItems);
+    addWarnings(element.parentNode, setWarnings);
     observer.observe(element, {
       characterData: false,
       subtree: true,
