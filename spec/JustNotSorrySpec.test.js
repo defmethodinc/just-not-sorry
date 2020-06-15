@@ -270,4 +270,16 @@ describe('JustNotSorry', () => {
       expect(warningItems[1]).toHaveLength(1);
     });
   });
+
+  describe('#checkForWarnings', () => {
+    const checkForWarnings = jest.fn();
+    const node = mount(<div onInput={checkForWarnings}></div>);
+
+    it('updates warnings each time input is triggered', () => {
+      node.simulate('input');
+      node.simulate('input');
+      node.simulate('input');
+      expect(checkForWarnings).toHaveBeenCalledTimes(3);
+    });
+  });
 });
