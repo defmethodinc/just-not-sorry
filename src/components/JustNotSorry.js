@@ -1,5 +1,4 @@
-import { h } from 'preact';
-import { useState, useEffect } from 'preact/hooks';
+import { h, Component } from 'preact';
 import ReactDOM from 'react-dom';
 
 import Warning from './Warning.js';
@@ -9,65 +8,29 @@ import domRegexpMatch from 'dom-regexp-match';
 
 export const WAIT_TIME_BEFORE_RECALC_WARNINGS = 500;
 
-export const getEditableDivs = () =>
-  document.querySelectorAll('div[contentEditable=true]');
+class JustNotSorry extends Component {
+  constructor(props) {
+    super(props);
 
-export const addWarning = (node, keyword, message, setWarnings) => {
-  let newWarning;
-  let warningItems = [];
-  const pattern = new RegExp('\\b(' + keyword + ')\\b', 'ig');
-  domRegexpMatch(node, pattern, (match, range) => {
-    newWarning = {
-      keyword: keyword,
-      message: message,
-      parentNode: node,
-      rangeToHighlight: range,
+    this.state = {
+      editableDivCount: 0,
+      warnings: [],
     };
-    warningItems.push(newWarning);
-    setWarnings((prevState) => [...prevState, newWarning]);
-  });
-  return warningItems;
-};
 
-export const addWarnings = (node, setWarnings) => {
-  let allWarnings = [];
-  WARNING_MESSAGES.map((warning) => {
-    const warningItems = addWarning(
-      node,
-      warning.keyword,
-      warning.message,
-      setWarnings
+    this.documentObserver = new MutationObserver(
+      this.handleContentEditableDivChange.bind(this)
     );
-    if (warningItems.length > 0) {
-      allWarnings = [...allWarnings, warningItems];
-    }
-    return warningItems;
-  });
-  return allWarnings;
-};
-
-export default function JustNotSorry() {
-  let documentObserver;
-  let observer;
-  let editableDivCount;
-
-  const [warnings, setWarnings] = useState([]);
-
-  useEffect(() => {
-    documentObserver = new MutationObserver(
-      handleContentEditableDivChange.bind(this)
+    this.observer = new MutationObserver(
+      this.handleContentEditableContentInsert.bind(this)
     );
-    observer = new MutationObserver(
-      handleContentEditableContentInsert.bind(this)
-    );
-    initializeObserver();
-  }, []);
+    this.initializeObserver();
+  }
 
-  const initializeObserver = () => {
-    documentObserver.observe(document, { subtree: true, childList: true });
+  initializeObserver() {
+    this.documentObserver.observe(document, { subtree: true, childList: true });
   };
 
-  const handleContentEditableContentInsert = (mutations) => {
+  handleContentEditableContentInsert(mutations) {
     if (mutations[0]) {
       mutations.forEach((mutation) => {
         if (
@@ -89,10 +52,10 @@ export default function JustNotSorry() {
     }
   };
 
-  const handleContentEditableDivChange = (mutations) => {
-    let divCount = getEditableDivs().length;
-    if (divCount !== editableDivCount) {
-      editableDivCount = divCount;
+  handleContentEditableDivChange(mutations) {
+    let divCount = this.getEditableDivs().length;
+    if (divCount !== this.state.editableDivCount) {
+      this.setState({ editableDivCount: divCount });
       if (mutations[0]) {
         mutations.forEach((mutation) => {
           if (
@@ -101,7 +64,7 @@ export default function JustNotSorry() {
           ) {
             let id = mutation.target.id;
             if (id) {
-              applyEventListeners(id);
+              this.applyEventListeners(id);
             }
           }
         });
@@ -109,31 +72,31 @@ export default function JustNotSorry() {
     }
   };
 
-  const checkForWarnings = (parentElement) => {
+  checkForWarnings(parentElement) {
     return Util.debounce(
-      () => checkForWarningsImpl(parentElement),
+      () => this.checkForWarningsImpl(parentElement),
       WAIT_TIME_BEFORE_RECALC_WARNINGS
     );
   };
 
-  const checkForWarningsImpl = (parentElement) => {
-    setWarnings([]);
-    addWarnings(parentElement, setWarnings);
+  checkForWarningsImpl(parentElement) {
+    this.setState({ warnings: [] });
+    this.addWarnings(parentElement);
   };
 
-  const applyEventListeners = (id) => {
+  applyEventListeners(id) {
     let targetDiv = document.getElementById(id);
-    targetDiv.removeEventListener('focus', addObserver);
-    targetDiv.addEventListener('focus', addObserver.bind(this));
-    targetDiv.addEventListener('blur', removeObserver.bind(this));
+    targetDiv.removeEventListener('focus', this.addObserver);
+    targetDiv.addEventListener('focus', this.addObserver.bind(this));
+    targetDiv.addEventListener('blur', this.removeObserver.bind(this));
   };
 
-  const addObserver = (event) => {
+  addObserver(event) {
     const element = event.currentTarget;
-    element.addEventListener('input', checkForWarnings(element.parentNode));
-    setWarnings([]);
-    addWarnings(element.parentNode, setWarnings);
-    observer.observe(element, {
+    element.addEventListener('input', this.checkForWarnings(element.parentNode));
+    this.setState({ warnings: [] });
+    this.addWarnings(element.parentNode);
+    this.observer.observe(element, {
       characterData: false,
       subtree: true,
       childList: true,
@@ -141,19 +104,53 @@ export default function JustNotSorry() {
     });
   };
 
-  const removeObserver = (event) => {
+  removeObserver(event) {
     const element = event.currentTarget;
-    setWarnings([]);
-    element.removeEventListener('input', checkForWarnings);
-    observer.disconnect();
+    this.setState({ warnings: [] });
+    element.removeEventListener('input', this.checkForWarnings);
+    this.observer.disconnect();
   };
 
-  const warningList = warnings.map((warning) =>
-    ReactDOM.createPortal(
-      <Warning class=".jns-warning" key={warning.keyword} value={warning} />,
-      warning.parentNode
-    )
-  );
-
-  return <div className=".jns-warnings-list">{warningList}</div>;
+getEditableDivs() {
+  return document.querySelectorAll('div[contentEditable=true]');
 }
+
+addWarning(node, keyword, message) {
+  const pattern = new RegExp('\\b(' + keyword + ')\\b', 'ig');
+  domRegexpMatch(node, pattern, (match, range) => {
+    let newWarning = {
+      keyword: keyword,
+      message: message,
+      parentNode: node,
+      rangeToHighlight: range,
+    };
+    this.setState(prevState => ({
+      warnings: [...prevState.warnings, newWarning]
+    }));
+  });
+};
+
+addWarnings(node) {
+  WARNING_MESSAGES.map((warning) => {
+    this.addWarning(
+      node,
+      warning.keyword,
+      warning.message,
+    );
+  });
+};
+
+  render() {
+    const warningList = this.state.warnings.map((warning) =>
+      ReactDOM.createPortal(
+        <Warning class=".jns-warning" key={warning.keyword} value={warning} />,
+        warning.parentNode
+      )
+    );
+    
+    return <div className=".jns-warnings-list">{warningList}</div>;
+  }
+
+}
+
+export default JustNotSorry;
