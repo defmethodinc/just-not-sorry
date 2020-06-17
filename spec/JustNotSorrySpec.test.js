@@ -6,6 +6,8 @@ import Adapter from 'enzyme-adapter-preact-pure';
 configure({ adapter: new Adapter() });
 
 describe('JustNotSorry', () => {
+  const justNotSorry = mount(<JustNotSorry />);
+
   let editableDiv1;
   let editableDiv2;
   let editableDiv3;
@@ -33,13 +35,6 @@ describe('JustNotSorry', () => {
   global.MutationObserver = mutationObserverMock;
 
   function generateEditableDiv(id, innerHtml) {
-    // let editableDiv = document.createElement('DIV');
-    // editableDiv.setAttribute('id', id);
-    // editableDiv.setAttribute('contentEditable', 'true');
-    // const body = document.querySelector('body');
-    // body.appendChild(editableDiv);
-    // document.body.appendChild(editableDiv);
-    // instead, mock through components
     return mount(
       <div id={id} contentEditable={'true'}>
         {innerHtml ? innerHtml : ''}
@@ -47,116 +42,155 @@ describe('JustNotSorry', () => {
     );
   }
 
-  beforeAll(function () {
+  beforeAll(() => {
     editableDiv1 = generateEditableDiv('div-1');
     editableDiv2 = generateEditableDiv('div-2', 'test just test');
     editableDiv3 = generateEditableDiv('div-3', 'test justify test');
   });
 
-  describe('#addObserver', function () {
-    it('adds an observer that listens for structural changes to the content editable div', function () {
-      let justNotSorry = mount(<JustNotSorry />);
+  describe('#addObserver', () => {
+    it('adds an observer that listens for structural changes to the content editable div', () => {
+      // remount JNS to trigger constructor functions
+      justNotSorry.unmount();
+      justNotSorry.mount();
 
-      // let target = document.getElementById('div-1');
-      // target.addEventListener('focus', justNotSorry.addObserver);
-      // dispatchEventOnElement(target, 'focus');
-      // console.log(editableDiv1.props());
-      editableDiv1.simulate('focus', justNotSorry.addObserver);
+      const instance = justNotSorry.instance();
+      const spy = jest.spyOn(instance, 'addObserver');
+      const node = mount(
+        <div
+          id={'div-focus'}
+          contentEditable={'true'}
+          onFocus={instance.addObserver.bind(instance)}
+        ></div>
+      );
+      node.simulate('focus');
 
       // There should be the document observer and the observer specifically for the target div
       const observerInstances = mutationObserverMock.mock.instances;
-      // const observerInstance = observerInstances[observerInstances.length - 1];
+      const observerInstance = observerInstances[observerInstances.length - 1];
 
       expect(observerInstances.length).toBe(2);
-      // expect(observerInstance.observe).toHaveBeenCalledTimes(1); THIS ASSERTION FAILS (requires line 63 to be uncommented as well)
+      expect(spy).toHaveBeenCalledTimes(1);
+      expect(observerInstance.observe).toHaveBeenCalledWith(node.getDOMNode(), {
+        attributes: false,
+        characterData: false,
+        childList: true,
+        subtree: true,
+      });
 
-      // check that input event listener was added to contentEditableDiv
-      // check that Warnings render
-      // check that the observer.observe method fires
-
-      // let JNS = JustNotSorry.default();
-      // let JNS = justNotSorry;
-      // console.log(JNS.html());
-      // let tm = JN.default;
-      // console.log(tm);
-
-      // const mock = jest.spyOn(JustNotSorry, 'testMe');
-      // mock.mockImplementation(() => {});
-
-      // let dc = shallow(<div />);
-      // // let target = document.getElementById('div-1');
-      // console.log(justNotSorry);
-
-      // let x = JustNotSorry.testMe;
-      // const y = justNotSorry;
-      // console.log("------");
-      // console.log(x);
-      // console.log(x);
-      // const spy = jest.spyOn(justNotSorry, 'removeWarnings');
-      // const spy = jest.spyOn(dc, 'observe');
-
-      //   target.addEventListener('focus', justNotSorry.addObserver);
-
-      //   expect(spy).not.toHaveBeenCalled();
-      //   dispatchEventOnElement(target, 'focus');
-
-      //   expect(spy).toHaveBeenCalledWith(
-      //     target,
-      //     jest.objectContaining({ childList: true })
-      //   );
-      expect(true).toBe(true);
+      node.unmount();
     });
 
-    // it('starts checking for warnings', function (done) {
-    //   spyOn(JustNotSorry, 'checkForWarnings').and.callThrough();
-    //   let target = document.getElementById('div-1');
+    it('starts checking for warnings', () => {
+      const instance = justNotSorry.instance();
+      const spy = jest.spyOn(instance, 'checkForWarnings');
+      const node = mount(
+        <div
+          id={'div-focus'}
+          contentEditable={'true'}
+          onFocus={instance.addObserver.bind(instance)}
+        ></div>
+      );
+      node.simulate('focus');
 
-    //   target.addEventListener('focus', JustNotSorry.addObserver);
-    //   dispatchEventOnElement(target, 'focus');
+      expect(spy).toHaveBeenCalled();
 
-    //   dispatchEventOnElement(target, 'input');
+      node.unmount();
+    });
 
-    //   setTimeout(function () {
-    //     // eslint-disable-next-line jasmine/prefer-toHaveBeenCalledWith
-    //     expect(JustNotSorry.checkForWarnings).toHaveBeenCalled();
-    //     done();
-    //   });
-    // });
+    it('adds warnings to the content editable div', () => {
+      const instance = justNotSorry.instance();
+      const spy = jest.spyOn(instance, 'addWarnings');
+      const node = mount(
+        <div
+          id={'div-focus'}
+          contentEditable={'true'}
+          onFocus={instance.addObserver.bind(instance)}
+        ></div>
+      );
+      node.simulate('focus');
 
-    // it('adds warnings to the content editable div', function () {
-    //   let target = document.getElementById('div-1');
-    //   spyOn(WarningChecker.prototype, 'addWarnings');
+      expect(spy).toHaveBeenCalledWith(node.getDOMNode().parentNode);
 
-    //   target.addEventListener('focus', JustNotSorry.addObserver);
-    //   dispatchEventOnElement(target, 'focus');
+      node.unmount();
+    });
+  });
 
-    //   expect(WarningChecker.prototype.addWarnings).toHaveBeenCalledWith(
-    //     target.parentNode
-    //   );
-    // });
+  describe('#removeObserver', () => {
+    it('removes any existing warnings', () => {
+      const instance = justNotSorry.instance();
+      const spy = jest.spyOn(instance, 'removeObserver');
+      const node = mount(
+        <div
+          id={'div-focus'}
+          contentEditable={'true'}
+          onFocus={instance.addObserver.bind(instance)}
+          onBlur={instance.removeObserver.bind(instance)}
+        >
+          just not sorry
+        </div>
+      );
+      node.simulate('focus');
 
-    // describe('when a global id variable is set', function () {
-    //   beforeEach(function () {
-    //     window.id = 'test value';
-    //   });
+      expect(justNotSorry.state('warnings').length).toEqual(2);
 
-    //   afterEach(function () {
-    //     delete window.id;
-    //   });
+      // remount the node
+      node.mount();
+      node.simulate('blur');
 
-    //   it('keeps that global variable unchanged', function (done) {
-    //     const target = document.getElementById('div-2');
-    //     target.addEventListener('focus', JustNotSorry.addObserver);
-    //     dispatchEventOnElement(target, 'focus');
+      expect(spy).toHaveBeenCalledTimes(1);
+      expect(justNotSorry.state('warnings').length).toEqual(0);
 
-    //     target.appendChild(document.createElement('BR'));
+      node.unmount();
+    });
 
-    //     setTimeout(function () {
-    //       expect(window.id).toEqual('test value');
-    //       done();
-    //     });
-    //   });
-    // });
+    it('no longer checks for warnings on input events', () => {
+      justNotSorry.unmount();
+      justNotSorry.mount();
+      const instance = justNotSorry.instance();
+      const node = mount(
+        <div
+          id={'div-remove'}
+          contentEditable={'true'}
+          onFocus={instance.addObserver.bind(instance)}
+          onBlur={instance.removeObserver.bind(instance)}
+        ></div>
+      );
+      node.simulate('focus');
+      node.simulate('blur');
+
+      const spy = jest.spyOn(instance, 'checkForWarnings');
+
+      node.simulate('input');
+
+      expect(spy).not.toHaveBeenCalled();
+
+      node.unmount();
+    });
+
+    it('disconnects the observer', () => {
+      const instance = justNotSorry.instance();
+      const spy = jest.spyOn(instance, 'removeObserver');
+      const node = mount(
+        <div
+          id={'div-disconnect'}
+          contentEditable={'true'}
+          onFocus={instance.addObserver.bind(instance)}
+          onBlur={instance.removeObserver.bind(instance)}
+        ></div>
+      );
+      node.simulate('focus');
+      node.simulate('blur');
+
+      // There should be the document observer and the observer specifically for the target div
+      const observerInstances = mutationObserverMock.mock.instances;
+      const observerInstance = observerInstances[observerInstances.length - 1];
+
+      expect(spy).toHaveBeenCalled();
+      expect(observerInstance.disconnect).toHaveBeenCalled();
+
+      node.unmount();
+    });
   });
 
   describe('#addWarning', () => {
@@ -262,14 +296,18 @@ describe('JustNotSorry', () => {
   });
 
   describe('#checkForWarnings', () => {
-    const checkForWarnings = jest.fn();
-    const node = mount(<div onInput={checkForWarnings}></div>);
+    const instance = justNotSorry.instance();
+    const spy = jest.spyOn(instance, 'checkForWarnings');
+    const node = mount(
+      <div onInput={instance.checkForWarnings}>just not sorry</div>
+    );
 
     it('updates warnings each time input is triggered', () => {
       node.simulate('input');
       node.simulate('input');
       node.simulate('input');
-      expect(checkForWarnings).toHaveBeenCalledTimes(3);
+      expect(spy).toHaveBeenCalledTimes(3);
+      node.unmount();
     });
   });
 });
