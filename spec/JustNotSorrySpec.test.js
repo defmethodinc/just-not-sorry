@@ -1,14 +1,5 @@
 import { h } from 'preact';
-// import * as JustNotSorry from '../src/components/JustNotSorry.js';
-import JustNotSorry, {
-  addWarning,
-  addWarnings,
-} from '../src/components/JustNotSorry.js';
-// import * as JN from '../src/components/JustNotSorry.js';
-// import { shallow } from '@os33/preact-render-spy';
-// import Enzyme from 'enzyme';
-// import Adapter from 'enzyme-adapter-react-16';
-// Enzyme.configure({ adapter: new Adapter() });
+import JustNotSorry from '../src/components/JustNotSorry.js';
 import { configure, mount } from 'enzyme';
 import Adapter from 'enzyme-adapter-preact-pure';
 
@@ -18,6 +9,8 @@ describe('JustNotSorry', () => {
   let editableDiv1;
   let editableDiv2;
   let editableDiv3;
+  let wrapper;
+  let instance;
 
   const mutationObserverMock = jest.fn(function MutationObserver(callback) {
     this.observe = jest.fn();
@@ -26,6 +19,16 @@ describe('JustNotSorry', () => {
       callback(mockedMutationList, this);
     };
   });
+
+  document.createRange = jest.fn(() => ({
+    setStart: jest.fn(),
+    setEnd: jest.fn(),
+    commonAncestorContainer: {
+      nodeName: 'BODY',
+      ownerDocument: document,
+    },
+    getClientRects: jest.fn(() => [{}]),
+  }));
 
   global.MutationObserver = mutationObserverMock;
 
@@ -43,11 +46,6 @@ describe('JustNotSorry', () => {
       </div>
     );
   }
-
-  // function dispatchEventOnElement(target, eventName) {
-  //   let event = new Event(eventName, {});
-  //   target.dispatchEvent(event);
-  // }
 
   beforeAll(function () {
     editableDiv1 = generateEditableDiv('div-1');
@@ -162,50 +160,45 @@ describe('JustNotSorry', () => {
   });
 
   describe('#addWarning', () => {
-    let newWarning;
-    let warnings = [];
-    const setWarnings = jest.fn(() => [...warnings, newWarning]);
+    beforeEach(() => {
+      wrapper = mount(<JustNotSorry />);
+      instance = wrapper.instance();
+    });
 
     it('adds a warning for a single keyword', () => {
       const node = editableDiv2.getDOMNode();
-      const newWarning = {
-        keyword: 'just',
-        message: 'warning message',
-        parentNode: node,
-        rangeToHighlight: new Range(),
-      };
+      instance.addWarning(node, 'just', 'warning message');
 
-      const warningItem = addWarning(
-        node,
-        'just',
-        'warning message',
-        setWarnings
+      expect(wrapper.state('warnings').length).toEqual(1);
+      expect(wrapper.state('warnings')[0]).toEqual(
+        expect.objectContaining({
+          keyword: 'just',
+          message: 'warning message',
+          parentNode: node,
+        })
       );
-      expect(warningItem).toEqual([newWarning]);
     });
 
     it('does not add warnings for partial matches', () => {
       const node = editableDiv3.getDOMNode();
-      const warningItem = addWarning(node, 'just', 'warning message');
-      expect(warningItem).toEqual([]);
+      instance.addWarning(node, 'just', 'warning message');
+
+      expect(wrapper.state('warnings').length).toEqual(0);
+      expect(wrapper.state('warnings')).toEqual([]);
     });
 
     it('matches case insensitive', () => {
       const node = generateEditableDiv('div-case', 'jUsT kidding').getDOMNode();
-      const newWarning = {
-        keyword: 'just',
-        message: 'warning message',
-        parentNode: node,
-        rangeToHighlight: new Range(),
-      };
 
-      const warningItem = addWarning(
-        node,
-        'just',
-        'warning message',
-        setWarnings
+      instance.addWarning(node, 'just', 'warning message');
+      expect(wrapper.state('warnings').length).toEqual(1);
+      expect(wrapper.state('warnings')[0]).toEqual(
+        expect.objectContaining({
+          keyword: 'just',
+          message: 'warning message',
+          parentNode: node,
+        })
       );
-      expect(warningItem).toMatchObject([newWarning]);
     });
 
     it('catches keywords with punctuation', () => {
@@ -213,19 +206,16 @@ describe('JustNotSorry', () => {
         'div-punctuation',
         'just. test'
       ).getDOMNode();
-      const newWarning = {
-        keyword: 'just',
-        message: 'warning message',
-        parentNode: node,
-        rangeToHighlight: new Range(),
-      };
-      const warningItem = addWarning(
-        node,
-        'just',
-        'warning message',
-        setWarnings
+
+      instance.addWarning(node, 'just', 'warning message');
+      expect(wrapper.state('warnings').length).toEqual(1);
+      expect(wrapper.state('warnings')[0]).toEqual(
+        expect.objectContaining({
+          keyword: 'just',
+          message: 'warning message',
+          parentNode: node,
+        })
       );
-      expect(warningItem).toMatchObject([newWarning]);
     });
 
     it('matches phrases', () => {
@@ -233,31 +223,31 @@ describe('JustNotSorry', () => {
         'div-phrase',
         'my cat is so sorry because of you'
       ).getDOMNode();
-      const newWarning = {
-        keyword: 'so sorry',
-        message: 'warning message',
-        parentNode: node,
-        rangeToHighlight: new Range(),
-      };
-      const warningItem = addWarning(
-        node,
-        'so sorry',
-        'warning message',
-        setWarnings
+
+      instance.addWarning(node, 'so sorry', 'warning message');
+      expect(wrapper.state('warnings').length).toEqual(1);
+      expect(wrapper.state('warnings')[0]).toEqual(
+        expect.objectContaining({
+          keyword: 'so sorry',
+          message: 'warning message',
+          parentNode: node,
+        })
       );
-      expect(warningItem).toMatchObject([newWarning]);
     });
   });
 
   describe('#addWarnings', () => {
-    let newWarning = {};
-    let warnings = [];
-    const setWarnings = jest.fn(() => [...warnings, newWarning]);
+    beforeEach(() => {
+      wrapper = mount(<JustNotSorry />);
+      instance = wrapper.instance();
+    });
 
     it('does nothing when given an empty string', () => {
       const node = editableDiv1.getDOMNode();
-      const warningItems = addWarnings(node, setWarnings);
-      expect(warningItems).toHaveLength(0);
+      instance.addWarnings(node);
+
+      expect(wrapper.state('warnings').length).toEqual(0);
+      expect(wrapper.state('warnings')).toEqual([]);
     });
 
     it('adds warnings to all keywords', () => {
@@ -265,9 +255,9 @@ describe('JustNotSorry', () => {
         'div-keywords',
         'I am just so sorry. Yes, just.'
       ).getDOMNode();
-      const warningItems = addWarnings(node, setWarnings);
-      expect(warningItems[0]).toHaveLength(2);
-      expect(warningItems[1]).toHaveLength(1);
+
+      instance.addWarnings(node);
+      expect(wrapper.state('warnings').length).toEqual(3);
     });
   });
 
