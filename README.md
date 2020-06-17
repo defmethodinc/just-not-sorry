@@ -54,23 +54,19 @@ You can also load the extension manually in Chrome using the following steps:
 
 Commit messages are required to follow the [AngularJS's commit message convention](https://github.com/angular/angular/blob/master/CONTRIBUTING.md#-commit-message-guidelines). This allows us to automatically increment the version numbering of the extension using the [SemVer](https://semver.org/) standard and generate release notes. We use the [Commitizen](https://github.com/commitizen/cz-cli) library to provide interactive prompts to help generate the commit messages. Once you've run `npm install` as instructed in the development setup section, Commitizen will be run whenever you execute the `git commit` command.
 
-### Jasmine Tests
+### Enzyme Tests
 
-Tests are written using [jasmine](https://jasmine.github.io/). They can either be run from the command line using headless chrome or run within a browser window.
-
-To run the headless tests, use:
+Tests are written using [enzyme](https://github.com/enzymejs/enzyme). They can either be run from the command line using:
 
 ```
 npm test
 ```
 
-To run the tests in the browser, use:
+To run the tests watch mode, use:
 
 ```
 npm run test:watch
 ```
-
-and then open http://localhost:8888 in a web browser.
 
 ### To Publish a New Version to Chrome Webstore
 
@@ -85,12 +81,13 @@ For production:
 - [dom-regexp-match](https://github.com/webmodules/dom-regexp-match)
 - [chrome-platform-analytics](https://github.com/GoogleChrome/chrome-platform-analytics)
 - Based on [gmail-chrome-extension-boilerplate](https://github.com/KartikTalwar/gmail-chrome-extension-boilerplate)
+- [preact/compat](https://github.com/preactjs/preact-compat)
 
 For test:
 
-- [jasmine.js](http://jasmine.github.io/)
-- [jasmine-jquery.js](https://github.com/velesin/jasmine-jquery)
-- [jQuery](https://jquery.com/)
+- [enzyme](https://github.com/enzymejs/enzyme)
+- [jest](https://github.com/facebook/jest)
+- [jest-enzyme](https://www.npmjs.com/package/jest-enzyme)
 
 ### License
 
