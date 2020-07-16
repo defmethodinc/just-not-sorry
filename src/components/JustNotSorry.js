@@ -28,7 +28,7 @@ class JustNotSorry extends Component {
 
   initializeObserver() {
     this.documentObserver.observe(document, { subtree: true, childList: true });
-  };
+  }
 
   handleContentEditableContentInsert(mutations) {
     if (mutations[0]) {
@@ -50,7 +50,7 @@ class JustNotSorry extends Component {
         }
       });
     }
-  };
+  }
 
   handleContentEditableDivChange(mutations) {
     let divCount = this.getEditableDivs().length;
@@ -70,30 +70,33 @@ class JustNotSorry extends Component {
         });
       }
     }
-  };
+  }
 
   checkForWarnings(parentElement) {
     return Util.debounce(
       () => this.checkForWarningsImpl(parentElement),
       WAIT_TIME_BEFORE_RECALC_WARNINGS
     );
-  };
+  }
 
   checkForWarningsImpl(parentElement) {
     this.setState({ warnings: [] });
     this.addWarnings(parentElement);
-  };
+  }
 
   applyEventListeners(id) {
     let targetDiv = document.getElementById(id);
     targetDiv.removeEventListener('focus', this.addObserver);
     targetDiv.addEventListener('focus', this.addObserver.bind(this));
     targetDiv.addEventListener('blur', this.removeObserver.bind(this));
-  };
+  }
 
   addObserver(event) {
     const element = event.currentTarget;
-    element.addEventListener('input', this.checkForWarnings(element.parentNode));
+    element.addEventListener(
+      'input',
+      this.checkForWarnings(element.parentNode)
+    );
     this.setState({ warnings: [] });
     this.addWarnings(element.parentNode);
     this.observer.observe(element, {
@@ -102,43 +105,42 @@ class JustNotSorry extends Component {
       childList: true,
       attributes: false,
     });
-  };
+  }
 
   removeObserver(event) {
     const element = event.currentTarget;
     this.setState({ warnings: [] });
     element.removeEventListener('input', this.checkForWarnings);
     this.observer.disconnect();
-  };
+  }
 
-getEditableDivs() {
-  return document.querySelectorAll('div[contentEditable=true]');
-}
+  getEditableDivs() {
+    return document.querySelectorAll('div[contentEditable=true]');
+  }
 
-addWarning(node, keyword, message) {
-  const pattern = new RegExp('\\b(' + keyword + ')\\b', 'ig');
-  domRegexpMatch(node, pattern, (match, range) => {
-    let newWarning = {
-      keyword: keyword,
-      message: message,
-      parentNode: node,
-      rangeToHighlight: range,
-    };
-    this.setState(prevState => ({
-      warnings: [...prevState.warnings, newWarning]
-    }));
-  });
-};
+  addWarning(node, keyword, message) {
+    const pattern = new RegExp('\\b(' + keyword + ')\\b', 'ig');
+    domRegexpMatch(node, pattern, (match, range) => {
+      let newWarning = {
+        keyword: keyword,
+        message: message,
+        parentNode: node,
+        rangeToHighlight: range,
+      };
 
-addWarnings(node) {
-  WARNING_MESSAGES.map((warning) => {
-    this.addWarning(
-      node,
-      warning.keyword,
-      warning.message,
-    );
-  });
-};
+      if (match.index < 2000) {
+        this.setState((prevState) => ({
+          warnings: [...prevState.warnings, newWarning],
+        }));
+      }
+    });
+  }
+
+  addWarnings(node) {
+    WARNING_MESSAGES.map((warning) => {
+      this.addWarning(node, warning.keyword, warning.message);
+    });
+  }
 
   render() {
     const warningList = this.state.warnings.map((warning) =>
@@ -147,10 +149,9 @@ addWarnings(node) {
         warning.parentNode
       )
     );
-    
+
     return <div className=".jns-warnings-list">{warningList}</div>;
   }
-
 }
 
 export default JustNotSorry;
