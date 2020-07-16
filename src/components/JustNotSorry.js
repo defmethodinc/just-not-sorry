@@ -128,7 +128,7 @@ class JustNotSorry extends Component {
         rangeToHighlight: range,
       };
 
-      if (match.index < 2000) {
+      if (!match.input.includes(`color: #fff;`)) {
         this.setState((prevState) => ({
           warnings: [...prevState.warnings, newWarning],
         }));
