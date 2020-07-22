@@ -97,7 +97,6 @@ class JustNotSorry extends Component {
       'input',
       this.checkForWarnings(element.parentNode)
     );
-    this.setState({ warnings: [] });
     this.addWarnings(element.parentNode);
     this.observer.observe(element, {
       characterData: false,
@@ -128,11 +127,15 @@ class JustNotSorry extends Component {
         rangeToHighlight: range,
       };
 
-      if (!match.input.includes(`color: #fff;`)) {
-        this.setState((prevState) => ({
-          warnings: [...prevState.warnings, newWarning],
-        }));
-      }
+      this.setState((state) => {
+        let warnings = state.warnings;
+        if (!match.input.includes(`color: #fff;`)) {
+          warnings = state.warnings.concat(newWarning);
+        }
+        return {
+          warnings,
+        };
+      });
     });
   }
 
