@@ -80,7 +80,6 @@ class JustNotSorry extends Component {
   }
 
   checkForWarningsImpl(parentElement) {
-    this.setState({ warnings: [] });
     this.addWarnings(parentElement);
   }
 
@@ -129,7 +128,10 @@ class JustNotSorry extends Component {
 
       this.setState((state) => {
         let warnings = state.warnings;
-        if (!match.input.includes(`color: #fff;`)) {
+        if (
+          !match.input.includes(`color: #fff;`) ||
+          !match.input.includes(`border: 1px solid transparent;`)
+        ) {
           warnings = state.warnings.concat(newWarning);
         }
         return {
