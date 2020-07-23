@@ -29,6 +29,7 @@ describe('JustNotSorry', () => {
       nodeName: 'BODY',
       ownerDocument: document,
     },
+    startContainer: 'test',
     getClientRects: jest.fn(() => [{}]),
   }));
 
