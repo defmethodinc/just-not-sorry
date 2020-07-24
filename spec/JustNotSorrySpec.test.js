@@ -269,6 +269,26 @@ describe('JustNotSorry', () => {
         })
       );
     });
+
+    it('does not add warnings for tooltip matches', () => {
+      document.createRange = jest.fn(() => ({
+        setStart: jest.fn(),
+        setEnd: jest.fn(),
+        commonAncestorContainer: {
+          nodeName: 'BODY',
+          ownerDocument: document,
+        },
+        startContainer:
+          "The word 'very' does not communicate enough information. Find a stronger, more meaningful adverb, or omit it completely. --Andrea Ayres",
+        getClientRects: jest.fn(() => [{}]),
+      }));
+
+      const node = editableDiv3.getDOMNode();
+      instance.addWarning(node, 'very', 'warning message');
+
+      expect(wrapper.state('warnings').length).toEqual(0);
+      expect(wrapper.state('warnings')).toEqual([]);
+    });
   });
 
   describe('#addWarnings', () => {
