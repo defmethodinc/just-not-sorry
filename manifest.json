@@ -3,22 +3,25 @@
   "name": "Just Not Sorry -- the Gmail Plug-in",
   "short_name": "JustNotSorry",
   "author": "Steve Brudz, Manish Kakwani, Tami Reiss, and Eric Tillberg of Def Method",
-  "version": "1.7.0",
+  "version": "2.0.0.2",
+  "version_name": "2.0.0-beta.2",
   "description": "A Gmail Plug-in that warns you when you write emails using words which undermine your message",
-  "icons": { "16": "img/JustNotSorry-16.png",
-             "48": "img/JustNotSorry-48.png",
-            "128": "img/JustNotSorry-128.png" },
+  "icons": {
+    "16": "img/JustNotSorry-16.png",
+    "48": "img/JustNotSorry-48.png",
+    "128": "img/JustNotSorry-128.png"
+  },
   "content_scripts": [
     {
       "matches": ["https://mail.google.com/*", "https://inbox.google.com/*"],
-      "css": ["just-not-sorry.css"],
-      "js": ["lib/head.load.min.js", "src/ScriptLoader.js"]
+      "css": ["./just-not-sorry.css"],
+      "js": ["bundle.js"]
     }
   ],
   "background": {
     "scripts": [
-      "lib/google-analytics-bundle.js",
-      "src/background.js"
+      "background/google-analytics-bundle.js",
+      "background/background.js"
     ],
     "persistent": false
   },
@@ -33,15 +36,7 @@
     "page": "options/options.html",
     "chrome_style": true
   },
-  "web_accessible_resources": [
-    "lib/dom-regexp-match-1.1.0.js",
-    "lib/fastdom.js",
-    "lib/fastdom-promised.js",
-    "src/HighlightGenerator.js",
-    "src/WarningChecker.js",
-    "src/Warnings.js",
-    "src/JustNotSorry.js"
-  ],
+  "web_accessible_resources": [],
   "permissions": [
     "https://www.google-analytics.com/",
     "storage",

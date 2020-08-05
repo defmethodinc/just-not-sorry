@@ -1,0 +1,6 @@
+node_modules/
+build/
+dist/
+background/google-analytics-bundle.js
+gulpfile.js
+webpack.config.js

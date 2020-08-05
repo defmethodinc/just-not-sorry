@@ -1,34 +1,68 @@
 {
   "name": "just-not-sorry",
   "description": "Gmail Plug-in that warns you when you write emails using words which undermine your message",
-  "version": "1.7.0",
+  "version": "2.0.0-beta.2",
   "author": "Steve Brudz, Manish Kakwani, Tami Reiss, and Eric Tillberg of Def Method",
   "license": "MIT",
   "repository": "git@github.com:defmethodinc/just-not-sorry.git",
   "homepage": "https://github.com/defmethodinc/just-not-sorry",
   "bugs": "https://github.com/defmethodinc/just-not-sorry/issues/new",
   "scripts": {
-    "test": "gulp jasmine-headless-chrome",
-    "test:watch": "gulp jasmine-browser"
+    "test": "jest --verbose ./spec",
+    "test:watch": "npm run test -- --watch",
+    "build": "webpack --config webpack.config.js",
+    "build:watch": "webpack --config webpack.config.js --watch",
+    "webext:run": "web-ext run --source-dir ./build/ --start-url gmail.com",
+    "webext:lint": "web-ext lint -s ./build",
+    "start:firefox": "concurrently \"npm:build:watch\" \"npm:webext:run\"",
+    "start:chrome": "concurrently \"npm:build:watch\" \"npm:webext:run -- -t chromium\"",
+    "format": "prettier --loglevel warn --write \"{src,spec}/*.{js,css}\" \"*.{md,css,json,js}\"",
+    "lint": "eslint . --cache --fix"
   },
   "devDependencies": {
+    "@babel/core": "^7.9.6",
+    "@babel/plugin-transform-react-jsx": "^7.9.4",
+    "@babel/preset-env": "^7.9.6",
+    "@os33/preact-render-spy": "^1.4.0",
     "@semantic-release/exec": "^5.0.0",
     "@semantic-release/git": "^9.0.0",
+    "babel": "^6.23.0",
+    "babel-eslint": "^8.2.6",
+    "babel-loader": "^8.0.6",
     "commitizen": "^4.0.4",
+    "concurrently": "^5.2.0",
+    "copy-webpack-plugin": "^5.1.1",
     "cz-conventional-changelog": "^3.1.0",
-    "gulp": "^4.0.2",
-    "gulp-jasmine-browser": "^4.1.0",
-    "gulp-open": "^3.0.1",
-    "gulp-watch": "^5.0.1",
+    "enzyme": "^3.11.0",
+    "enzyme-adapter-preact-pure": "^2.2.0",
+    "eslint": "^6.8.0",
+    "eslint-config-prettier": "^6.11.0",
+    "eslint-plugin-import": "^2.20.2",
+    "eslint-plugin-jasmine": "^4.1.1",
+    "eslint-plugin-jest": "^23.13.1",
+    "eslint-plugin-react": "^7.20.0",
     "husky": "^4.2.5",
-    "jasmine-core": "^3.5.0",
-    "puppeteer": "^2.1.1",
-    "semantic-release": "^17.0.4"
+    "jest": "^26.0.1",
+    "jest-enzyme": "^7.1.2",
+    "lint-staged": "^10.2.2",
+    "prettier": "^2.0.5",
+    "semantic-release": "^17.0.4",
+    "web-ext": "^4.2.0",
+    "webpack": "^4.43.0",
+    "webpack-cli": "^3.3.11",
+    "webpack-dev-server": "^3.11.0",
+    "webpack-stream": "^5.2.1"
   },
-  "dependencies": {},
+  "dependencies": {
+    "dom-regexp-match": "^1.1.0",
+    "fastdom": "^1.0.9",
+    "preact": "^10.4.1",
+    "prop-types": "^15.7.2",
+    "react-tooltip": "^4.2.6"
+  },
   "husky": {
     "hooks": {
-      "pre-commit": "npm test",
+      "pre-commit": "npm test && lint-staged",
       "pre-push": "npm test",
       "prepare-commit-msg": "exec < /dev/tty && git cz --hook || true"
     }
@@ -37,5 +71,26 @@
     "commitizen": {
       "path": "./node_modules/cz-conventional-changelog"
     }
-  }
+  },
+  "lint-staged": {
+    "*.js": [
+      "prettier --write",
+      "eslint --cache --fix",
+      "git add"
+    ],
+    "*.{md,css,json}": [
+      "prettier --write",
+      "git add"
+    ]
+  },
+  "jest": {
+    "moduleNameMapper": {
+      "^react$": "preact/compat",
+      "^react-dom/test-utils$": "preact/test-utils",
+      "^react-dom$": "preact/compat"
+    }
+  },
+  "snapshotSerializers": [
+    "preact-render-spy/snapshot"
+  ]
 }
