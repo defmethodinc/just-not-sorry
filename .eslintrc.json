@@ -6,25 +6,44 @@
   "extends": [
     "eslint:recommended",
     "plugin:import/errors",
-    "prettier"
+    "prettier",
+    "plugin:react/recommended"
   ],
   "globals": {
     "chrome": true,
-    "analytics": true
+    "analytics": true,
+    "window": true,
+    "document": true,
+    "global": true
+  },
+  "parser": "babel-eslint",
+  "settings": {
+    "react": {
+      "pragma": "h"
+    }
   },
   "parserOptions": {
-    "sourceType": "module",
-    "ecmaVersion": 2018
+    "ecmaFeatures": {
+      "modules": true,
+      "ecmaVersion": 2018,
+      "jsx": true
+    }
+  },
+  "plugins": ["react"],
+  "rules": {
+    "import/no-unresolved": "off",
+    "react/prop-types": 0,
+    "react/no-unknown-property": [2, { "ignore": ["class"] }]
   },
   "overrides": [
     {
-      "files": "**/*Spec.js",
+      "files": "**/*Spec.test.js",
       "env": {
-        "jasmine": true,
+        "jest": true,
         "es6": true
       },
-      "plugins": ["jasmine"],
-      "extends": ["eslint:recommended","plugin:jasmine/recommended","prettier"]
+      "plugins": ["jest"],
+      "extends": ["eslint:recommended", "plugin:jest/recommended", "prettier"]
     }
   ]
 }

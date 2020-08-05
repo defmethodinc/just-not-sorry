@@ -1,3 +1,10 @@
-.jns-warning {
+.jns-highlight {
   border-bottom: 2px dashed #ff9933;
+}
+
+.jns-tooltip {
+  max-width: 380px;
+  max-height: 100px;
+  margin-bottom: 30px;
+  margin-top: 50px;
 }

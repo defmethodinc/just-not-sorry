@@ -12,7 +12,7 @@ module.exports = {
     ]),
   ],
   mode: 'production',
-  entry: './src/JustNotSorry.js',
+  entry: './src/index.js',
   output: {
     path: path.join(__dirname, 'build'),
     filename: 'bundle.js',
@@ -20,10 +20,28 @@ module.exports = {
   module: {
     rules: [
       {
-        test: /\.js$/,
-        loader: 'babel-loader',
+        test: /\.jsx?$/,
+        exclude: /(node_modules)/,
+        use: {
+          loader: 'babel-loader',
+          options: {
+            presets: ['@babel/preset-env'],
+            plugins: [['@babel/plugin-transform-react-jsx', { pragma: 'h' }]],
+          },
+        },
       },
     ],
   },
+  resolve: {
+    extensions: ['.js', '.jsx'],
+    alias: {
+      react: 'preact/compat',
+      'react-dom': 'preact/compat',
+      'enzyme-adapter-react-16': 'enzyme-adapter-preact-pure',
+    },
+  },
   devtool: 'inline-source-map',
+  performance: {
+    hints: process.env.NODE_ENV === 'production' ? 'warning' : false,
+  },
 };
