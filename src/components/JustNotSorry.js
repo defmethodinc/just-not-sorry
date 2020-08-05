@@ -128,15 +128,16 @@ class JustNotSorry extends Component {
       };
 
       this.setState((state) => {
-        let warnings = state.warnings;
-        warnings = state.warnings.concat(newWarning).filter(function (warning) {
-          if (warning.rangeToHighlight.startContainer) {
-            return (
-              warning.rangeToHighlight.startContainer.textContent !=
-              newWarning.message
-            );
-          }
-        });
+        const warnings = state.warnings
+          .concat(newWarning)
+          .filter(function (warning) {
+            if (warning.rangeToHighlight.startContainer) {
+              return (
+                warning.rangeToHighlight.startContainer.textContent !==
+                newWarning.message
+              );
+            }
+          });
         return {
           warnings,
         };
@@ -153,7 +154,11 @@ class JustNotSorry extends Component {
   render() {
     const warningList = this.state.warnings.map((warning) =>
       ReactDOM.createPortal(
-        <Warning class=".jns-warning" key={warning.keyword} value={warning} />,
+        <Warning
+          className=".jns-warning"
+          key={warning.keyword}
+          value={warning}
+        />,
         warning.parentNode
       )
     );
