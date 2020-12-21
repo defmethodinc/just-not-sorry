@@ -6,7 +6,7 @@ import Adapter from 'enzyme-adapter-preact-pure';
 configure({ adapter: new Adapter() });
 
 describe('JustNotSorry', () => {
-  const justNotSorry = mount(<JustNotSorry />);
+  let justNotSorry;
 
   let editableDiv1;
   let editableDiv2;
@@ -35,35 +35,40 @@ describe('JustNotSorry', () => {
 
   global.MutationObserver = mutationObserverMock;
 
-  function generateEditableDiv(id, innerHtml) {
-    return mount(
-      <div id={id} contentEditable={'true'}>
+  const divsForCleanUp = [];
+
+  function generateEditableDiv(props, innerHtml) {
+    const divNode = mount(
+      <div {...props} contentEditable={'true'}>
         {innerHtml ? innerHtml : ''}
       </div>
     );
+    divsForCleanUp.push(divNode);
+    return divNode;
   }
 
-  beforeAll(() => {
-    editableDiv1 = generateEditableDiv('div-1');
-    editableDiv2 = generateEditableDiv('div-2', 'test just test');
-    editableDiv3 = generateEditableDiv('div-3', 'test justify test');
+  beforeEach(() => {
+    justNotSorry = mount(<JustNotSorry />);
+    wrapper = justNotSorry;
+    instance = justNotSorry.instance();
+    editableDiv1 = generateEditableDiv({ id: 'div-1' });
+    editableDiv2 = generateEditableDiv({ id: 'div-2' }, 'test just test');
+    editableDiv3 = generateEditableDiv({ id: 'div-3' }, 'test justify test');
+  });
+
+  afterEach(() => {
+    divsForCleanUp.forEach((divNode) => divNode.unmount());
+    divsForCleanUp.length = 0;
+    justNotSorry.unmount();
   });
 
   describe('#addObserver', () => {
     it('adds an observer that listens for structural changes to the content editable div', () => {
-      // remount JNS to trigger constructor functions
-      justNotSorry.unmount();
-      justNotSorry.mount();
-
-      const instance = justNotSorry.instance();
       const spy = jest.spyOn(instance, 'addObserver');
-      const node = mount(
-        <div
-          id={'div-focus'}
-          contentEditable={'true'}
-          onFocus={instance.addObserver.bind(instance)}
-        ></div>
-      );
+      const node = generateEditableDiv({
+        id: 'div-focus',
+        onFocus: instance.addObserver.bind(instance),
+      });
       node.simulate('focus');
 
       // There should be the document observer and the observer specifically for the target div
@@ -83,15 +88,11 @@ describe('JustNotSorry', () => {
     });
 
     it('starts checking for warnings', () => {
-      const instance = justNotSorry.instance();
       const spy = jest.spyOn(instance, 'checkForWarnings');
-      const node = mount(
-        <div
-          id={'div-focus'}
-          contentEditable={'true'}
-          onFocus={instance.addObserver.bind(instance)}
-        ></div>
-      );
+      const node = generateEditableDiv({
+        id: 'div-focus',
+        onFocus: instance.addObserver.bind(instance),
+      });
       node.simulate('focus');
 
       expect(spy).toHaveBeenCalled();
@@ -100,15 +101,11 @@ describe('JustNotSorry', () => {
     });
 
     it('adds warnings to the content editable div', () => {
-      const instance = justNotSorry.instance();
       const spy = jest.spyOn(instance, 'addWarnings');
-      const node = mount(
-        <div
-          id={'div-focus'}
-          contentEditable={'true'}
-          onFocus={instance.addObserver.bind(instance)}
-        ></div>
-      );
+      const node = generateEditableDiv({
+        id: 'div-focus',
+        onFocus: instance.addObserver.bind(instance),
+      });
       node.simulate('focus');
 
       expect(spy).toHaveBeenCalledWith(node.getDOMNode().parentNode);
@@ -119,17 +116,14 @@ describe('JustNotSorry', () => {
 
   describe('#removeObserver', () => {
     it('removes any existing warnings', () => {
-      const instance = justNotSorry.instance();
       const spy = jest.spyOn(instance, 'removeObserver');
-      const node = mount(
-        <div
-          id={'div-focus'}
-          contentEditable={'true'}
-          onFocus={instance.addObserver.bind(instance)}
-          onBlur={instance.removeObserver.bind(instance)}
-        >
-          just not sorry
-        </div>
+      const node = generateEditableDiv(
+        {
+          id: 'div-focus',
+          onFocus: instance.addObserver.bind(instance),
+          onBlur: instance.removeObserver.bind(instance),
+        },
+        'just not sorry'
       );
       node.simulate('focus');
 
@@ -148,15 +142,11 @@ describe('JustNotSorry', () => {
     it('no longer checks for warnings on input events', () => {
       justNotSorry.unmount();
       justNotSorry.mount();
-      const instance = justNotSorry.instance();
-      const node = mount(
-        <div
-          id={'div-remove'}
-          contentEditable={'true'}
-          onFocus={instance.addObserver.bind(instance)}
-          onBlur={instance.removeObserver.bind(instance)}
-        ></div>
-      );
+      const node = generateEditableDiv({
+        id: 'div-remove',
+        onFocus: instance.addObserver.bind(instance),
+        onBlur: instance.removeObserver.bind(instance),
+      });
       node.simulate('focus');
       node.simulate('blur');
 
@@ -170,16 +160,12 @@ describe('JustNotSorry', () => {
     });
 
     it('disconnects the observer', () => {
-      const instance = justNotSorry.instance();
       const spy = jest.spyOn(instance, 'removeObserver');
-      const node = mount(
-        <div
-          id={'div-disconnect'}
-          contentEditable={'true'}
-          onFocus={instance.addObserver.bind(instance)}
-          onBlur={instance.removeObserver.bind(instance)}
-        ></div>
-      );
+      const node = generateEditableDiv({
+        id: 'div-disconnect',
+        onFocus: instance.addObserver.bind(instance),
+        onBlur: instance.removeObserver.bind(instance),
+      });
       node.simulate('focus');
       node.simulate('blur');
 
@@ -195,11 +181,6 @@ describe('JustNotSorry', () => {
   });
 
   describe('#addWarning', () => {
-    beforeEach(() => {
-      wrapper = mount(<JustNotSorry />);
-      instance = wrapper.instance();
-    });
-
     it('adds a warning for a single keyword', () => {
       const node = editableDiv2.getDOMNode();
       instance.addWarning(node, 'just', 'warning message');
@@ -223,7 +204,10 @@ describe('JustNotSorry', () => {
     });
 
     it('matches case insensitive', () => {
-      const node = generateEditableDiv('div-case', 'jUsT kidding').getDOMNode();
+      const node = generateEditableDiv(
+        { id: 'div-case' },
+        'jUsT kidding'
+      ).getDOMNode();
 
       instance.addWarning(node, 'just', 'warning message');
       expect(wrapper.state('warnings').length).toEqual(1);
@@ -238,7 +222,7 @@ describe('JustNotSorry', () => {
 
     it('catches keywords with punctuation', () => {
       const node = generateEditableDiv(
-        'div-punctuation',
+        { id: 'div-punctuation' },
         'just. test'
       ).getDOMNode();
 
@@ -255,7 +239,7 @@ describe('JustNotSorry', () => {
 
     it('matches phrases', () => {
       const node = generateEditableDiv(
-        'div-phrase',
+        { id: 'div-phrase' },
         'my cat is so sorry because of you'
       ).getDOMNode();
 
@@ -293,7 +277,6 @@ describe('JustNotSorry', () => {
 
   describe('#addWarnings', () => {
     beforeEach(() => {
-      wrapper = mount(<JustNotSorry />);
       instance = wrapper.instance();
     });
 
@@ -307,7 +290,7 @@ describe('JustNotSorry', () => {
 
     it('adds warnings to all keywords', () => {
       const node = generateEditableDiv(
-        'div-keywords',
+        { id: 'div-keywords' },
         'I am just so sorry. Yes, just.'
       ).getDOMNode();
 
@@ -317,13 +300,13 @@ describe('JustNotSorry', () => {
   });
 
   describe('#checkForWarnings', () => {
-    const instance = justNotSorry.instance();
-    const spy = jest.spyOn(instance, 'checkForWarnings');
-    const node = mount(
-      <div onInput={instance.checkForWarnings}>just not sorry</div>
-    );
-
     it('updates warnings each time input is triggered', () => {
+      const spy = jest.spyOn(instance, 'checkForWarnings');
+      const node = generateEditableDiv(
+        { id: 'test', onInput: instance.checkForWarnings },
+        'just not sorry'
+      );
+
       node.simulate('input');
       node.simulate('input');
       node.simulate('input');
