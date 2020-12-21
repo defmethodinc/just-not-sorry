@@ -13,7 +13,11 @@
   },
   "content_scripts": [
     {
-      "matches": ["https://mail.google.com/*", "https://inbox.google.com/*"],
+      "matches": [
+        "https://mail.google.com/*",
+        "https://inbox.google.com/*",
+        "https://outlook.live.com/*"
+      ],
       "css": ["./just-not-sorry.css"],
       "js": ["bundle.js"]
     }

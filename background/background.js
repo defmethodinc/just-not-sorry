@@ -16,6 +16,9 @@ chrome.runtime.onInstalled.addListener(function () {
           new chrome.declarativeContent.PageStateMatcher({
             pageUrl: { urlContains: 'inbox.google.com' },
           }),
+          new chrome.declarativeContent.PageStateMatcher({
+            pageUrl: { urlContains: 'outlook.live.com' },
+          }),
         ],
         actions: [new chrome.declarativeContent.ShowPageAction()],
       },
