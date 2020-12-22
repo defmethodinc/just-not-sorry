@@ -1,6 +1,6 @@
 {
   "name": "just-not-sorry",
-  "description": "Gmail Plug-in that warns you when you write emails using words which undermine your message",
+  "description": "Chrome extension that warns you when you write emails using words which undermine your message",
   "version": "2.0.0-beta.2",
   "author": "Steve Brudz, Manish Kakwani, Tami Reiss, and Eric Tillberg of Def Method",
   "license": "MIT",
