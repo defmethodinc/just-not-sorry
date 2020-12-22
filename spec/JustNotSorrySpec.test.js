@@ -333,7 +333,27 @@ describe('JustNotSorry', () => {
 
         instance.handleContentEditableDivChange(mutations);
 
-        expect(spy).toHaveBeenCalledWith(id);
+        expect(spy).toHaveBeenCalledWith(node.getDOMNode());
+      });
+
+      describe('and the new div does not have an id', () => {
+        it('should still apply the event listeners', () => {
+          const spy = jest
+            .spyOn(instance, 'applyEventListeners')
+            .mockImplementationOnce(() => {});
+
+          jest.spyOn(instance, 'getEditableDivs').mockReturnValue([1]);
+          const node = generateEditableDiv({}, 'just not sorry');
+          const mockMutation = {
+            type: 'childList',
+            target: node.getDOMNode(),
+          };
+          const mutations = [mockMutation];
+
+          instance.handleContentEditableDivChange(mutations);
+
+          expect(spy).toHaveBeenCalledWith(node.getDOMNode());
+        });
       });
     });
   });

@@ -62,10 +62,7 @@ class JustNotSorry extends Component {
             mutation.type === 'childList' &&
             mutation.target.hasAttribute('contentEditable')
           ) {
-            let id = mutation.target.id;
-            if (id) {
-              this.applyEventListeners(id);
-            }
+            this.applyEventListeners(mutation.target);
           }
         });
       }
@@ -84,8 +81,7 @@ class JustNotSorry extends Component {
     this.addWarnings(parentElement);
   }
 
-  applyEventListeners(id) {
-    let targetDiv = document.getElementById(id);
+  applyEventListeners(targetDiv) {
     targetDiv.removeEventListener('focus', this.addObserver);
     targetDiv.addEventListener('focus', this.addObserver.bind(this));
     targetDiv.addEventListener('blur', this.removeObserver.bind(this));
