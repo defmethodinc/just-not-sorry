@@ -9,6 +9,28 @@
       color: green;
       height: 1.2em;
     }
+    .warnings {
+      border: 1px solid darkgray;
+      border-collapse: collapse;
+    }
+    .warnings caption {
+      font-weight: bold;
+      font-size: 1.25em;
+      padding-bottom: 0.25em;
+    }
+    .warnings tbody td, .warnings th {
+      padding: 1em;
+    }
+    .warnings thead th {
+      background-color: #d4d4d4;
+    }
+    .warnings tbody th {
+      width: 10em;
+      text-align: left;
+    }
+    .warnings tbody tr:nth-child(even) {
+      background-color: #f2f2f2;
+    }
   </style>
 </head>
 
@@ -23,6 +45,23 @@
     (Don't worry, the underline won't get sent as part of your
     email if you decide to ignore it.)
   </p>
+  <table class="warnings">
+    <caption>Warning Messages</caption>
+    <thead>
+    <tr>
+      <th>keyword</th>
+      <th>message</th>
+    </tr>
+    </thead>
+    <tbody>
+    <% _.forEach(allWarnings, function(warning) { %>
+      <tr>
+        <th><%= _.replace(warning.keyword, /\|/g, "<br/>") %></th>
+        <td><%= warning.message %> <a href="<%= warning.source %>" rel="noopener noreferrer" target="_blank">source</a></td>
+      </tr>
+    <% }); %>
+    </tbody>
+  </table>
   <p>
     Created by Tami Reiss, Steve Brudz, Manish Kakwani, and Eric Tillberg of
     <a href="http://defmethod.com">Def Method</a>.

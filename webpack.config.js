@@ -8,6 +8,9 @@ module.exports = {
       chunks: ['options'],
       filename: 'options.html',
       template: 'options/options.ejs',
+      templateParameters: {
+        allWarnings: require('./src/components/WarningMessages.json'),
+      },
     }),
     new CopyPlugin({
       patterns: [
