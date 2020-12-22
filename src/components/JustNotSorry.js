@@ -37,16 +37,12 @@ class JustNotSorry extends Component {
           mutation.type !== 'characterData' &&
           mutation.target.hasAttribute('contentEditable')
         ) {
-          let id = mutation.target.id;
-          if (id) {
-            let targetDiv = document.getElementById(id);
-            // generate input event to fire checkForWarnings again
-            let inputEvent = new Event('input', {
-              bubbles: true,
-              cancelable: true,
-            });
-            targetDiv.dispatchEvent(inputEvent);
-          }
+          // generate input event to fire checkForWarnings again
+          let inputEvent = new Event('input', {
+            bubbles: true,
+            cancelable: true,
+          });
+          mutation.target.dispatchEvent(inputEvent);
         }
       });
     }
@@ -62,10 +58,7 @@ class JustNotSorry extends Component {
             mutation.type === 'childList' &&
             mutation.target.hasAttribute('contentEditable')
           ) {
-            let id = mutation.target.id;
-            if (id) {
-              this.applyEventListeners(id);
-            }
+            this.applyEventListeners(mutation.target);
           }
         });
       }
@@ -84,8 +77,7 @@ class JustNotSorry extends Component {
     this.addWarnings(parentElement);
   }
 
-  applyEventListeners(id) {
-    let targetDiv = document.getElementById(id);
+  applyEventListeners(targetDiv) {
     targetDiv.removeEventListener('focus', this.addObserver);
     targetDiv.addEventListener('focus', this.addObserver.bind(this));
     targetDiv.addEventListener('blur', this.removeObserver.bind(this));

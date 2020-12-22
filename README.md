@@ -1,8 +1,8 @@
 ![](https://github.com/defmethodinc/just-not-sorry/workflows/Node.js%20CI/badge.svg) [![Commitizen friendly](https://img.shields.io/badge/commitizen-friendly-brightgreen.svg)](http://commitizen.github.io/cz-cli/) [![code style: prettier](https://img.shields.io/badge/code_style-prettier-ff69b4.svg?style=flat-square)](https://github.com/prettier/prettier)
 
-# Just Not Sorry -- the Gmail Plug-in
+# Just Not Sorry -- the Chrome extension
 
-Inspired by the writings of Tara Mohr and others, this Chrome Extension for Gmail will warn you when you use phrases that might be undermining your message.
+Inspired by the writings of Tara Mohr and others, this Chrome Extension for Gmail and Outlook.com will warn you when you use phrases that might be undermining your message.
 
 The Chrome Extension can be found at https://chrome.google.com/webstore/detail/just-not-sorry-the-gmail/fmegmibednnlgojepmidhlhpjbppmlci?hl=en-US
 
@@ -42,7 +42,7 @@ You can also load the extension manually in Chrome using the following steps:
 
 - Run `npm run build` in the project root to build the extension
 - Follow the [instructions on the Chrome docs](https://developer.chrome.com/extensions/getstarted#unpacked) to load the unpacked extension using the `build` subdirectory
-- Go to Gmail and open a compose window
+- Go to Gmail (or outlook.com) and open a compose window
 - If you make changes to the code, click the Reload link on the `chrome://extensions` page and then reload your Gmail tab to pick up the changes.
 - Errors will show up in the console
 
