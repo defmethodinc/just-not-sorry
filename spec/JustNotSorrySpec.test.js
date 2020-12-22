@@ -357,4 +357,42 @@ describe('JustNotSorry', () => {
       });
     });
   });
+
+  describe('#handleContentEditableContentInsert', () => {
+    describe('when an observed content editable sees a non-text change (such as a line break)', () => {
+      it('should dispatch an input event to trigger checking for warnings', () => {
+        const mockNode = {
+          dispatchEvent: jest.fn(),
+          hasAttribute: () => true,
+        };
+        const mockMutation = {
+          type: 'childList',
+          target: mockNode,
+        };
+        const mutations = [mockMutation];
+
+        instance.handleContentEditableContentInsert(mutations);
+
+        expect(mockNode.dispatchEvent).toHaveBeenCalledWith(expect.any(Event));
+      });
+    });
+
+    describe('when an observed content editable sees a text change', () => {
+      it('should NOT dispatch an extra input event', () => {
+        const mockNode = {
+          dispatchEvent: jest.fn(),
+          hasAttribute: () => true,
+        };
+        const mockMutation = {
+          type: 'characterData',
+          target: mockNode,
+        };
+        const mutations = [mockMutation];
+
+        instance.handleContentEditableContentInsert(mutations);
+
+        expect(mockNode.dispatchEvent).not.toHaveBeenCalled();
+      });
+    });
+  });
 });

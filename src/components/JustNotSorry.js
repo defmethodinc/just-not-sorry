@@ -37,16 +37,12 @@ class JustNotSorry extends Component {
           mutation.type !== 'characterData' &&
           mutation.target.hasAttribute('contentEditable')
         ) {
-          let id = mutation.target.id;
-          if (id) {
-            let targetDiv = document.getElementById(id);
-            // generate input event to fire checkForWarnings again
-            let inputEvent = new Event('input', {
-              bubbles: true,
-              cancelable: true,
-            });
-            targetDiv.dispatchEvent(inputEvent);
-          }
+          // generate input event to fire checkForWarnings again
+          let inputEvent = new Event('input', {
+            bubbles: true,
+            cancelable: true,
+          });
+          mutation.target.dispatchEvent(inputEvent);
         }
       });
     }
