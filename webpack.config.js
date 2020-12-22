@@ -1,23 +1,31 @@
 const path = require('path');
+const HtmlWebpackPlugin = require('html-webpack-plugin');
 const CopyPlugin = require('copy-webpack-plugin');
 
 module.exports = {
   plugins: [
+    new HtmlWebpackPlugin({
+      chunks: ['options'],
+      filename: 'options.html',
+      template: 'options/options.ejs',
+    }),
     new CopyPlugin({
       patterns: [
         { from: 'img', to: 'img' },
         { from: 'manifest.json' },
-        { from: 'options', to: 'options' },
         { from: 'background', to: 'background' },
         { from: 'just-not-sorry.css' },
       ],
     }),
   ],
   mode: 'production',
-  entry: './src/index.js',
+  entry: {
+    bundle: './src/index.js',
+    options: './options/options.js',
+  },
   output: {
     path: path.join(__dirname, 'build'),
-    filename: 'bundle.js',
+    filename: '[name].js',
   },
   module: {
     rules: [
