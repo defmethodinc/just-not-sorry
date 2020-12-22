@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Just Not Sorry Options</title>
+  <style>
+    #status {
+      text-align: center;
+      font-weight: bold;
+      color: green;
+      height: 1.2em;
+    }
+    .warnings {
+      margin-top: 2em;
+      border: 1px solid darkgray;
+      border-collapse: collapse;
+    }
+    .warnings caption {
+      font-weight: bold;
+      font-size: 1.25em;
+      padding-bottom: 0.5em;
+    }
+    .warnings tbody td, .warnings th {
+      padding: 1em;
+    }
+    .warnings thead th {
+      background-color: #d4d4d4;
+    }
+    .warnings tbody th {
+      width: 10em;
+      text-align: left;
+    }
+    .warnings tbody tr:nth-child(even) {
+      background-color: #f2f2f2;
+    }
+    .warnings ul {
+      padding: 0;
+      list-style-type: none;
+    }
+    .warnings li {
+      margin: 0.5em 0;
+    }
+  </style>
+</head>
+
+<body>
+  <p>
+    We're Just NOT Sorry! Let's stop qualifying our message and
+    diminishing our voice. Inspired by the writings of Tara Mohr
+    and others, this Chrome Extension for Gmail will warn you
+    when you use words or phrases that undermine your message.
+    Words will be underlined for correction with additional
+    information about how using the phrase is perceived.
+    (Don't worry, the underline won't get sent as part of your
+    email if you decide to ignore it.)
+  </p>
+  <p>
+    Created by Tami Reiss, Steve Brudz, Manish Kakwani, and Eric Tillberg. Maintained by
+    <a href="https://defmethod.com">Def Method</a>.
+  </p>
+  <p>
+    All code has been open-sourced and is available on
+    <a href="https://github.com/defmethodinc/just-not-sorry">GitHub</a>.
+  </p>
+  <p>
+    <label>
+      <input type="checkbox" id="allowTracking">
+      Allow us to collect anonymous usage information
+    </label>
+  </p>
+  <p><em>
+    We never collect anything personally identifiable and don't collect
+    anything about the email that you're writing.  See our
+    <a href="https://github.com/defmethodinc/just-not-sorry/blob/master/PRIVACY.md">privacy policy</a>
+    for more information.
+  </em></p>
+
+  <div id="status"></div>
+  <button id="save">Save</button>
+
+  <table class="warnings">
+    <caption>Words and Phrases That Trigger Warnings</caption>
+    <thead>
+    <tr>
+      <th>phrase</th>
+      <th>message</th>
+    </tr>
+    </thead>
+    <tbody>
+    <% _.forEach(allWarnings, function(warning) { %>
+      <tr>
+        <th>
+          <ul>
+          <% _.forEach(warning.keyword.split("|"), function(keyword) { %>
+            <li>"<%= keyword %>"</li>
+          <% }); %>
+          </ul>
+        </th>
+        <td><%= warning.message %> <a href="<%= warning.source %>" rel="noopener noreferrer" target="_blank">source</a></td>
+      </tr>
+    <% }); %>
+    </tbody>
+  </table>
+
+</body>
+</html>
