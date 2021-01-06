@@ -271,10 +271,6 @@ describe('JustNotSorry', () => {
   });
 
   describe('#addWarnings', () => {
-    beforeEach(() => {
-      instance = wrapper.instance();
-    });
-
     it('does nothing when given an empty string', () => {
       const node = generateEditableDiv({ id: 'some-id' });
       instance.addWarnings(node);
