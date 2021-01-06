@@ -4,6 +4,7 @@ import ReactDOM from 'react-dom';
 import Warning from './Warning.js';
 import * as Util from './util.js';
 import WARNING_MESSAGES from './WarningMessages.json';
+import WARNING_PUNCTUATIONS from './WarningPunctuations.json';
 import domRegexpMatch from 'dom-regexp-match';
 
 export const WAIT_TIME_BEFORE_RECALC_WARNINGS = 500;
@@ -135,9 +136,38 @@ class JustNotSorry extends Component {
     });
   }
 
+  addPunctuationWarning(node, keyword, message) {
+    const pattern = new RegExp('\\b(' + keyword + ')\\B', 'ig');
+    domRegexpMatch(node, pattern, (match, range) => {
+      let newWarning = {
+        keyword: keyword,
+        message: message,
+        parentNode: node,
+        rangeToHighlight: range,
+      };
+
+      this.setState((state) => {
+        const warnings = state.warnings
+          .concat(newWarning)
+          .filter(
+            (warning) =>
+              warning.rangeToHighlight.startContainer &&
+              warning.rangeToHighlight.startContainer.textContent !==
+                newWarning.message
+          );
+        return {
+          warnings,
+        };
+      });
+    });
+  }
+
   addWarnings(node) {
     WARNING_MESSAGES.map((warning) => {
       this.addWarning(node, warning.keyword, warning.message);
+    });
+    WARNING_PUNCTUATIONS.map((warning) => {
+      this.addPunctuationWarning(node, warning.keyword, warning.message);
     });
   }
 

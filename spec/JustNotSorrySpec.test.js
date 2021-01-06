@@ -166,6 +166,24 @@ describe('JustNotSorry', () => {
   });
 
   describe('#addWarning', () => {
+    it('adds a warning for a punctuation keyword', () => {
+      const node = generateEditableDiv(
+        { id: 'meaningless-id' },
+        'test!!!'
+      ).getDOMNode();
+
+      instance.addPunctuationWarning(node, '!{3,}', 'warning message');
+
+      expect(wrapper.state('warnings').length).toEqual(1);
+      expect(wrapper.state('warnings')[0]).toEqual(
+        expect.objectContaining({
+          keyword: '!{3,}',
+          message: 'warning message',
+          parentNode: node,
+        })
+      );
+    });
+
     it('adds a warning for a single keyword', () => {
       const node = generateEditableDiv(
         { id: 'meaningless-id' },
