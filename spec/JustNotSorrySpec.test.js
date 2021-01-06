@@ -8,7 +8,6 @@ configure({ adapter: new Adapter() });
 describe('JustNotSorry', () => {
   let justNotSorry;
 
-  let editableDiv1;
   let editableDiv2;
   let editableDiv3;
   let wrapper;
@@ -51,7 +50,6 @@ describe('JustNotSorry', () => {
     justNotSorry = mount(<JustNotSorry />);
     wrapper = justNotSorry;
     instance = justNotSorry.instance();
-    editableDiv1 = generateEditableDiv({ id: 'div-1' });
     editableDiv2 = generateEditableDiv({ id: 'div-2' }, 'test just test');
     editableDiv3 = generateEditableDiv({ id: 'div-3' }, 'test justify test');
   });
@@ -281,7 +279,7 @@ describe('JustNotSorry', () => {
     });
 
     it('does nothing when given an empty string', () => {
-      const node = editableDiv1.getDOMNode();
+      const node = generateEditableDiv({ id: 'some-id' });
       instance.addWarnings(node);
 
       expect(wrapper.state('warnings').length).toEqual(0);
