@@ -37,7 +37,7 @@ describe('JustNotSorry', () => {
 
   const divsForCleanUp = [];
 
-  function generateEditableDiv(props, innerHtml) {
+  const generateEditableDiv = (props, innerHtml) => {
     const divNode = mount(
       <div {...props} contentEditable={'true'}>
         {innerHtml ? innerHtml : ''}
@@ -45,7 +45,7 @@ describe('JustNotSorry', () => {
     );
     divsForCleanUp.push(divNode);
     return divNode;
-  }
+  };
 
   beforeEach(() => {
     justNotSorry = mount(<JustNotSorry />);
