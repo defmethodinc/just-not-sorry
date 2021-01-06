@@ -8,7 +8,6 @@ configure({ adapter: new Adapter() });
 describe('JustNotSorry', () => {
   let justNotSorry;
 
-  let editableDiv3;
   let wrapper;
   let instance;
 
@@ -49,7 +48,6 @@ describe('JustNotSorry', () => {
     justNotSorry = mount(<JustNotSorry />);
     wrapper = justNotSorry;
     instance = justNotSorry.instance();
-    editableDiv3 = generateEditableDiv({ id: 'div-3' }, 'test justify test');
   });
 
   afterEach(() => {
@@ -196,7 +194,10 @@ describe('JustNotSorry', () => {
     });
 
     it('does not add warnings for partial matches', () => {
-      const node = editableDiv3.getDOMNode();
+      const node = generateEditableDiv(
+        { id: 'div-id' },
+        'test justify test'
+      ).getDOMNode();
       instance.addWarning(node, 'just', 'warning message');
 
       expect(wrapper.state('warnings').length).toEqual(0);
@@ -267,7 +268,10 @@ describe('JustNotSorry', () => {
         getClientRects: jest.fn(() => [{}]),
       }));
 
-      const node = editableDiv3.getDOMNode();
+      const node = generateEditableDiv(
+        { id: 'div-3' },
+        'test justify test'
+      ).getDOMNode();
       instance.addWarning(node, 'very', 'warning message');
 
       expect(wrapper.state('warnings').length).toEqual(0);
