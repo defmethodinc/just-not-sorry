@@ -374,9 +374,8 @@ describe('JustNotSorry', () => {
           type: 'childList',
           target: mockNode,
         };
-        const mutations = [mockMutation];
 
-        instance.handleContentEditableContentInsert(mutations);
+        instance.handleContentEditableContentInsert([mockMutation]);
 
         expect(mockNode.dispatchEvent).toHaveBeenCalledWith(expect.any(Event));
       });
@@ -388,9 +387,8 @@ describe('JustNotSorry', () => {
           type: 'characterData',
           target: mockNode,
         };
-        const mutations = [mockMutation];
 
-        instance.handleContentEditableContentInsert(mutations);
+        instance.handleContentEditableContentInsert([mockMutation]);
 
         expect(mockNode.dispatchEvent).not.toHaveBeenCalled();
       });
