@@ -111,12 +111,12 @@ class JustNotSorry extends Component {
   }
 
   addWarning(node, keyword, message) {
-    const pattern = new RegExp('\\b(' + keyword + ')\\b', 'ig');
+    const pattern = new RegExp(`\\b(${keyword})\\b`, 'ig');
     this.updateWarnings(node, pattern, keyword, message);
   }
 
   addPunctuationWarning(node, keyword, message) {
-    const pattern = new RegExp('\\b(' + keyword + ')\\B', 'ig');
+    const pattern = new RegExp(`\\b(${keyword})\\B`, 'ig');
     this.updateWarnings(node, pattern, keyword, message);
   }
 
