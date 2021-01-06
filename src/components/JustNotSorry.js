@@ -31,6 +31,22 @@ class JustNotSorry extends Component {
     this.documentObserver.observe(document, { subtree: true, childList: true });
   }
 
+  handleContentEditableDivChange(mutations) {
+    let divCount = this.getEditableDivs().length;
+    if (divCount !== this.state.editableDivCount) {
+      this.setState({ editableDivCount: divCount });
+      if (mutations[0]) {
+        mutations
+          .filter(
+            (mutation) =>
+              mutation.type === 'childList' &&
+              mutation.target.hasAttribute('contentEditable')
+          )
+          .forEach((mutation) => this.applyEventListeners(mutation.target));
+      }
+    }
+  }
+
   handleContentEditableContentInsert(mutations) {
     if (mutations[0]) {
       mutations
@@ -50,20 +66,9 @@ class JustNotSorry extends Component {
     }
   }
 
-  handleContentEditableDivChange(mutations) {
-    let divCount = this.getEditableDivs().length;
-    if (divCount !== this.state.editableDivCount) {
-      this.setState({ editableDivCount: divCount });
-      if (mutations[0]) {
-        mutations
-          .filter(
-            (mutation) =>
-              mutation.type === 'childList' &&
-              mutation.target.hasAttribute('contentEditable')
-          )
-          .forEach((mutation) => this.applyEventListeners(mutation.target));
-      }
-    }
+  checkForWarningsImpl(parentElement) {
+    this.setState({ warnings: [] });
+    this.addWarnings(parentElement);
   }
 
   checkForWarnings(parentElement) {
@@ -71,17 +76,6 @@ class JustNotSorry extends Component {
       () => this.checkForWarningsImpl(parentElement),
       WAIT_TIME_BEFORE_RECALC_WARNINGS
     );
-  }
-
-  checkForWarningsImpl(parentElement) {
-    this.setState({ warnings: [] });
-    this.addWarnings(parentElement);
-  }
-
-  applyEventListeners(targetDiv) {
-    targetDiv.removeEventListener('focus', this.addObserver);
-    targetDiv.addEventListener('focus', this.addObserver.bind(this));
-    targetDiv.addEventListener('blur', this.removeObserver.bind(this));
   }
 
   addObserver(event) {
@@ -106,6 +100,12 @@ class JustNotSorry extends Component {
     this.observer.disconnect();
   }
 
+  applyEventListeners(targetDiv) {
+    targetDiv.removeEventListener('focus', this.addObserver);
+    targetDiv.addEventListener('focus', this.addObserver.bind(this));
+    targetDiv.addEventListener('blur', this.removeObserver.bind(this));
+  }
+
   getEditableDivs() {
     return document.querySelectorAll('div[contentEditable=true]');
   }
@@ -118,6 +118,15 @@ class JustNotSorry extends Component {
   addPunctuationWarning(node, keyword, message) {
     const pattern = new RegExp('\\b(' + keyword + ')\\B', 'ig');
     this.updateWarnings(node, pattern, keyword, message);
+  }
+
+  addWarnings(node) {
+    WARNING_MESSAGES.map((warning) => {
+      this.addWarning(node, warning.keyword, warning.message);
+    });
+    WARNING_PUNCTUATIONS.map((warning) => {
+      this.addPunctuationWarning(node, warning.keyword, warning.message);
+    });
   }
 
   updateWarnings(node, pattern, keyword, message) {
@@ -142,15 +151,6 @@ class JustNotSorry extends Component {
           warnings,
         };
       });
-    });
-  }
-
-  addWarnings(node) {
-    WARNING_MESSAGES.map((warning) => {
-      this.addWarning(node, warning.keyword, warning.message);
-    });
-    WARNING_PUNCTUATIONS.map((warning) => {
-      this.addPunctuationWarning(node, warning.keyword, warning.message);
     });
   }
 
