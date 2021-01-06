@@ -54,9 +54,15 @@ describe('JustNotSorry', () => {
   };
 
   describe('#addObserver', () => {
+    let node = undefined;
+    afterEach(() => {
+      if (node) {
+        node.unmount();
+      }
+    });
     it('adds an observer that listens for structural changes to the content editable div', () => {
       const spy = jest.spyOn(instance, 'addObserver');
-      const node = generateEditableDiv({
+      node = generateEditableDiv({
         id: 'div-focus',
         onFocus: instance.addObserver.bind(instance),
       });
@@ -74,34 +80,28 @@ describe('JustNotSorry', () => {
         childList: true,
         subtree: true,
       });
-
-      node.unmount();
     });
 
     it('starts checking for warnings', () => {
       const spy = jest.spyOn(instance, 'checkForWarnings');
-      const node = generateEditableDiv({
+      node = generateEditableDiv({
         id: 'div-focus',
         onFocus: instance.addObserver.bind(instance),
       });
       node.simulate('focus');
 
       expect(spy).toHaveBeenCalled();
-
-      node.unmount();
     });
 
     it('adds warnings to the content editable div', () => {
       const spy = jest.spyOn(instance, 'addWarnings');
-      const node = generateEditableDiv({
+      node = generateEditableDiv({
         id: 'div-focus',
         onFocus: instance.addObserver.bind(instance),
       });
       node.simulate('focus');
 
       expect(spy).toHaveBeenCalledWith(node.getDOMNode().parentNode);
-
-      node.unmount();
     });
   });
 
