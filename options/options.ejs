@@ -90,12 +90,15 @@
       <tr>
         <th>
           <ul>
-          <% _.forEach(warning.keyword.split("|"), (keyword) => { %>
-            <li>"<%= keyword %>"</li>
-          <% }); %>
+            <% const labels = warning.displayLabel ? warning.displayLabel : warning.keyword.split("|") %>
+              <% _.forEach(labels, (label) => { %>
+                  <li>"<%= label %>"</li>
+              <% }); %>
           </ul>
         </th>
-        <td><%= warning.message %> <a href="<%= warning.source %>" rel="noopener noreferrer" target="_blank">source</a></td>
+        <td>
+          <%= warning.message %> <a href="<%= warning.source %>" rel="noopener noreferrer" target="_blank">source</a>
+        </td>
       </tr>
     <% }); %>
     </tbody>
