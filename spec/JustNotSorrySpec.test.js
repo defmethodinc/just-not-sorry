@@ -179,7 +179,7 @@ describe('JustNotSorry', () => {
   describe('#addWarning', () => {
     it('adds a warning for a single keyword', () => {
       const node = generateEditableDiv(
-        { id: 'div-2' },
+        { id: 'meaningless-id' },
         'test just test'
       ).getDOMNode();
 
