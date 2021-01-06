@@ -5,33 +5,30 @@ import Adapter from 'enzyme-adapter-preact-pure';
 
 configure({ adapter: new Adapter() });
 
+const mutationObserverMock = jest.fn(function MutationObserver(callback) {
+  this.observe = jest.fn();
+  this.disconnect = jest.fn();
+  this.trigger = (mockedMutationList) => {
+    callback(mockedMutationList, this);
+  };
+});
+global.MutationObserver = mutationObserverMock;
+
+document.createRange = jest.fn(() => ({
+  setStart: jest.fn(),
+  setEnd: jest.fn(),
+  commonAncestorContainer: {
+    nodeName: 'BODY',
+    ownerDocument: document,
+  },
+  startContainer: 'test',
+  getClientRects: jest.fn(() => [{}]),
+}));
+
 describe('JustNotSorry', () => {
   let justNotSorry;
-
   let wrapper;
   let instance;
-
-  const mutationObserverMock = jest.fn(function MutationObserver(callback) {
-    this.observe = jest.fn();
-    this.disconnect = jest.fn();
-    this.trigger = (mockedMutationList) => {
-      callback(mockedMutationList, this);
-    };
-  });
-
-  document.createRange = jest.fn(() => ({
-    setStart: jest.fn(),
-    setEnd: jest.fn(),
-    commonAncestorContainer: {
-      nodeName: 'BODY',
-      ownerDocument: document,
-    },
-    startContainer: 'test',
-    getClientRects: jest.fn(() => [{}]),
-  }));
-
-  global.MutationObserver = mutationObserverMock;
-
   const divsForCleanUp = [];
 
   const generateEditableDiv = (props, innerHtml) => {
