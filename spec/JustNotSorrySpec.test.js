@@ -332,9 +332,8 @@ describe('JustNotSorry', () => {
           type: 'childList',
           target: node.getDOMNode(),
         };
-        const mutations = [mockMutation];
 
-        instance.handleContentEditableDivChange(mutations);
+        instance.handleContentEditableDivChange([mockMutation]);
 
         expect(spy).toHaveBeenCalledWith(node.getDOMNode());
       });
@@ -350,9 +349,8 @@ describe('JustNotSorry', () => {
             type: 'childList',
             target: node.getDOMNode(),
           };
-          const mutations = [mockMutation];
 
-          instance.handleContentEditableDivChange(mutations);
+          instance.handleContentEditableDivChange([mockMutation]);
 
           expect(spy).toHaveBeenCalledWith(node.getDOMNode());
         });
