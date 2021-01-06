@@ -340,10 +340,6 @@ describe('JustNotSorry', () => {
 
       describe('and the new div does not have an id', () => {
         it('should still apply the event listeners', () => {
-          const spy = jest
-            .spyOn(instance, 'applyEventListeners')
-            .mockImplementationOnce(() => {});
-
           const node = generateEditableDiv({}, 'just not sorry');
           const mockMutation = {
             type: 'childList',
