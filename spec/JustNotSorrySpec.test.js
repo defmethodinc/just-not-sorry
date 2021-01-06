@@ -31,16 +31,6 @@ describe('JustNotSorry', () => {
   let instance;
   const divsForCleanUp = [];
 
-  const generateEditableDiv = (props, innerHtml) => {
-    const divNode = mount(
-      <div {...props} contentEditable={'true'}>
-        {innerHtml ? innerHtml : ''}
-      </div>
-    );
-    divsForCleanUp.push(divNode);
-    return divNode;
-  };
-
   beforeEach(() => {
     justNotSorry = mount(<JustNotSorry />);
     wrapper = justNotSorry;
@@ -52,6 +42,16 @@ describe('JustNotSorry', () => {
     divsForCleanUp.length = 0;
     justNotSorry.unmount();
   });
+
+  const generateEditableDiv = (props, innerHtml) => {
+    const divNode = mount(
+      <div {...props} contentEditable={'true'}>
+        {innerHtml ? innerHtml : ''}
+      </div>
+    );
+    divsForCleanUp.push(divNode);
+    return divNode;
+  };
 
   describe('#addObserver', () => {
     it('adds an observer that listens for structural changes to the content editable div', () => {
