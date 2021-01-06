@@ -54,14 +54,13 @@ class JustNotSorry extends Component {
     if (divCount !== this.state.editableDivCount) {
       this.setState({ editableDivCount: divCount });
       if (mutations[0]) {
-        mutations.forEach((mutation) => {
-          if (
-            mutation.type === 'childList' &&
-            mutation.target.hasAttribute('contentEditable')
-          ) {
-            this.applyEventListeners(mutation.target);
-          }
-        });
+        mutations
+          .filter(
+            (mutation) =>
+              mutation.type === 'childList' &&
+              mutation.target.hasAttribute('contentEditable')
+          )
+          .forEach((mutation) => this.applyEventListeners(mutation.target));
       }
     }
   }
