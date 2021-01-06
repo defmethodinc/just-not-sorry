@@ -112,32 +112,15 @@ class JustNotSorry extends Component {
 
   addWarning(node, keyword, message) {
     const pattern = new RegExp('\\b(' + keyword + ')\\b', 'ig');
-    domRegexpMatch(node, pattern, (match, range) => {
-      let newWarning = {
-        keyword: keyword,
-        message: message,
-        parentNode: node,
-        rangeToHighlight: range,
-      };
-
-      this.setState((state) => {
-        const warnings = state.warnings
-          .concat(newWarning)
-          .filter(
-            (warning) =>
-              warning.rangeToHighlight.startContainer &&
-              warning.rangeToHighlight.startContainer.textContent !==
-                newWarning.message
-          );
-        return {
-          warnings,
-        };
-      });
-    });
+    this.updateWarnings(node, pattern, keyword, message);
   }
 
   addPunctuationWarning(node, keyword, message) {
     const pattern = new RegExp('\\b(' + keyword + ')\\B', 'ig');
+    this.updateWarnings(node, pattern, keyword, message);
+  }
+
+  updateWarnings(node, pattern, keyword, message) {
     domRegexpMatch(node, pattern, (match, range) => {
       let newWarning = {
         keyword: keyword,
