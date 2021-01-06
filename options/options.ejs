@@ -86,11 +86,11 @@
     </tr>
     </thead>
     <tbody>
-    <% _.forEach(allWarnings, function(warning) { %>
+    <% _.forEach(allWarnings, (warning) => { %>
       <tr>
         <th>
           <ul>
-          <% _.forEach(warning.keyword.split("|"), function(keyword) { %>
+          <% _.forEach(warning.keyword.split("|"), (keyword) => { %>
             <li>"<%= keyword %>"</li>
           <% }); %>
           </ul>
