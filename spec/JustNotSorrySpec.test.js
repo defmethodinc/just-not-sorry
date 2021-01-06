@@ -317,13 +317,16 @@ describe('JustNotSorry', () => {
 
   describe('#handleContentEditableDivChange', () => {
     describe('when a new content editable div is added', () => {
-      it('should apply the event listeners', () => {
-        const id = 'testing';
-        const spy = jest
+      let spy;
+      beforeEach(() => {
+        spy = jest
           .spyOn(instance, 'applyEventListeners')
           .mockImplementationOnce(() => {});
-
         jest.spyOn(instance, 'getEditableDivs').mockReturnValue([1]);
+      });
+
+      it('should apply the event listeners', () => {
+        const id = 'testing';
         const node = generateEditableDiv({ id }, 'just not sorry');
         const mockMutation = {
           type: 'childList',
@@ -342,7 +345,6 @@ describe('JustNotSorry', () => {
             .spyOn(instance, 'applyEventListeners')
             .mockImplementationOnce(() => {});
 
-          jest.spyOn(instance, 'getEditableDivs').mockReturnValue([1]);
           const node = generateEditableDiv({}, 'just not sorry');
           const mockMutation = {
             type: 'childList',
