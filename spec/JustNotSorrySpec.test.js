@@ -8,7 +8,6 @@ configure({ adapter: new Adapter() });
 describe('JustNotSorry', () => {
   let justNotSorry;
 
-  let editableDiv2;
   let editableDiv3;
   let wrapper;
   let instance;
@@ -50,7 +49,6 @@ describe('JustNotSorry', () => {
     justNotSorry = mount(<JustNotSorry />);
     wrapper = justNotSorry;
     instance = justNotSorry.instance();
-    editableDiv2 = generateEditableDiv({ id: 'div-2' }, 'test just test');
     editableDiv3 = generateEditableDiv({ id: 'div-3' }, 'test justify test');
   });
 
@@ -180,7 +178,11 @@ describe('JustNotSorry', () => {
 
   describe('#addWarning', () => {
     it('adds a warning for a single keyword', () => {
-      const node = editableDiv2.getDOMNode();
+      const node = generateEditableDiv(
+        { id: 'div-2' },
+        'test just test'
+      ).getDOMNode();
+
       instance.addWarning(node, 'just', 'warning message');
 
       expect(wrapper.state('warnings').length).toEqual(1);
