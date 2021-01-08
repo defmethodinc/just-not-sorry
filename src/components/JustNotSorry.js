@@ -114,7 +114,7 @@ class JustNotSorry extends Component {
   }
 
   addWarnings(node) {
-    WARNING_MESSAGES.map((warning) => {
+    WARNING_MESSAGES.forEach((warning) => {
       this.addWarning(node, warning.regex, warning.message);
     });
   }
