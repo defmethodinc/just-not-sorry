@@ -110,7 +110,7 @@ class JustNotSorry extends Component {
   }
 
   addWarning(node, regex, message) {
-    this.updateWarnings(node, new RegExp(regex, 'ig'), regex, message);
+    this.updateWarnings(node, new RegExp(regex, 'ig'), message);
   }
 
   addWarnings(node) {
@@ -119,10 +119,10 @@ class JustNotSorry extends Component {
     });
   }
 
-  updateWarnings(node, pattern, regex, message) {
+  updateWarnings(node, pattern, message) {
     domRegexpMatch(node, pattern, (match, range) => {
       let newWarning = {
-        regex: regex,
+        regex: pattern.source,
         message: message,
         parentNode: node,
         rangeToHighlight: range,
