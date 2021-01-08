@@ -177,7 +177,7 @@ describe('JustNotSorry', () => {
       expect(wrapper.state('warnings').length).toEqual(1);
       expect(wrapper.state('warnings')[0]).toEqual(
         expect.objectContaining({
-          keyword: '\\b!{3,}\\B',
+          regex: '\\b!{3,}\\B',
           message: 'warning message',
           parentNode: node,
         })

@@ -115,9 +115,9 @@ class JustNotSorry extends Component {
     this.updateWarnings(node, pattern, keyword, message);
   }
 
-  addPunctuationWarning(node, keyword, message) {
-    const pattern = new RegExp(keyword, 'ig');
-    this.updateWarnings(node, pattern, keyword, message);
+  addPunctuationWarning(node, regex, message) {
+    const pattern = new RegExp(regex, 'ig');
+    this.updateWarnings(node, pattern, regex, message);
   }
 
   addWarnings(node) {
@@ -125,13 +125,14 @@ class JustNotSorry extends Component {
       this.addWarning(node, warning.keyword, warning.message);
     });
     WARNING_PUNCTUATIONS.map((warning) => {
-      this.addPunctuationWarning(node, warning.keyword, warning.message);
+      this.addPunctuationWarning(node, warning.regex, warning.message);
     });
   }
 
   updateWarnings(node, pattern, keyword, message) {
     domRegexpMatch(node, pattern, (match, range) => {
       let newWarning = {
+        regex: keyword,
         keyword: keyword,
         message: message,
         parentNode: node,
