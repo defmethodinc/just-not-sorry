@@ -172,12 +172,12 @@ describe('JustNotSorry', () => {
         'test!!!'
       ).getDOMNode();
 
-      instance.addPunctuationWarning(node, '!{3,}', 'warning message');
+      instance.addPunctuationWarning(node, '\\b!{3,}\\B', 'warning message');
 
       expect(wrapper.state('warnings').length).toEqual(1);
       expect(wrapper.state('warnings')[0]).toEqual(
         expect.objectContaining({
-          keyword: '!{3,}',
+          keyword: '\\b!{3,}\\B',
           message: 'warning message',
           parentNode: node,
         })

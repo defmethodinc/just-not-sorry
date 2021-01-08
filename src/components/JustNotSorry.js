@@ -116,7 +116,7 @@ class JustNotSorry extends Component {
   }
 
   addPunctuationWarning(node, keyword, message) {
-    const pattern = new RegExp(`\\b(${keyword})\\B`, 'ig');
+    const pattern = new RegExp(keyword, 'ig');
     this.updateWarnings(node, pattern, keyword, message);
   }
 
