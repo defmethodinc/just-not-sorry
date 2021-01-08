@@ -1,4 +1,4 @@
-import WARNING_MESSAGES from '../src/components/WarningMessages.json';
+import WARNING_MESSAGES from '../src/warnings/phrases.json';
 
 describe('WARNING_MESSAGES', () => {
   function isBlank(str) {

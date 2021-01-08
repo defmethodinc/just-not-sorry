@@ -3,8 +3,8 @@ import ReactDOM from 'react-dom';
 
 import Warning from './Warning.js';
 import * as Util from './util.js';
-import WARNING_MESSAGES from './WarningMessages.json';
-import WARNING_PUNCTUATIONS from './WarningPunctuations.json';
+import WARNING_MESSAGES from '../warnings/phrases.json';
+import WARNING_PUNCTUATIONS from '../warnings/punctuations.json';
 import domRegexpMatch from 'dom-regexp-match';
 
 export const WAIT_TIME_BEFORE_RECALC_WARNINGS = 500;
