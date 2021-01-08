@@ -110,8 +110,7 @@ class JustNotSorry extends Component {
   }
 
   addWarning(node, regex, message) {
-    const pattern = new RegExp(regex, 'ig');
-    this.updateWarnings(node, pattern, regex, message);
+    this.updateWarnings(node, new RegExp(regex, 'ig'), regex, message);
   }
 
   addWarnings(node) {
