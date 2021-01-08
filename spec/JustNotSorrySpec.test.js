@@ -195,7 +195,7 @@ describe('JustNotSorry', () => {
       expect(wrapper.state('warnings').length).toEqual(1);
       expect(wrapper.state('warnings')[0]).toEqual(
         expect.objectContaining({
-          keyword: 'just',
+          regex: 'just',
           message: 'warning message',
           parentNode: node,
         })
@@ -223,7 +223,7 @@ describe('JustNotSorry', () => {
       expect(wrapper.state('warnings').length).toEqual(1);
       expect(wrapper.state('warnings')[0]).toEqual(
         expect.objectContaining({
-          keyword: 'just',
+          regex: 'just',
           message: 'warning message',
           parentNode: node,
         })
@@ -240,7 +240,7 @@ describe('JustNotSorry', () => {
       expect(wrapper.state('warnings').length).toEqual(1);
       expect(wrapper.state('warnings')[0]).toEqual(
         expect.objectContaining({
-          keyword: 'just',
+          regex: 'just',
           message: 'warning message',
           parentNode: node,
         })
@@ -257,7 +257,7 @@ describe('JustNotSorry', () => {
       expect(wrapper.state('warnings').length).toEqual(1);
       expect(wrapper.state('warnings')[0]).toEqual(
         expect.objectContaining({
-          keyword: 'so sorry',
+          regex: 'so sorry',
           message: 'warning message',
           parentNode: node,
         })

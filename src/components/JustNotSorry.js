@@ -120,11 +120,10 @@ class JustNotSorry extends Component {
     });
   }
 
-  updateWarnings(node, pattern, keyword, message) {
+  updateWarnings(node, pattern, regex, message) {
     domRegexpMatch(node, pattern, (match, range) => {
       let newWarning = {
-        regex: keyword,
-        keyword: keyword,
+        regex: regex,
         message: message,
         parentNode: node,
         rangeToHighlight: range,
@@ -151,7 +150,7 @@ class JustNotSorry extends Component {
       ReactDOM.createPortal(
         <Warning
           className=".jns-warning"
-          key={warning.keyword}
+          key={warning.regex}
           value={warning}
         />,
         warning.parentNode
