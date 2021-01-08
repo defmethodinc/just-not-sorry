@@ -32,26 +32,28 @@ describe('WARNING_MESSAGES', () => {
 
   WARNING_MESSAGES.forEach(function (warning, index) {
     describe(
-      'for warning at index ' + index + ' (keyword: "' + warning.keyword + '")',
-      function () {
-        describe('the keyword', () => {
+      'for warning at index ' + index + ' (regex: "' + warning.regex + '")',
+      () => {
+        describe('the regex', () => {
           it('should be present', () => {
             expect(
-              Object.prototype.hasOwnProperty.call(warning, 'keyword')
+              Object.prototype.hasOwnProperty.call(warning, 'regex')
             ).toBeTruthy();
           });
 
           it('should be non-blank', () => {
-            expect(isBlank(warning.keyword)).toBeFalsy();
-          });
-
-          it('should be a valid regular expression', () => {
-            var regex = new RegExp(warning.keyword, 'gi');
-
-            expect(regex.test(warning.keyword)).toBeTruthy();
+            expect(isBlank(warning.regex)).toBeFalsy();
           });
         });
 
+        describe('the displayLabel', () => {
+          it('should be present', () => {
+            expect(isBlank(warning.displayLabel)).toBeFalsy();
+          });
+          it('should be an array', () => {
+            expect(Array.isArray(warning.displayLabel)).toBeTruthy();
+          });
+        });
         describe('the source', () => {
           it('should be present', () => {
             expect(

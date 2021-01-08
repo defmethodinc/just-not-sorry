@@ -90,8 +90,7 @@
       <tr>
         <th>
           <ul>
-            <% const labels = warning.displayLabel ? warning.displayLabel : warning.keyword.split("|") %>
-              <% _.forEach(labels, (label) => { %>
+              <% _.forEach(warning.displayLabel, (label) => { %>
                   <li>"<%= label %>"</li>
               <% }); %>
           </ul>

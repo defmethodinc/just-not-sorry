@@ -4,7 +4,6 @@ import ReactDOM from 'react-dom';
 import Warning from './Warning.js';
 import * as Util from './util.js';
 import WARNING_MESSAGES from '../warnings/phrases.json';
-import WARNING_PUNCTUATIONS from '../warnings/punctuations.json';
 import domRegexpMatch from 'dom-regexp-match';
 
 export const WAIT_TIME_BEFORE_RECALC_WARNINGS = 500;
@@ -110,22 +109,14 @@ class JustNotSorry extends Component {
     return document.querySelectorAll('div[contentEditable=true]');
   }
 
-  addWarning(node, keyword, message) {
-    const pattern = new RegExp(`\\b(${keyword})\\b`, 'ig');
-    this.updateWarnings(node, pattern, keyword, message);
-  }
-
-  addPunctuationWarning(node, regex, message) {
+  addWarning(node, regex, message) {
     const pattern = new RegExp(regex, 'ig');
     this.updateWarnings(node, pattern, regex, message);
   }
 
   addWarnings(node) {
     WARNING_MESSAGES.map((warning) => {
-      this.addWarning(node, warning.keyword, warning.message);
-    });
-    WARNING_PUNCTUATIONS.map((warning) => {
-      this.addPunctuationWarning(node, warning.regex, warning.message);
+      this.addWarning(node, warning.regex, warning.message);
     });
   }
 

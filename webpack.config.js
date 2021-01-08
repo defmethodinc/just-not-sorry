@@ -2,8 +2,6 @@ const path = require('path');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const CopyPlugin = require('copy-webpack-plugin');
 
-const phrases = require('./src/warnings/phrases.json');
-const punctuations = require('./src/warnings/punctuations.json');
 module.exports = {
   plugins: [
     new HtmlWebpackPlugin({
@@ -11,7 +9,7 @@ module.exports = {
       filename: 'options.html',
       template: 'options/options.ejs',
       templateParameters: {
-        allWarnings: [...phrases, ...punctuations],
+        allWarnings: require('./src/warnings/phrases.json'),
       },
     }),
     new CopyPlugin({

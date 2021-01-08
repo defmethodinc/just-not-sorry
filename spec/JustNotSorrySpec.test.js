@@ -172,7 +172,7 @@ describe('JustNotSorry', () => {
         'test!!!'
       ).getDOMNode();
 
-      instance.addPunctuationWarning(node, '\\b!{3,}\\B', 'warning message');
+      instance.addWarning(node, '\\b!{3,}\\B', 'warning message');
 
       expect(wrapper.state('warnings').length).toEqual(1);
       expect(wrapper.state('warnings')[0]).toEqual(
@@ -207,7 +207,7 @@ describe('JustNotSorry', () => {
         { id: 'div-id' },
         'test justify test'
       ).getDOMNode();
-      instance.addWarning(node, 'just', 'warning message');
+      instance.addWarning(node, '\\b(just)\\b', 'warning message');
 
       expect(wrapper.state('warnings').length).toEqual(0);
       expect(wrapper.state('warnings')).toEqual([]);
