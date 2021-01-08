@@ -109,20 +109,20 @@ class JustNotSorry extends Component {
     return document.querySelectorAll('div[contentEditable=true]');
   }
 
-  addWarning(node, regex, message) {
-    this.updateWarnings(node, new RegExp(regex, 'ig'), message);
+  addWarning(node, pattern, message) {
+    this.updateWarnings(node, new RegExp(pattern, 'ig'), message);
   }
 
   addWarnings(node) {
     WARNING_MESSAGES.forEach((warning) => {
-      this.addWarning(node, warning.regex, warning.message);
+      this.addWarning(node, warning.pattern, warning.message);
     });
   }
 
   updateWarnings(node, pattern, message) {
     domRegexpMatch(node, pattern, (match, range) => {
       let newWarning = {
-        regex: pattern.source,
+        pattern: pattern.source,
         message: message,
         parentNode: node,
         rangeToHighlight: range,
@@ -149,7 +149,7 @@ class JustNotSorry extends Component {
       ReactDOM.createPortal(
         <Warning
           className=".jns-warning"
-          key={warning.regex}
+          key={warning.pattern}
           value={warning}
         />,
         warning.parentNode

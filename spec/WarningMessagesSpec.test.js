@@ -32,17 +32,17 @@ describe('WARNING_MESSAGES', () => {
 
   WARNING_MESSAGES.forEach(function (warning, index) {
     describe(
-      'for warning at index ' + index + ' (regex: "' + warning.regex + '")',
+      'for warning at index ' + index + ' (pattern: "' + warning.pattern + '")',
       () => {
-        describe('the regex', () => {
+        describe('the pattern', () => {
           it('should be present', () => {
             expect(
-              Object.prototype.hasOwnProperty.call(warning, 'regex')
+              Object.prototype.hasOwnProperty.call(warning, 'pattern')
             ).toBeTruthy();
           });
 
           it('should be non-blank', () => {
-            expect(isBlank(warning.regex)).toBeFalsy();
+            expect(isBlank(warning.pattern)).toBeFalsy();
           });
         });
 
