@@ -1,4 +1,4 @@
-import WARNING_MESSAGES from '../src/components/WarningMessages.json';
+import WARNING_MESSAGES from '../src/warnings/phrases.json';
 
 describe('WARNING_MESSAGES', () => {
   function isBlank(str) {
@@ -32,26 +32,28 @@ describe('WARNING_MESSAGES', () => {
 
   WARNING_MESSAGES.forEach(function (warning, index) {
     describe(
-      'for warning at index ' + index + ' (keyword: "' + warning.keyword + '")',
-      function () {
-        describe('the keyword', () => {
+      'for warning at index ' + index + ' (pattern: "' + warning.pattern + '")',
+      () => {
+        describe('the pattern', () => {
           it('should be present', () => {
             expect(
-              Object.prototype.hasOwnProperty.call(warning, 'keyword')
+              Object.prototype.hasOwnProperty.call(warning, 'pattern')
             ).toBeTruthy();
           });
 
           it('should be non-blank', () => {
-            expect(isBlank(warning.keyword)).toBeFalsy();
-          });
-
-          it('should be a valid regular expression', () => {
-            var regex = new RegExp(warning.keyword, 'gi');
-
-            expect(regex.test(warning.keyword)).toBeTruthy();
+            expect(isBlank(warning.pattern)).toBeFalsy();
           });
         });
 
+        describe('the displayLabel', () => {
+          it('should be present', () => {
+            expect(isBlank(warning.displayLabel)).toBeFalsy();
+          });
+          it('should be an array', () => {
+            expect(Array.isArray(warning.displayLabel)).toBeTruthy();
+          });
+        });
         describe('the source', () => {
           it('should be present', () => {
             expect(

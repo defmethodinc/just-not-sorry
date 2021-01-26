@@ -86,16 +86,18 @@
     </tr>
     </thead>
     <tbody>
-    <% _.forEach(allWarnings, function(warning) { %>
+    <% _.forEach(allWarnings, (warning) => { %>
       <tr>
         <th>
           <ul>
-          <% _.forEach(warning.keyword.split("|"), function(keyword) { %>
-            <li>"<%= keyword %>"</li>
-          <% }); %>
+              <% _.forEach(warning.displayLabel, (label) => { %>
+                  <li>"<%= label %>"</li>
+              <% }); %>
           </ul>
         </th>
-        <td><%= warning.message %> <a href="<%= warning.source %>" rel="noopener noreferrer" target="_blank">source</a></td>
+        <td>
+          <%= warning.message %> <a href="<%= warning.source %>" rel="noopener noreferrer" target="_blank">source</a>
+        </td>
       </tr>
     <% }); %>
     </tbody>

@@ -3,7 +3,7 @@ import ReactDOM from 'react-dom';
 
 import Warning from './Warning.js';
 import * as Util from './util.js';
-import WARNING_MESSAGES from './WarningMessages.json';
+import WARNING_MESSAGES from '../warnings/phrases.json';
 import domRegexpMatch from 'dom-regexp-match';
 
 export const WAIT_TIME_BEFORE_RECALC_WARNINGS = 500;
@@ -30,46 +30,39 @@ class JustNotSorry extends Component {
     this.documentObserver.observe(document, { subtree: true, childList: true });
   }
 
+  handleContentEditableDivChange(mutations) {
+    let divCount = this.getEditableDivs().length;
+    if (divCount !== this.state.editableDivCount) {
+      this.setState({ editableDivCount: divCount });
+      if (mutations[0]) {
+        mutations
+          .filter(
+            (mutation) =>
+              mutation.type === 'childList' &&
+              mutation.target.hasAttribute('contentEditable')
+          )
+          .forEach((mutation) => this.applyEventListeners(mutation.target));
+      }
+    }
+  }
+
   handleContentEditableContentInsert(mutations) {
     if (mutations[0]) {
-      mutations.forEach((mutation) => {
-        if (
-          mutation.type !== 'characterData' &&
-          mutation.target.hasAttribute('contentEditable')
-        ) {
+      mutations
+        .filter(
+          (mutation) =>
+            mutation.type !== 'characterData' &&
+            mutation.target.hasAttribute('contentEditable')
+        )
+        .forEach((mutation) => {
           // generate input event to fire checkForWarnings again
           let inputEvent = new Event('input', {
             bubbles: true,
             cancelable: true,
           });
           mutation.target.dispatchEvent(inputEvent);
-        }
-      });
-    }
-  }
-
-  handleContentEditableDivChange(mutations) {
-    let divCount = this.getEditableDivs().length;
-    if (divCount !== this.state.editableDivCount) {
-      this.setState({ editableDivCount: divCount });
-      if (mutations[0]) {
-        mutations.forEach((mutation) => {
-          if (
-            mutation.type === 'childList' &&
-            mutation.target.hasAttribute('contentEditable')
-          ) {
-            this.applyEventListeners(mutation.target);
-          }
         });
-      }
     }
-  }
-
-  checkForWarnings(parentElement) {
-    return Util.debounce(
-      () => this.checkForWarningsImpl(parentElement),
-      WAIT_TIME_BEFORE_RECALC_WARNINGS
-    );
   }
 
   checkForWarningsImpl(parentElement) {
@@ -77,10 +70,11 @@ class JustNotSorry extends Component {
     this.addWarnings(parentElement);
   }
 
-  applyEventListeners(targetDiv) {
-    targetDiv.removeEventListener('focus', this.addObserver);
-    targetDiv.addEventListener('focus', this.addObserver.bind(this));
-    targetDiv.addEventListener('blur', this.removeObserver.bind(this));
+  checkForWarnings(parentElement) {
+    return Util.debounce(
+      () => this.checkForWarningsImpl(parentElement),
+      WAIT_TIME_BEFORE_RECALC_WARNINGS
+    );
   }
 
   addObserver(event) {
@@ -105,15 +99,30 @@ class JustNotSorry extends Component {
     this.observer.disconnect();
   }
 
+  applyEventListeners(targetDiv) {
+    targetDiv.removeEventListener('focus', this.addObserver);
+    targetDiv.addEventListener('focus', this.addObserver.bind(this));
+    targetDiv.addEventListener('blur', this.removeObserver.bind(this));
+  }
+
   getEditableDivs() {
     return document.querySelectorAll('div[contentEditable=true]');
   }
 
-  addWarning(node, keyword, message) {
-    const pattern = new RegExp('\\b(' + keyword + ')\\b', 'ig');
+  addWarning(node, pattern, message) {
+    this.updateWarnings(node, new RegExp(pattern, 'ig'), message);
+  }
+
+  addWarnings(node) {
+    WARNING_MESSAGES.forEach((warning) => {
+      this.addWarning(node, warning.pattern, warning.message);
+    });
+  }
+
+  updateWarnings(node, pattern, message) {
     domRegexpMatch(node, pattern, (match, range) => {
       let newWarning = {
-        keyword: keyword,
+        pattern: pattern.source,
         message: message,
         parentNode: node,
         rangeToHighlight: range,
@@ -122,24 +131,16 @@ class JustNotSorry extends Component {
       this.setState((state) => {
         const warnings = state.warnings
           .concat(newWarning)
-          .filter(function (warning) {
-            if (warning.rangeToHighlight.startContainer) {
-              return (
-                warning.rangeToHighlight.startContainer.textContent !==
+          .filter(
+            (warning) =>
+              warning.rangeToHighlight.startContainer &&
+              warning.rangeToHighlight.startContainer.textContent !==
                 newWarning.message
-              );
-            }
-          });
+          );
         return {
           warnings,
         };
       });
-    });
-  }
-
-  addWarnings(node) {
-    WARNING_MESSAGES.map((warning) => {
-      this.addWarning(node, warning.keyword, warning.message);
     });
   }
 
@@ -148,7 +149,7 @@ class JustNotSorry extends Component {
       ReactDOM.createPortal(
         <Warning
           className=".jns-warning"
-          key={warning.keyword}
+          key={warning.pattern}
           value={warning}
         />,
         warning.parentNode

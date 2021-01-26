@@ -9,7 +9,7 @@ module.exports = {
       filename: 'options.html',
       template: 'options/options.ejs',
       templateParameters: {
-        allWarnings: require('./src/components/WarningMessages.json'),
+        allWarnings: require('./src/warnings/phrases.json'),
       },
     }),
     new CopyPlugin({
