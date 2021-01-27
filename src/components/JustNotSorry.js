@@ -8,12 +8,12 @@ import domRegexpMatch from 'dom-regexp-match';
 
 export const WAIT_TIME_BEFORE_RECALC_WARNINGS = 500;
 const MAIL_BODY_DIV_ATTR = 'contenteditable';
+
 class JustNotSorry extends Component {
   constructor(props) {
     super(props);
 
     this.state = {
-      editableDivCount: 0,
       warnings: [],
     };
 
@@ -31,38 +31,30 @@ class JustNotSorry extends Component {
   }
 
   handleContentEditableDivChange(mutations) {
-    let divCount = this.getEditableDivs().length;
-    if (divCount !== this.state.editableDivCount) {
-      this.setState({ editableDivCount: divCount });
-      if (mutations[0]) {
-        mutations
-          .filter(
-            (mutation) =>
-              mutation.type === 'childList' &&
-              mutation.target.hasAttribute(MAIL_BODY_DIV_ATTR)
-          )
-          .forEach((mutation) => this.applyEventListeners(mutation.target));
-      }
-    }
+    mutations
+      .filter(
+        (mutation) =>
+          mutation.type === 'childList' &&
+          mutation.target.hasAttribute(MAIL_BODY_DIV_ATTR)
+      )
+      .forEach((mutation) => this.applyEventListeners(mutation.target));
   }
 
   handleContentEditableContentInsert(mutations) {
-    if (mutations[0]) {
-      mutations
-        .filter(
-          (mutation) =>
-            mutation.type !== 'characterData' &&
-            mutation.target.hasAttribute(MAIL_BODY_DIV_ATTR)
-        )
-        .forEach((mutation) => {
-          // generate input event to fire checkForWarnings again
-          let inputEvent = new Event('input', {
-            bubbles: true,
-            cancelable: true,
-          });
-          mutation.target.dispatchEvent(inputEvent);
+    mutations
+      .filter(
+        (mutation) =>
+          mutation.type !== 'characterData' &&
+          mutation.target.hasAttribute(MAIL_BODY_DIV_ATTR)
+      )
+      .forEach((mutation) => {
+        // generate input event to fire checkForWarnings again
+        let inputEvent = new Event('input', {
+          bubbles: true,
+          cancelable: true,
         });
-    }
+        mutation.target.dispatchEvent(inputEvent);
+      });
   }
 
   checkForWarningsImpl(parentElement) {
@@ -103,10 +95,6 @@ class JustNotSorry extends Component {
     targetDiv.removeEventListener('focus', this.addObserver);
     targetDiv.addEventListener('focus', this.addObserver.bind(this));
     targetDiv.addEventListener('blur', this.removeObserver.bind(this));
-  }
-
-  getEditableDivs() {
-    return document.querySelectorAll('div[contentEditable=true]');
   }
 
   addWarning(node, pattern, message) {

@@ -331,7 +331,6 @@ describe('JustNotSorry', () => {
         spy = jest
           .spyOn(instance, 'applyEventListeners')
           .mockImplementationOnce(() => {});
-        jest.spyOn(instance, 'getEditableDivs').mockReturnValue([1]);
       });
 
       it('should apply the event listeners', () => {
