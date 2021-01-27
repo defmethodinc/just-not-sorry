@@ -7,7 +7,7 @@ import WARNING_MESSAGES from '../warnings/phrases.json';
 import domRegexpMatch from 'dom-regexp-match';
 
 export const WAIT_TIME_BEFORE_RECALC_WARNINGS = 500;
-
+const MAIL_BODY_DIV_ATTR = 'contenteditable';
 class JustNotSorry extends Component {
   constructor(props) {
     super(props);
@@ -39,7 +39,7 @@ class JustNotSorry extends Component {
           .filter(
             (mutation) =>
               mutation.type === 'childList' &&
-              mutation.target.hasAttribute('contentEditable')
+              mutation.target.hasAttribute(MAIL_BODY_DIV_ATTR)
           )
           .forEach((mutation) => this.applyEventListeners(mutation.target));
       }
@@ -52,7 +52,7 @@ class JustNotSorry extends Component {
         .filter(
           (mutation) =>
             mutation.type !== 'characterData' &&
-            mutation.target.hasAttribute('contentEditable')
+            mutation.target.hasAttribute(MAIL_BODY_DIV_ATTR)
         )
         .forEach((mutation) => {
           // generate input event to fire checkForWarnings again
