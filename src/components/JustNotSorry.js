@@ -34,11 +34,10 @@ class JustNotSorry extends Component {
     );
   }
 
-  handleContentEditableDivChange(mutations) {
+  handleContentEditableDivChange = (mutations) =>
     mutations
       .filter(isContentEditableChildList)
       .forEach((mutation) => this.applyEventListeners(mutation.target));
-  }
 
   handleContentEditableContentInsert(mutations) {
     mutations.filter(isContentEditableCharacterData).forEach((mutation) => {
