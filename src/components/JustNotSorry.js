@@ -95,9 +95,8 @@ class JustNotSorry extends Component {
     targetDiv.addEventListener('blur', this.removeObserver.bind(this));
   }
 
-  addWarning(node, pattern, message) {
+  addWarning = (node, pattern, message) =>
     this.updateWarnings(node, new RegExp(pattern, 'ig'), message);
-  }
 
   addWarnings(node) {
     WARNING_MESSAGES.forEach((warning) => {
