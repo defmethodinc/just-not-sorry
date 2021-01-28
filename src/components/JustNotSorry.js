@@ -39,7 +39,7 @@ class JustNotSorry extends Component {
       .filter(isContentEditableChildList)
       .forEach((mutation) => this.applyEventListeners(mutation.target));
 
-  handleContentEditableContentInsert(mutations) {
+  handleContentEditableContentInsert = (mutations) =>
     mutations.filter(isContentEditableCharacterData).forEach((mutation) => {
       // generate input event to fire checkForWarnings again
       mutation.target.dispatchEvent(
@@ -49,7 +49,6 @@ class JustNotSorry extends Component {
         })
       );
     });
-  }
 
   checkForWarningsImpl(parentElement) {
     this.setState({ warnings: [] });
