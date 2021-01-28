@@ -27,14 +27,11 @@ class JustNotSorry extends Component {
     this.documentObserver = new MutationObserver(
       this.handleContentEditableDivChange.bind(this)
     );
+    this.documentObserver.observe(document, { subtree: true, childList: true });
+
     this.observer = new MutationObserver(
       this.handleContentEditableContentInsert.bind(this)
     );
-    this.initializeObserver();
-  }
-
-  initializeObserver() {
-    this.documentObserver.observe(document, { subtree: true, childList: true });
   }
 
   handleContentEditableDivChange(mutations) {
