@@ -6,7 +6,7 @@ import * as Util from './util.js';
 import WARNINGS from '../warnings/phrases.json';
 import domRegexpMatch from 'dom-regexp-match';
 
-export const WAIT_TIME_BEFORE_RECALC_WARNINGS = 500;
+const WAIT_TIME_BEFORE_RECALC_WARNINGS = 500;
 
 const isContentEditableChildList = (mutation) =>
   mutation.type === 'childList' &&
