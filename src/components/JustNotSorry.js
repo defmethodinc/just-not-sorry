@@ -98,7 +98,7 @@ class JustNotSorry extends Component {
 
   updateWarnings = (node, pattern, message) => {
     domRegexpMatch(node, pattern, (match, range) => {
-      let newWarning = {
+      const newWarning = {
         pattern: pattern.source,
         message: message,
         parentNode: node,
