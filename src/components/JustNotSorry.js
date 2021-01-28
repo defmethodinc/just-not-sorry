@@ -147,11 +147,7 @@ class JustNotSorry extends Component {
   render() {
     const warningList = this.state.warnings.map((warning) =>
       ReactDOM.createPortal(
-        <Warning
-          className=".jns-warning"
-          key={warning.pattern}
-          value={warning}
-        />,
+        <Warning key={warning.pattern} value={warning} />,
         warning.parentNode
       )
     );
