@@ -49,17 +49,6 @@ class JustNotSorry extends Component {
     this.observer = new MutationObserver(handleContentEditableContentInsert);
   }
 
-  handleContentEditableDivChange = (mutations) =>
-    mutations
-      .filter(isContentEditableChildList)
-      .forEach((mutation) => this.applyEventListeners(mutation.target));
-
-  applyEventListeners = (targetDiv) => {
-    targetDiv.removeEventListener('focus', this.addObserver);
-    targetDiv.addEventListener('focus', this.addObserver);
-    targetDiv.addEventListener('blur', this.removeObserver);
-  };
-
   updateWarnings = (node, pattern, message) => {
     domRegexpMatch(node, pattern, (match, range) => {
       const newWarning = {
@@ -113,6 +102,17 @@ class JustNotSorry extends Component {
     element.removeEventListener('input', this.checkForWarnings);
     this.observer.disconnect();
   };
+
+  applyEventListeners = (targetDiv) => {
+    targetDiv.removeEventListener('focus', this.addObserver);
+    targetDiv.addEventListener('focus', this.addObserver);
+    targetDiv.addEventListener('blur', this.removeObserver);
+  };
+
+  handleContentEditableDivChange = (mutations) =>
+    mutations
+      .filter(isContentEditableChildList)
+      .forEach((mutation) => this.applyEventListeners(mutation.target));
 
   render() {
     return (
