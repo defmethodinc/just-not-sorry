@@ -16,6 +16,11 @@ const isContentEditableCharacterData = (mutation) =>
   mutation.type !== 'characterData' &&
   mutation.target.hasAttribute('contentEditable');
 
+const triggerCheckForWarnings = (mutation) =>
+  mutation.target.dispatchEvent(
+    new Event('input', { bubbles: true, cancelable: true })
+  );
+
 class JustNotSorry extends Component {
   constructor(props) {
     super(props);
@@ -40,15 +45,9 @@ class JustNotSorry extends Component {
       .forEach((mutation) => this.applyEventListeners(mutation.target));
 
   handleContentEditableContentInsert = (mutations) =>
-    mutations.filter(isContentEditableCharacterData).forEach((mutation) => {
-      // generate input event to fire checkForWarnings again
-      mutation.target.dispatchEvent(
-        new Event('input', {
-          bubbles: true,
-          cancelable: true,
-        })
-      );
-    });
+    mutations
+      .filter(isContentEditableCharacterData)
+      .forEach(triggerCheckForWarnings);
 
   checkForWarningsImpl(parentElement) {
     this.setState({ warnings: [] });
