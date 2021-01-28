@@ -8,6 +8,10 @@ import domRegexpMatch from 'dom-regexp-match';
 
 export const WAIT_TIME_BEFORE_RECALC_WARNINGS = 500;
 
+const isContentEditableChildList = (mutation) =>
+  mutation.type === 'childList' &&
+  mutation.target.hasAttribute('contentEditable');
+
 class JustNotSorry extends Component {
   constructor(props) {
     super(props);
@@ -36,11 +40,7 @@ class JustNotSorry extends Component {
       this.setState({ editableDivCount: divCount });
       if (mutations[0]) {
         mutations
-          .filter(
-            (mutation) =>
-              mutation.type === 'childList' &&
-              mutation.target.hasAttribute('contentEditable')
-          )
+          .filter(isContentEditableChildList)
           .forEach((mutation) => this.applyEventListeners(mutation.target));
       }
     }
