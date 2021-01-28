@@ -92,7 +92,11 @@ class JustNotSorry extends Component {
   };
 
   removeObserver = (event) => {
-    this.setState({ warnings: [] });
+    // pass a function to ensure the call uses the updated version
+    // eslint-disable-next-line no-unused-vars
+    this.setState((state) => ({
+      warnings: [],
+    }));
     event.currentTarget.removeEventListener('input', this.checkForWarnings);
     this.observer.disconnect();
   };
