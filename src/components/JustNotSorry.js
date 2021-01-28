@@ -54,12 +54,11 @@ class JustNotSorry extends Component {
     this.addWarnings(parentElement);
   };
 
-  checkForWarnings(parentElement) {
-    return Util.debounce(
+  checkForWarnings = (parentElement) =>
+    Util.debounce(
       () => this.checkForWarningsImpl(parentElement),
       WAIT_TIME_BEFORE_RECALC_WARNINGS
     );
-  }
 
   addObserver(event) {
     const element = event.currentTarget;
