@@ -88,16 +88,6 @@ class JustNotSorry extends Component {
     targetDiv.addEventListener('blur', this.removeObserver);
   };
 
-  addWarning = (node, warning) =>
-    this.updateWarnings(
-      node,
-      new RegExp(warning.pattern, 'ig'),
-      warning.message
-    );
-
-  addWarnings = (node) =>
-    WARNINGS.forEach((warning) => this.addWarning(node, warning));
-
   updateWarnings = (node, pattern, message) => {
     domRegexpMatch(node, pattern, (match, range) => {
       const newWarning = {
@@ -122,6 +112,16 @@ class JustNotSorry extends Component {
       });
     });
   };
+
+  addWarning = (node, warning) =>
+    this.updateWarnings(
+      node,
+      new RegExp(warning.pattern, 'ig'),
+      warning.message
+    );
+
+  addWarnings = (node) =>
+    WARNINGS.forEach((warning) => this.addWarning(node, warning));
 
   render() {
     return (
