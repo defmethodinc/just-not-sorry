@@ -3,7 +3,7 @@ import ReactDOM from 'react-dom';
 
 import Warning from './Warning.js';
 import * as Util from './util.js';
-import WARNING_MESSAGES from '../warnings/phrases.json';
+import WARNINGS from '../warnings/phrases.json';
 import domRegexpMatch from 'dom-regexp-match';
 
 export const WAIT_TIME_BEFORE_RECALC_WARNINGS = 500;
@@ -95,12 +95,16 @@ class JustNotSorry extends Component {
     targetDiv.addEventListener('blur', this.removeObserver.bind(this));
   }
 
-  addWarning = (node, pattern, message) =>
-    this.updateWarnings(node, new RegExp(pattern, 'ig'), message);
+  addWarning = (node, warning) =>
+    this.updateWarnings(
+      node,
+      new RegExp(warning.pattern, 'ig'),
+      warning.message
+    );
 
   addWarnings(node) {
-    WARNING_MESSAGES.forEach((warning) => {
-      this.addWarning(node, warning.pattern, warning.message);
+    WARNINGS.forEach((warning) => {
+      this.addWarning(node, warning);
     });
   }
 

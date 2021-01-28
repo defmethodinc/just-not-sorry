@@ -25,6 +25,7 @@ document.createRange = jest.fn(() => ({
   getClientRects: jest.fn(() => [{}]),
 }));
 
+const buildWarning = (pattern, message) => ({ pattern, message });
 describe('JustNotSorry', () => {
   let justNotSorry;
   let wrapper;
@@ -172,7 +173,10 @@ describe('JustNotSorry', () => {
         'test!!!'
       ).getDOMNode();
 
-      instance.addWarning(node, '\\b!{3,}\\B', 'warning message');
+      instance.addWarning(node, {
+        pattern: '\\b!{3,}\\B',
+        message: 'warning message',
+      });
 
       expect(wrapper.state('warnings').length).toEqual(1);
       expect(wrapper.state('warnings')[0]).toEqual(
@@ -190,7 +194,7 @@ describe('JustNotSorry', () => {
         'test just test'
       ).getDOMNode();
 
-      instance.addWarning(node, 'just', 'warning message');
+      instance.addWarning(node, buildWarning('just', 'warning message'));
 
       expect(wrapper.state('warnings').length).toEqual(1);
       expect(wrapper.state('warnings')[0]).toEqual(
@@ -207,7 +211,10 @@ describe('JustNotSorry', () => {
         { id: 'div-id' },
         'test justify test'
       ).getDOMNode();
-      instance.addWarning(node, '\\b(just)\\b', 'warning message');
+      instance.addWarning(
+        node,
+        buildWarning('\\b(just)\\b', 'warning message')
+      );
 
       expect(wrapper.state('warnings').length).toEqual(0);
       expect(wrapper.state('warnings')).toEqual([]);
@@ -219,7 +226,7 @@ describe('JustNotSorry', () => {
         'jUsT kidding'
       ).getDOMNode();
 
-      instance.addWarning(node, 'just', 'warning message');
+      instance.addWarning(node, buildWarning('just', 'warning message'));
       expect(wrapper.state('warnings').length).toEqual(1);
       expect(wrapper.state('warnings')[0]).toEqual(
         expect.objectContaining({
@@ -236,7 +243,7 @@ describe('JustNotSorry', () => {
         'just. test'
       ).getDOMNode();
 
-      instance.addWarning(node, 'just', 'warning message');
+      instance.addWarning(node, buildWarning('just', 'warning message'));
       expect(wrapper.state('warnings').length).toEqual(1);
       expect(wrapper.state('warnings')[0]).toEqual(
         expect.objectContaining({
@@ -253,7 +260,7 @@ describe('JustNotSorry', () => {
         'my cat is so sorry because of you'
       ).getDOMNode();
 
-      instance.addWarning(node, 'so sorry', 'warning message');
+      instance.addWarning(node, buildWarning('so sorry', 'warning message'));
       expect(wrapper.state('warnings').length).toEqual(1);
       expect(wrapper.state('warnings')[0]).toEqual(
         expect.objectContaining({
@@ -281,7 +288,7 @@ describe('JustNotSorry', () => {
         { id: 'div-3' },
         'test justify test'
       ).getDOMNode();
-      instance.addWarning(node, 'very', 'warning message');
+      instance.addWarning(node, buildWarning('very', 'warning message'));
 
       expect(wrapper.state('warnings').length).toEqual(0);
       expect(wrapper.state('warnings')).toEqual([]);
