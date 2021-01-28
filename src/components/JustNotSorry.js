@@ -82,8 +82,8 @@ class JustNotSorry extends Component {
 
   applyEventListeners = (targetDiv) => {
     targetDiv.removeEventListener('focus', this.addObserver);
-    targetDiv.addEventListener('focus', this.addObserver.bind(this));
-    targetDiv.addEventListener('blur', this.removeObserver.bind(this));
+    targetDiv.addEventListener('focus', this.addObserver);
+    targetDiv.addEventListener('blur', this.removeObserver);
   };
 
   addWarning = (node, warning) =>
