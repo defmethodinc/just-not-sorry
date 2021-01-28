@@ -46,11 +46,12 @@ class JustNotSorry extends Component {
   handleContentEditableContentInsert(mutations) {
     mutations.filter(isContentEditableCharacterData).forEach((mutation) => {
       // generate input event to fire checkForWarnings again
-      let inputEvent = new Event('input', {
-        bubbles: true,
-        cancelable: true,
-      });
-      mutation.target.dispatchEvent(inputEvent);
+      mutation.target.dispatchEvent(
+        new Event('input', {
+          bubbles: true,
+          cancelable: true,
+        })
+      );
     });
   }
 
