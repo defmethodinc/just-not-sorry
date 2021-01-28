@@ -69,19 +69,9 @@ class JustNotSorry extends Component {
         rangeToHighlight: range,
       };
 
-      this.setState((state) => {
-        const warnings = state.warnings
-          .concat(newWarning)
-          .filter(
-            (warning) =>
-              warning.rangeToHighlight.startContainer &&
-              warning.rangeToHighlight.startContainer.textContent !==
-                newWarning.message
-          );
-        return {
-          warnings,
-        };
-      });
+      this.setState((state) => ({
+        warnings: state.warnings.concat(newWarning),
+      }));
     });
   };
 
