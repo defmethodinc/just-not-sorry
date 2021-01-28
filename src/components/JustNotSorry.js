@@ -49,10 +49,10 @@ class JustNotSorry extends Component {
       .filter(isContentEditableCharacterData)
       .forEach(triggerCheckForWarnings);
 
-  checkForWarningsImpl(parentElement) {
+  checkForWarningsImpl = (parentElement) => {
     this.setState({ warnings: [] });
     this.addWarnings(parentElement);
-  }
+  };
 
   checkForWarnings(parentElement) {
     return Util.debounce(
