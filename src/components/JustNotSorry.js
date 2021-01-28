@@ -8,6 +8,13 @@ import domRegexpMatch from 'dom-regexp-match';
 
 const WAIT_TIME_BEFORE_RECALC_WARNINGS = 500;
 
+const OPTIONS = {
+  characterData: false,
+  subtree: true,
+  childList: true,
+  attributes: false,
+};
+
 const isContentEditableChildList = (mutation) =>
   mutation.type === 'childList' &&
   mutation.target.hasAttribute('contentEditable');
@@ -65,12 +72,7 @@ class JustNotSorry extends Component {
       this.checkForWarnings(element.parentNode)
     );
     this.addWarnings(element.parentNode);
-    this.observer.observe(element, {
-      characterData: false,
-      subtree: true,
-      childList: true,
-      attributes: false,
-    });
+    this.observer.observe(element, OPTIONS);
   };
 
   removeObserver = (event) => {
