@@ -54,34 +54,6 @@ class JustNotSorry extends Component {
       .filter(isContentEditableChildList)
       .forEach((mutation) => this.applyEventListeners(mutation.target));
 
-  checkForWarningsImpl = (parentNode) => {
-    this.setState({ warnings: [] });
-    this.addWarnings(parentNode);
-  };
-
-  checkForWarnings = (parentNode) =>
-    Util.debounce(
-      () => this.checkForWarningsImpl(parentNode),
-      WAIT_TIME_BEFORE_RECALC_WARNINGS
-    );
-
-  addObserver = (event) => {
-    const element = event.currentTarget;
-    element.addEventListener(
-      'input',
-      this.checkForWarnings(element.parentNode)
-    );
-    this.addWarnings(element.parentNode);
-    this.observer.observe(element, OPTIONS);
-  };
-
-  removeObserver = (event) => {
-    const element = event.currentTarget;
-    this.setState({ warnings: [] });
-    element.removeEventListener('input', this.checkForWarnings);
-    this.observer.disconnect();
-  };
-
   applyEventListeners = (targetDiv) => {
     targetDiv.removeEventListener('focus', this.addObserver);
     targetDiv.addEventListener('focus', this.addObserver);
@@ -122,6 +94,35 @@ class JustNotSorry extends Component {
 
   addWarnings = (node) =>
     WARNINGS.forEach((warning) => this.addWarning(node, warning));
+
+  checkForWarningsImpl = (parentNode) => {
+    this.setState({ warnings: [] });
+    this.addWarnings(parentNode);
+  };
+
+  checkForWarnings = (parentNode) => {
+    Util.debounce(
+      () => this.checkForWarningsImpl(parentNode),
+      WAIT_TIME_BEFORE_RECALC_WARNINGS
+    );
+  };
+
+  addObserver = (event) => {
+    const element = event.currentTarget;
+    element.addEventListener(
+      'input',
+      this.checkForWarnings(element.parentNode)
+    );
+    this.addWarnings(element.parentNode);
+    this.observer.observe(element, OPTIONS);
+  };
+
+  removeObserver = (event) => {
+    const element = event.currentTarget;
+    this.setState({ warnings: [] });
+    element.removeEventListener('input', this.checkForWarnings);
+    this.observer.disconnect();
+  };
 
   render() {
     return (
