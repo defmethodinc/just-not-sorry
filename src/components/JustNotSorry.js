@@ -21,6 +21,11 @@ const triggerCheckForWarnings = (mutation) =>
     new Event('input', { bubbles: true, cancelable: true })
   );
 
+export const handleContentEditableContentInsert = (mutations) =>
+  mutations
+    .filter(isContentEditableCharacterData)
+    .forEach(triggerCheckForWarnings);
+
 class JustNotSorry extends Component {
   constructor(props) {
     super(props);
@@ -34,20 +39,13 @@ class JustNotSorry extends Component {
     );
     this.documentObserver.observe(document, { subtree: true, childList: true });
 
-    this.observer = new MutationObserver(
-      this.handleContentEditableContentInsert.bind(this)
-    );
+    this.observer = new MutationObserver(handleContentEditableContentInsert);
   }
 
   handleContentEditableDivChange = (mutations) =>
     mutations
       .filter(isContentEditableChildList)
       .forEach((mutation) => this.applyEventListeners(mutation.target));
-
-  handleContentEditableContentInsert = (mutations) =>
-    mutations
-      .filter(isContentEditableCharacterData)
-      .forEach(triggerCheckForWarnings);
 
   checkForWarningsImpl = (parentNode) => {
     this.setState({ warnings: [] });

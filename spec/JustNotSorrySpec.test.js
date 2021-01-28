@@ -1,5 +1,6 @@
 import { h } from 'preact';
 import JustNotSorry from '../src/components/JustNotSorry.js';
+import { handleContentEditableContentInsert } from '../src/components/JustNotSorry.js';
 import { configure, mount } from 'enzyme';
 import Adapter from 'enzyme-adapter-preact-pure';
 
@@ -384,7 +385,7 @@ describe('JustNotSorry', () => {
           target: mockNode,
         };
 
-        instance.handleContentEditableContentInsert([mockMutation]);
+        handleContentEditableContentInsert([mockMutation]);
 
         expect(mockNode.dispatchEvent).toHaveBeenCalledWith(expect.any(Event));
       });
@@ -397,7 +398,7 @@ describe('JustNotSorry', () => {
           target: mockNode,
         };
 
-        instance.handleContentEditableContentInsert([mockMutation]);
+        handleContentEditableContentInsert([mockMutation]);
 
         expect(mockNode.dispatchEvent).not.toHaveBeenCalled();
       });
