@@ -60,7 +60,7 @@ class JustNotSorry extends Component {
       WAIT_TIME_BEFORE_RECALC_WARNINGS
     );
 
-  addObserver(event) {
+  addObserver = (event) => {
     const element = event.currentTarget;
     element.addEventListener(
       'input',
@@ -73,7 +73,7 @@ class JustNotSorry extends Component {
       childList: true,
       attributes: false,
     });
-  }
+  };
 
   removeObserver(event) {
     const element = event.currentTarget;
