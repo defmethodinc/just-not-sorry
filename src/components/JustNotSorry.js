@@ -102,11 +102,8 @@ class JustNotSorry extends Component {
       warning.message
     );
 
-  addWarnings(node) {
-    WARNINGS.forEach((warning) => {
-      this.addWarning(node, warning);
-    });
-  }
+  addWarnings = (node) =>
+    WARNINGS.forEach((warning) => this.addWarning(node, warning));
 
   updateWarnings(node, pattern, message) {
     domRegexpMatch(node, pattern, (match, range) => {
