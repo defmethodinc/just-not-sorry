@@ -21,7 +21,6 @@ class JustNotSorry extends Component {
     super(props);
 
     this.state = {
-      editableDivCount: 0,
       warnings: [],
     };
 
@@ -39,28 +38,20 @@ class JustNotSorry extends Component {
   }
 
   handleContentEditableDivChange(mutations) {
-    let divCount = this.getEditableDivs().length;
-    if (divCount !== this.state.editableDivCount) {
-      this.setState({ editableDivCount: divCount });
-      if (mutations[0]) {
-        mutations
-          .filter(isContentEditableChildList)
-          .forEach((mutation) => this.applyEventListeners(mutation.target));
-      }
-    }
+    mutations
+      .filter(isContentEditableChildList)
+      .forEach((mutation) => this.applyEventListeners(mutation.target));
   }
 
   handleContentEditableContentInsert(mutations) {
-    if (mutations[0]) {
-      mutations.filter(isContentEditableCharacterData).forEach((mutation) => {
-        // generate input event to fire checkForWarnings again
-        let inputEvent = new Event('input', {
-          bubbles: true,
-          cancelable: true,
-        });
-        mutation.target.dispatchEvent(inputEvent);
+    mutations.filter(isContentEditableCharacterData).forEach((mutation) => {
+      // generate input event to fire checkForWarnings again
+      let inputEvent = new Event('input', {
+        bubbles: true,
+        cancelable: true,
       });
-    }
+      mutation.target.dispatchEvent(inputEvent);
+    });
   }
 
   checkForWarningsImpl(parentElement) {
@@ -101,10 +92,6 @@ class JustNotSorry extends Component {
     targetDiv.removeEventListener('focus', this.addObserver);
     targetDiv.addEventListener('focus', this.addObserver.bind(this));
     targetDiv.addEventListener('blur', this.removeObserver.bind(this));
-  }
-
-  getEditableDivs() {
-    return document.querySelectorAll('div[contentEditable=true]');
   }
 
   addWarning(node, pattern, message) {
