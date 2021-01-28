@@ -97,9 +97,8 @@ class JustNotSorry extends Component {
   };
 
   removeObserver = (event) => {
-    const element = event.currentTarget;
     this.setState({ warnings: [] });
-    element.removeEventListener('input', this.checkForWarnings);
+    event.currentTarget.removeEventListener('input', this.checkForWarnings);
     this.observer.disconnect();
   };
 
