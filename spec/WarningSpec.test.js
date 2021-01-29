@@ -1,7 +1,7 @@
 import { h } from 'preact';
 import Warning, {
   highlightStyles,
-  setNodeStyle,
+  getNodeStyle,
   calculateCoords,
 } from '../src/components/Warning.js';
 import { configure, shallow } from 'enzyme';
@@ -108,8 +108,8 @@ describe('#highlightStyles', () => {
 
 describe('#setNodeStyles', () => {
   it('should return undefined if the parentNode or rangeToHighlight are invalid', () => {
-    expect(setNodeStyle(null, null)).toEqual(undefined);
-    expect(setNodeStyle(undefined, undefined)).toEqual(undefined);
+    expect(getNodeStyle(null, null)).toEqual(undefined);
+    expect(getNodeStyle(undefined, undefined)).toEqual(undefined);
   });
 
   it('should return a style object when both parentNode and rangeToHighlight are valid', () => {
@@ -125,7 +125,7 @@ describe('#setNodeStyles', () => {
     };
     const coords = { top: 65, left: 0 };
 
-    expect(setNodeStyle(rect, coords)).toEqual({
+    expect(getNodeStyle(rect, coords)).toEqual({
       top: '62px',
       left: '0px',
       width: '39px',

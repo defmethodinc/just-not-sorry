@@ -26,12 +26,12 @@ export const highlightStyles = (parentNode, rangeToHighlight) => {
     const rectsToHighlight = rangeToHighlight.getClientRects();
     const rect = rectsToHighlight[0];
 
-    return setNodeStyle(rect, coords);
+    return getNodeStyle(rect, coords);
   }
   return undefined;
 };
 
-export const setNodeStyle = (rect, coords) => {
+export const getNodeStyle = (rect, coords) => {
   if (rect && coords) {
     return {
       top: `${coords.top - HIGHLIGHT_YPOS_ADJUSTMENT}px`,
