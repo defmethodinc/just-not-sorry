@@ -53,12 +53,14 @@ export const calculatePosition = (coords) => {
 };
 
 export default function Warning(props) {
-  const warningStyle = props.value
-    ? highlightStyles(props.value.parentNode, props.value.rangeToHighlight)
-    : {};
-  const coords = props.value
-    ? calculateCoords(props.value.parentNode, props.value.rangeToHighlight)
-    : {};
+  const warningStyle = highlightStyles(
+    props.value.parentNode,
+    props.value.rangeToHighlight
+  );
+  const coords = calculateCoords(
+    props.value.parentNode,
+    props.value.rangeToHighlight
+  );
   const position = calculatePosition(coords);
 
   return (
