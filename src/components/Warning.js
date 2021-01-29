@@ -48,13 +48,7 @@ export const setNodeStyle = (rect, coords) => {
 };
 
 export const calculatePosition = (coords) => {
-  if (coords) {
-    if (coords.top <= 200) {
-      return 'bottom';
-    } else if (coords.top > 200) {
-      return 'top';
-    }
-  }
+  if (coords) return coords.top <= 200 ? 'bottom' : 'top';
   return null;
 };
 
