@@ -96,7 +96,9 @@ describe('#highlightStyles', () => {
     const parentNode = parent;
     const rangeToHighlight = range;
 
-    expect(highlightStyles(parentNode, rangeToHighlight)).toEqual({
+    const styles = highlightStyles(parentNode, rangeToHighlight);
+    expect(styles.length).toEqual(1);
+    expect(styles[0]).toEqual({
       top: '62px',
       left: '0px',
       width: '39px',

@@ -29,7 +29,7 @@ export const highlightStyles = (parentNode, rangeToHighlight) => {
     for (let i = 0; i < rectsToHighlight.length; i++) {
       styles.push(getNodeStyle(rectsToHighlight[i], coords[i]));
     }
-    return styles[0];
+    return styles;
   }
   return undefined;
 };
