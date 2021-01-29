@@ -50,18 +50,22 @@ class JustNotSorry extends Component {
   }
 
   updateWarnings = (node, pattern, message) => {
-    domRegexpMatch(node, pattern, (match, range) => {
-      const newWarning = {
-        pattern: pattern.source,
-        message: message,
-        parentNode: node,
-        rangeToHighlight: range,
-      };
+    if (node.childNodes) {
+      node.childNodes.forEach((childNode) => {
+        domRegexpMatch(childNode, pattern, (match, range) => {
+          const newWarning = {
+            pattern: pattern.source,
+            message: message,
+            parentNode: node.parentNode,
+            rangeToHighlight: range,
+          };
 
-      this.setState((state) => ({
-        warnings: state.warnings.concat(newWarning),
-      }));
-    });
+          this.setState((state) => ({
+            warnings: state.warnings.concat(newWarning),
+          }));
+        });
+      });
+    }
   };
 
   addWarning = (node, warning) =>
@@ -82,13 +86,10 @@ class JustNotSorry extends Component {
   };
 
   addObserver = (event) => {
-    const element = event.currentTarget;
-    element.addEventListener(
-      'input',
-      this.checkForWarnings(element.parentNode)
-    );
-    this.addWarnings(element.parentNode);
-    this.observer.observe(element, OPTIONS);
+    const node = event.currentTarget;
+    this.observer.observe(node, OPTIONS);
+    node.addEventListener('input', this.checkForWarnings(node));
+    this.addWarnings(node);
   };
 
   removeObserver = (event) => {

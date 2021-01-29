@@ -97,7 +97,7 @@ describe('JustNotSorry', () => {
       });
       node.simulate('focus');
 
-      expect(spy).toHaveBeenCalledWith(node.getDOMNode().parentNode);
+      expect(spy).toHaveBeenCalledWith(node.getDOMNode());
     });
   });
 
@@ -184,7 +184,7 @@ describe('JustNotSorry', () => {
         expect.objectContaining({
           pattern: '\\b!{3,}\\B',
           message: 'warning message',
-          parentNode: node,
+          parentNode: node.parentNode,
         })
       );
     });
@@ -202,7 +202,7 @@ describe('JustNotSorry', () => {
         expect.objectContaining({
           pattern: 'just',
           message: 'warning message',
-          parentNode: node,
+          parentNode: node.parentNode,
         })
       );
     });
@@ -233,7 +233,7 @@ describe('JustNotSorry', () => {
         expect.objectContaining({
           pattern: 'just',
           message: 'warning message',
-          parentNode: node,
+          parentNode: node.parentNode,
         })
       );
     });
@@ -250,7 +250,7 @@ describe('JustNotSorry', () => {
         expect.objectContaining({
           pattern: 'just',
           message: 'warning message',
-          parentNode: node,
+          parentNode: node.parentNode,
         })
       );
     });
@@ -267,7 +267,7 @@ describe('JustNotSorry', () => {
         expect.objectContaining({
           pattern: 'so sorry',
           message: 'warning message',
-          parentNode: node,
+          parentNode: node.parentNode,
         })
       );
     });
