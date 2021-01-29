@@ -5,12 +5,12 @@ export const HIGHLIGHT_YPOS_ADJUSTMENT = 3;
 
 export const calculateCoords = (parentNode, rangeToHighlight) => {
   if (parentNode && rangeToHighlight) {
-    let parentRect = parentNode.getBoundingClientRect();
-    let rectsToHighlight = rangeToHighlight.getClientRects();
-    let rect = rectsToHighlight[0];
+    const parentRect = parentNode.getBoundingClientRect();
+    const rectsToHighlight = rangeToHighlight.getClientRects();
+    const rect = rectsToHighlight[0];
 
     if (rect) {
-      let coords = {
+      const coords = {
         top: rect.top - parentRect.top + rect.height,
         left: rect.left - parentRect.left,
       };
@@ -22,9 +22,9 @@ export const calculateCoords = (parentNode, rangeToHighlight) => {
 
 export const highlightStyles = (parentNode, rangeToHighlight) => {
   if (parentNode && rangeToHighlight) {
-    let coords = calculateCoords(parentNode, rangeToHighlight);
-    let rectsToHighlight = rangeToHighlight.getClientRects();
-    let rect = rectsToHighlight[0];
+    const coords = calculateCoords(parentNode, rangeToHighlight);
+    const rectsToHighlight = rangeToHighlight.getClientRects();
+    const rect = rectsToHighlight[0];
 
     return setNodeStyle(rect, coords);
   }
