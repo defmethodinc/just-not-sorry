@@ -17,7 +17,7 @@ export const calculateCoords = (parentNode, rangeToHighlight) => {
       return coords;
     }
   }
-  return;
+  return undefined;
 };
 
 export const highlightStyles = (parentNode, rangeToHighlight) => {
@@ -30,14 +30,14 @@ export const highlightStyles = (parentNode, rangeToHighlight) => {
       return setNodeStyle(rect, coords);
     }
   }
-  return;
+  return undefined;
 };
 
 export const setNodeStyle = (rect, coords) => {
   if (rect && coords) {
     return {
       top: coords.top - HIGHLIGHT_YPOS_ADJUSTMENT + 'px',
-      left: coords.left + 'px',
+      left: `${coords.left}px`,
       width: rect.width + 'px',
       height: rect.height * 0.2 + 'px',
       zIndex: 10,
