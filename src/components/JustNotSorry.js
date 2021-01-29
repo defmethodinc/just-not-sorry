@@ -100,10 +100,10 @@ class JustNotSorry extends Component {
     this.observer.disconnect();
   };
 
-  applyEventListeners = (targetDiv) => {
-    targetDiv.removeEventListener('focus', this.addObserver);
-    targetDiv.addEventListener('focus', this.addObserver);
-    targetDiv.addEventListener('blur', this.removeObserver);
+  applyEventListeners = (node) => {
+    node.removeEventListener('focus', this.addObserver);
+    node.addEventListener('focus', this.addObserver);
+    node.addEventListener('blur', this.removeObserver);
   };
 
   handleContentEditableDivChange = (mutations) =>
