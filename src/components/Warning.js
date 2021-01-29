@@ -55,19 +55,19 @@ export const calculatePosition = (coords) => {
 
 export default function Warning(props) {
   const { parentNode, rangeToHighlight } = props.value;
-  const warningStyle = highlightStyles(parentNode, rangeToHighlight);
+  const warningStyles = highlightStyles(parentNode, rangeToHighlight);
   const coords = calculateCoords(parentNode, rangeToHighlight);
-  const position = calculatePosition(coords);
+  const positions = calculatePosition(coords);
 
-  return (
-    <div className="jns-warning">
-      <WarningHighlight
-        styles={warningStyle}
-        parent={parentNode}
-        keyword={props.value.keyword}
-        message={props.value.message}
-        position={position}
-      />
-    </div>
-  );
+  const highlights = warningStyles.map((style, index) => (
+    <WarningHighlight
+      key={positions[index]}
+      styles={style}
+      parent={parentNode}
+      keyword={props.value.keyword}
+      message={props.value.message}
+      position={positions[index]}
+    />
+  ));
+  return <div className="jns-warning">{highlights}</div>;
 }
