@@ -79,9 +79,10 @@ class JustNotSorry extends Component {
     WARNINGS.forEach((warning) => this.addWarning(node, warning));
 
   checkForWarnings = (node) =>
-    Util.debounce(() => {
-      this.addWarnings(node);
-    }, WAIT_TIME_BEFORE_RECALC_WARNINGS);
+    Util.debounce(
+      () => this.addWarnings(node),
+      WAIT_TIME_BEFORE_RECALC_WARNINGS
+    );
 
   addObserver = (event) => {
     const node = event.currentTarget;
