@@ -7,15 +7,16 @@ export const calculateCoords = (parentNode, rangeToHighlight) => {
   if (parentNode && rangeToHighlight) {
     const parentRect = parentNode.getBoundingClientRect();
     const rectsToHighlight = rangeToHighlight.getClientRects();
-    const rect = rectsToHighlight[0];
 
-    if (rect) {
-      const coords = {
+    const coords = [];
+    for (let i = 0; i < rectsToHighlight.length; i++) {
+      const rect = rectsToHighlight[i];
+      coords.push({
         top: rect.top - parentRect.top + rect.height,
         left: rect.left - parentRect.left,
-      };
-      return coords;
+      });
     }
+    return coords[0];
   }
   return undefined;
 };
@@ -25,7 +26,6 @@ export const highlightStyles = (parentNode, rangeToHighlight) => {
     const coords = calculateCoords(parentNode, rangeToHighlight);
     const rectsToHighlight = rangeToHighlight.getClientRects();
     const rect = rectsToHighlight[0];
-
     return getNodeStyle(rect, coords);
   }
   return undefined;
