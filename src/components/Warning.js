@@ -36,10 +36,10 @@ export const highlightStyles = (parentNode, rangeToHighlight) => {
 export const setNodeStyle = (rect, coords) => {
   if (rect && coords) {
     return {
-      top: coords.top - HIGHLIGHT_YPOS_ADJUSTMENT + 'px',
+      top: `${coords.top - HIGHLIGHT_YPOS_ADJUSTMENT}px`,
       left: `${coords.left}px`,
-      width: rect.width + 'px',
-      height: rect.height * 0.2 + 'px',
+      width: `${rect.width}px`,
+      height: `${rect.height * 0.2}px`,
       zIndex: 10,
       position: 'absolute',
       padding: '0px',
