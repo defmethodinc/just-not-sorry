@@ -53,21 +53,16 @@ export const calculatePosition = (coords) => {
 };
 
 export default function Warning(props) {
-  const warningStyle = highlightStyles(
-    props.value.parentNode,
-    props.value.rangeToHighlight
-  );
-  const coords = calculateCoords(
-    props.value.parentNode,
-    props.value.rangeToHighlight
-  );
+  const node = props.value.parentNode;
+  const warningStyle = highlightStyles(node, props.value.rangeToHighlight);
+  const coords = calculateCoords(node, props.value.rangeToHighlight);
   const position = calculatePosition(coords);
 
   return (
     <div className="jns-warning">
       <WarningHighlight
         styles={warningStyle}
-        parent={props.value.parentNode}
+        parent={node}
         keyword={props.value.keyword}
         message={props.value.message}
         position={position}
