@@ -47,7 +47,7 @@ export const setNodeStyle = (rect, coords) => {
 
 export const calculatePosition = (coords) => {
   if (coords) return coords.top <= 200 ? 'bottom' : 'top';
-  return null;
+  else return undefined;
 };
 
 export default function Warning(props) {
