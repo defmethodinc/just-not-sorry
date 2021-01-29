@@ -26,9 +26,7 @@ export const highlightStyles = (parentNode, rangeToHighlight) => {
     let rectsToHighlight = rangeToHighlight.getClientRects();
     let rect = rectsToHighlight[0];
 
-    if (rect) {
-      return setNodeStyle(rect, coords);
-    }
+    return setNodeStyle(rect, coords);
   }
   return undefined;
 };
