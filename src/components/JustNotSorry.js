@@ -5,7 +5,8 @@ import Warning from './Warning.js';
 import * as Util from './util.js';
 import WARNINGS from '../warnings/phrases.json';
 import domRegexpMatch from 'dom-regexp-match';
-import { handleContentEditableContentInsert } from '../handlers/ContentEditableInsert';
+import { handleContentEditableContentInsert } from '../callbacks/ContentEditableInsert';
+import { handleContentEditableChange } from '../callbacks/ContentEditableChange';
 
 const WAIT_TIME_BEFORE_RECALC_WARNINGS = 1;
 
@@ -16,10 +17,6 @@ const OPTIONS = {
   attributes: false,
 };
 
-const isContentEditableChildList = (mutation) =>
-  mutation.type === 'childList' &&
-  mutation.target.hasAttribute('contentEditable');
-
 class JustNotSorry extends Component {
   constructor(props) {
     super(props);
@@ -29,7 +26,7 @@ class JustNotSorry extends Component {
     };
 
     this.documentObserver = new MutationObserver(
-      this.handleContentEditableDivChange.bind(this)
+      handleContentEditableChange(this.applyEventListeners)
     );
     this.documentObserver.observe(document, { subtree: true, childList: true });
 
@@ -93,11 +90,6 @@ class JustNotSorry extends Component {
     node.addEventListener('focus', this.addObserver);
     node.addEventListener('blur', this.removeObserver);
   };
-
-  handleContentEditableDivChange = (mutations) =>
-    mutations
-      .filter(isContentEditableChildList)
-      .forEach((mutation) => this.applyEventListeners(mutation.target));
 
   render() {
     return (

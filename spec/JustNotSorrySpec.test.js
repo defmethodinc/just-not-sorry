@@ -330,42 +330,4 @@ describe('JustNotSorry', () => {
       node.unmount();
     });
   });
-
-  describe('#handleContentEditableDivChange', () => {
-    describe('when a new content editable div is added', () => {
-      let spy;
-      beforeEach(() => {
-        spy = jest
-          .spyOn(instance, 'applyEventListeners')
-          .mockImplementationOnce(() => {});
-      });
-
-      it('should apply the event listeners', () => {
-        const id = 'testing';
-        const node = generateEditableDiv({ id }, 'just not sorry');
-        const mockMutation = {
-          type: 'childList',
-          target: node.getDOMNode(),
-        };
-
-        instance.handleContentEditableDivChange([mockMutation]);
-
-        expect(spy).toHaveBeenCalledWith(node.getDOMNode());
-      });
-
-      describe('and the new div does not have an id', () => {
-        it('should still apply the event listeners', () => {
-          const node = generateEditableDiv({}, 'just not sorry');
-          const mockMutation = {
-            type: 'childList',
-            target: node.getDOMNode(),
-          };
-
-          instance.handleContentEditableDivChange([mockMutation]);
-
-          expect(spy).toHaveBeenCalledWith(node.getDOMNode());
-        });
-      });
-    });
-  });
 });
