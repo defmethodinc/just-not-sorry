@@ -1,4 +1,4 @@
-import { handleContentEditableContentInsert } from '../src/handlers/EditableContent.js';
+import { handleContentEditableContentInsert } from '../src/handlers/ContentEditableInsert.js';
 
 describe('#handleContentEditableContentInsert', () => {
   let mockNode;

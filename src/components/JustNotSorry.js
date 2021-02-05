@@ -5,7 +5,7 @@ import Warning from './Warning.js';
 import * as Util from './util.js';
 import WARNINGS from '../warnings/phrases.json';
 import domRegexpMatch from 'dom-regexp-match';
-import { handleContentEditableContentInsert } from '../handlers/EditableContent';
+import { handleContentEditableContentInsert } from '../handlers/ContentEditableInsert';
 
 const WAIT_TIME_BEFORE_RECALC_WARNINGS = 1;
 
