@@ -5,6 +5,7 @@ import Warning from './Warning.js';
 import * as Util from './util.js';
 import WARNINGS from '../warnings/phrases.json';
 import domRegexpMatch from 'dom-regexp-match';
+import { handleContentEditableContentInsert } from '../handlers/EditableContent';
 
 const WAIT_TIME_BEFORE_RECALC_WARNINGS = 1;
 
@@ -18,20 +19,6 @@ const OPTIONS = {
 const isContentEditableChildList = (mutation) =>
   mutation.type === 'childList' &&
   mutation.target.hasAttribute('contentEditable');
-
-const isContentEditableCharacterData = (mutation) =>
-  mutation.type !== 'characterData' &&
-  mutation.target.hasAttribute('contentEditable');
-
-const triggerCheckForWarnings = (mutation) =>
-  mutation.target.dispatchEvent(
-    new Event('input', { bubbles: true, cancelable: true })
-  );
-
-export const handleContentEditableContentInsert = (mutations) =>
-  mutations
-    .filter(isContentEditableCharacterData)
-    .forEach(triggerCheckForWarnings);
 
 class JustNotSorry extends Component {
   constructor(props) {
