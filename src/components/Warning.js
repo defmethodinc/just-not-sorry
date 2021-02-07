@@ -25,13 +25,13 @@ export const getNodeStyle = (rect, coord) => {
   }
 };
 
-export const calculateCoords = (parentNode, rectsToHighlight) => {
-  if (parentNode && rectsToHighlight) {
+export const calculateCoords = (parentNode, rect) => {
+  if (parentNode && rect) {
     const parentRect = parentNode.getBoundingClientRect();
-    return rectsToHighlight.map((rect) => ({
+    return {
       top: rect.top - parentRect.top + rect.height,
       left: rect.left - parentRect.left,
-    }));
+    };
   }
   return undefined;
 };
@@ -39,9 +39,9 @@ export const calculateCoords = (parentNode, rectsToHighlight) => {
 export const highlightStyles = (parentNode, rangeToHighlight) => {
   if (parentNode && rangeToHighlight) {
     const rectsToHighlight = Array.from(rangeToHighlight.getClientRects());
-    const coords = calculateCoords(parentNode, rectsToHighlight);
-
-    return rectsToHighlight.map((rect, i) => getNodeStyle(rect, coords[i]));
+    return rectsToHighlight.map((rect) =>
+      getNodeStyle(rect, calculateCoords(parentNode, rect))
+    );
   }
   return undefined;
 };

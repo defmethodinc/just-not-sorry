@@ -77,9 +77,11 @@ describe('#calculateCoords', () => {
   it('should return valid coords when both parentNode and rangeToHighlight are valid', () => {
     const parentNode = parent;
     const rectsToHighlight = range.getClientRects();
-    const coords = calculateCoords(parentNode, rectsToHighlight);
-    expect(coords.length).toEqual(1);
-    expect(coords[0]).toEqual({
+    expect(rectsToHighlight.length).toEqual(1);
+
+    const rect = rectsToHighlight[0];
+    const coords = calculateCoords(parentNode, rect);
+    expect(coords).toEqual({
       top: 65,
       left: 0,
     });
