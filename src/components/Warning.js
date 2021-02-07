@@ -53,17 +53,15 @@ export default function Warning(props) {
   const coords = calculateCoords(parentNode, rectsToHighlight);
   const highlights = highlightStyles(coords, rectsToHighlight);
 
-  const warningHighlights = highlights.map((highlight, index) => {
-    return (
-      <WarningHighlight
-        key={index}
-        styles={highlight.style}
-        parent={parentNode}
-        keyword={props.value.keyword}
-        message={props.value.message}
-        position={highlight.position}
-      />
-    );
-  });
+  const warningHighlights = highlights.map((highlight, index) => (
+    <WarningHighlight
+      key={index}
+      styles={highlight.style}
+      parent={parentNode}
+      keyword={props.value.keyword}
+      message={props.value.message}
+      position={highlight.position}
+    />
+  ));
   return <div className="jns-warning">{warningHighlights}</div>;
 }
