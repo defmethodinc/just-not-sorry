@@ -1,7 +1,7 @@
 import { h } from 'preact';
 import WarningHighlight from './WarningHighlight.js';
 
-const HIGHLIGHT_YPOS_ADJUSTMENT = 3;
+const YPOS_ADJUSTMENT = 3;
 
 export const calculateCoords = (parentNode, rectsToHighlight) => {
   if (parentNode && rectsToHighlight) {
@@ -25,7 +25,7 @@ export const getNodeStyle = (rect, coord) => {
   if (rect && coord) {
     return {
       style: {
-        top: `${coord.top - HIGHLIGHT_YPOS_ADJUSTMENT}px`,
+        top: `${coord.top - YPOS_ADJUSTMENT}px`,
         left: `${coord.left}px`,
         width: `${rect.width}px`,
         height: `${rect.height * 0.2}px`,
