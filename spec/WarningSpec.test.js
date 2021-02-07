@@ -99,7 +99,7 @@ describe('#highlightStyles', () => {
 
     const styles = highlightStyles(coords, rectsToHighlight);
     expect(styles.length).toEqual(1);
-    expect(styles[0]).toEqual({
+    expect(styles[0].style).toEqual({
       top: '62px',
       left: '0px',
       width: '39px',
@@ -129,8 +129,8 @@ describe('#setNodeStyles', () => {
       y: 202,
     };
     const coords = { top: 65, left: 0 };
-
-    expect(getNodeStyle(rect, coords)).toEqual({
+    const nodeStyle = getNodeStyle(rect, coords);
+    expect(nodeStyle.style).toEqual({
       top: '62px',
       left: '0px',
       width: '39px',
