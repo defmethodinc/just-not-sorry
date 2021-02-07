@@ -15,10 +15,8 @@ export const calculateCoords = (parentNode, rangeToHighlight) => {
   return undefined;
 };
 
-export const highlightStyles = (parentNode, rangeToHighlight) => {
-  if (parentNode && rangeToHighlight) {
-    const coords = calculateCoords(parentNode, rangeToHighlight);
-    const rectsToHighlight = rangeToHighlight.getClientRects();
+export const highlightStyles = (coords, rectsToHighlight) => {
+  if (coords && rectsToHighlight) {
     return Array.from(rectsToHighlight).map((rect, i) =>
       getNodeStyle(rect, coords[i])
     );
@@ -47,8 +45,13 @@ export const calculatePosition = (coords) => {
 
 export default function Warning(props) {
   const { parentNode, rangeToHighlight } = props.value;
-  const warningStyles = highlightStyles(parentNode, rangeToHighlight);
+
   const coords = calculateCoords(parentNode, rangeToHighlight);
+  const rectsToHighlight = rangeToHighlight
+    ? rangeToHighlight.getClientRects()
+    : undefined;
+
+  const warningStyles = highlightStyles(coords, rectsToHighlight);
 
   const highlights = warningStyles.map((style, index) => {
     const position = calculatePosition(coords[index]);

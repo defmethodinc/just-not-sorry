@@ -95,8 +95,9 @@ describe('#highlightStyles', () => {
   it('should return valid coords when both parentNode and rangeToHighlight are valid', () => {
     const parentNode = parent;
     const rangeToHighlight = range;
+    const coords = calculateCoords(parentNode, rangeToHighlight);
 
-    const styles = highlightStyles(parentNode, rangeToHighlight);
+    const styles = highlightStyles(coords, rangeToHighlight.getClientRects());
     expect(styles.length).toEqual(1);
     expect(styles[0]).toEqual({
       top: '62px',
