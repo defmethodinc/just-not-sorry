@@ -52,12 +52,12 @@ export default function Warning(props) {
   const coords = calculateCoords(parentNode, rectsToHighlight);
   const warningStyles = highlightStyles(coords, rectsToHighlight);
 
-  const highlights = warningStyles.map((style, index) => {
+  const highlights = warningStyles.map((warningStyle, index) => {
     const position = calculatePosition(coords[index]);
     return (
       <WarningHighlight
         key={index}
-        styles={style}
+        styles={warningStyle.style}
         parent={parentNode}
         keyword={props.value.keyword}
         message={props.value.message}
