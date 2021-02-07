@@ -19,7 +19,7 @@ export const calculateCoords = (parentNode, rect) => {
   return undefined;
 };
 
-export const getNodeStyle = (rect, coord) => {
+export const getHighlight = (rect, coord) => {
   if (rect && coord) {
     return {
       style: {
@@ -36,11 +36,11 @@ export const getNodeStyle = (rect, coord) => {
   }
 };
 
-export const highlightStyles = (parentNode, rangeToHighlight) => {
+export const getHighlights = (parentNode, rangeToHighlight) => {
   if (rangeToHighlight) {
     const rectsToHighlight = Array.from(rangeToHighlight.getClientRects());
     return rectsToHighlight.map((rect) =>
-      getNodeStyle(rect, calculateCoords(parentNode, rect))
+      getHighlight(rect, calculateCoords(parentNode, rect))
     );
   }
   return undefined;
@@ -49,7 +49,7 @@ export const highlightStyles = (parentNode, rangeToHighlight) => {
 export default function Warning(props) {
   const { parentNode, rangeToHighlight } = props.value;
 
-  const highlights = highlightStyles(parentNode, rangeToHighlight);
+  const highlights = getHighlights(parentNode, rangeToHighlight);
 
   return (
     <div className="jns-warning">

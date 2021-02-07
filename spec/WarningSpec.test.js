@@ -1,7 +1,7 @@
 import { h } from 'preact';
 import Warning, {
-  highlightStyles,
-  getNodeStyle,
+  getHighlights,
+  getHighlight,
   calculateCoords,
 } from '../src/components/Warning.js';
 import { configure, shallow } from 'enzyme';
@@ -88,34 +88,37 @@ describe('#calculateCoords', () => {
   });
 });
 
-describe('#highlightStyles', () => {
+describe('#getHighlights', () => {
   it('should return undefined if the parentNode or rangeToHighlight are invalid', () => {
-    expect(highlightStyles(null, null)).toEqual(undefined);
-    expect(highlightStyles(undefined, undefined)).toEqual(undefined);
+    expect(getHighlights(null, null)).toEqual(undefined);
+    expect(getHighlights(undefined, undefined)).toEqual(undefined);
   });
 
-  it('should return valid coords when both parentNode and rangeToHighlight are valid', () => {
+  it('should return valid highlights when both parentNode and rangeToHighlight are valid', () => {
     const parentNode = parent;
     const rangeToHighlight = range;
 
-    const styles = highlightStyles(parentNode, rangeToHighlight);
-    expect(styles.length).toEqual(1);
-    expect(styles[0].style).toEqual({
-      top: '62px',
-      left: '0px',
-      width: '39px',
-      height: '3px',
-      zIndex: 10,
-      position: 'absolute',
-      padding: '0px',
+    const highlights = getHighlights(parentNode, rangeToHighlight);
+    expect(highlights.length).toEqual(1);
+    expect(highlights[0]).toEqual({
+      style: {
+        top: '62px',
+        left: '0px',
+        width: '39px',
+        height: '3px',
+        zIndex: 10,
+        position: 'absolute',
+        padding: '0px',
+      },
+      position: 'bottom',
     });
   });
 });
 
 describe('#setNodeStyles', () => {
   it('should return undefined if the parentNode or rangeToHighlight are invalid', () => {
-    expect(getNodeStyle(null, null)).toEqual(undefined);
-    expect(getNodeStyle(undefined, undefined)).toEqual(undefined);
+    expect(getHighlight(null, null)).toEqual(undefined);
+    expect(getHighlight(undefined, undefined)).toEqual(undefined);
   });
 
   it('should return a style object when both parentNode and rangeToHighlight are valid', () => {
@@ -130,15 +133,18 @@ describe('#setNodeStyles', () => {
       y: 202,
     };
     const coords = { top: 65, left: 0 };
-    const nodeStyle = getNodeStyle(rect, coords);
-    expect(nodeStyle.style).toEqual({
-      top: '62px',
-      left: '0px',
-      width: '39px',
-      height: '3px',
-      zIndex: 10,
-      position: 'absolute',
-      padding: '0px',
+    const highlight = getHighlight(rect, coords);
+    expect(highlight).toEqual({
+      style: {
+        top: '62px',
+        left: '0px',
+        width: '39px',
+        height: '3px',
+        zIndex: 10,
+        position: 'absolute',
+        padding: '0px',
+      },
+      position: 'bottom',
     });
   });
 });
