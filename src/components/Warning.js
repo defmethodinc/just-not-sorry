@@ -37,13 +37,11 @@ export const getHighlight = (rect, coord) => {
 };
 
 export const getHighlights = (parentNode, rangeToHighlight) => {
-  if (rangeToHighlight) {
-    const rectsToHighlight = Array.from(rangeToHighlight.getClientRects());
-    return rectsToHighlight.map((rect) =>
-      getHighlight(rect, calculateCoords(parentNode, rect))
-    );
-  }
-  return undefined;
+  return rangeToHighlight
+    ? Array.from(rangeToHighlight.getClientRects()).map((rect) =>
+        getHighlight(rect, calculateCoords(parentNode, rect))
+      )
+    : undefined;
 };
 
 export default function Warning(props) {
