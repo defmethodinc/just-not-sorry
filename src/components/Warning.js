@@ -33,11 +33,12 @@ export const getNodeStyle = (rect, coord) => {
         position: 'absolute',
         padding: '0px',
       },
+      highlightPosition: calculatePosition(coord),
     };
   }
 };
 
-export const calculatePosition = (coords) => {
+const calculatePosition = (coords) => {
   if (coords) return coords.top <= 200 ? 'bottom' : 'top';
   else return undefined;
 };
@@ -53,7 +54,6 @@ export default function Warning(props) {
   const warningStyles = highlightStyles(coords, rectsToHighlight);
 
   const highlights = warningStyles.map((warningStyle, index) => {
-    const position = calculatePosition(coords[index]);
     return (
       <WarningHighlight
         key={index}
@@ -61,7 +61,7 @@ export default function Warning(props) {
         parent={parentNode}
         keyword={props.value.keyword}
         message={props.value.message}
-        position={position}
+        position={warningStyle.highlightPosition}
       />
     );
   });
