@@ -37,7 +37,7 @@ export const calculateCoords = (parentNode, rect) => {
 };
 
 export const highlightStyles = (parentNode, rangeToHighlight) => {
-  if (parentNode && rangeToHighlight) {
+  if (rangeToHighlight) {
     const rectsToHighlight = Array.from(rangeToHighlight.getClientRects());
     return rectsToHighlight.map((rect) =>
       getNodeStyle(rect, calculateCoords(parentNode, rect))
