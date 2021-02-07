@@ -20,20 +20,20 @@ export const calculateCoords = (parentNode, rect) => {
 };
 
 export const getHighlight = (rect, coord) => {
-  if (rect && coord) {
-    return {
-      style: {
-        top: `${coord.top - YPOS_ADJUSTMENT}px`,
-        left: `${coord.left}px`,
-        width: `${rect.width}px`,
-        height: `${rect.height * 0.2}px`,
-        zIndex: 10,
-        position: 'absolute',
-        padding: '0px',
-      },
-      position: calculatePosition(coord),
-    };
-  }
+  return rect && coord
+    ? {
+        style: {
+          top: `${coord.top - YPOS_ADJUSTMENT}px`,
+          left: `${coord.left}px`,
+          width: `${rect.width}px`,
+          height: `${rect.height * 0.2}px`,
+          zIndex: 10,
+          position: 'absolute',
+          padding: '0px',
+        },
+        position: calculatePosition(coord),
+      }
+    : undefined;
 };
 
 export const getHighlights = (parentNode, rangeToHighlight) => {
