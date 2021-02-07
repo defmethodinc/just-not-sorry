@@ -6,7 +6,7 @@ export const HIGHLIGHT_YPOS_ADJUSTMENT = 3;
 export const calculateCoords = (parentNode, rectsToHighlight) => {
   if (parentNode && rectsToHighlight) {
     const parentRect = parentNode.getBoundingClientRect();
-    return Array.from(rectsToHighlight).map((rect) => ({
+    return rectsToHighlight.map((rect) => ({
       top: rect.top - parentRect.top + rect.height,
       left: rect.left - parentRect.left,
     }));
@@ -16,9 +16,7 @@ export const calculateCoords = (parentNode, rectsToHighlight) => {
 
 export const highlightStyles = (coords, rectsToHighlight) => {
   if (coords && rectsToHighlight) {
-    return Array.from(rectsToHighlight).map((rect, i) =>
-      getNodeStyle(rect, coords[i])
-    );
+    return rectsToHighlight.map((rect, i) => getNodeStyle(rect, coords[i]));
   }
   return undefined;
 };
@@ -46,11 +44,10 @@ export default function Warning(props) {
   const { parentNode, rangeToHighlight } = props.value;
 
   const rectsToHighlight = rangeToHighlight
-    ? rangeToHighlight.getClientRects()
+    ? Array.from(rangeToHighlight.getClientRects())
     : undefined;
 
   const coords = calculateCoords(parentNode, rectsToHighlight);
-
   const warningStyles = highlightStyles(coords, rectsToHighlight);
 
   const highlights = warningStyles.map((style, index) => {
