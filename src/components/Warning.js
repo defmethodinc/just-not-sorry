@@ -3,10 +3,9 @@ import WarningHighlight from './WarningHighlight.js';
 
 export const HIGHLIGHT_YPOS_ADJUSTMENT = 3;
 
-export const calculateCoords = (parentNode, rangeToHighlight) => {
-  if (parentNode && rangeToHighlight) {
+export const calculateCoords = (parentNode, rectsToHighlight) => {
+  if (parentNode && rectsToHighlight) {
     const parentRect = parentNode.getBoundingClientRect();
-    const rectsToHighlight = rangeToHighlight.getClientRects();
     return Array.from(rectsToHighlight).map((rect) => ({
       top: rect.top - parentRect.top + rect.height,
       left: rect.left - parentRect.left,
@@ -46,10 +45,11 @@ export const calculatePosition = (coords) => {
 export default function Warning(props) {
   const { parentNode, rangeToHighlight } = props.value;
 
-  const coords = calculateCoords(parentNode, rangeToHighlight);
   const rectsToHighlight = rangeToHighlight
     ? rangeToHighlight.getClientRects()
     : undefined;
+
+  const coords = calculateCoords(parentNode, rectsToHighlight);
 
   const warningStyles = highlightStyles(coords, rectsToHighlight);
 
