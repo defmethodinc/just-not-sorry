@@ -8,6 +8,17 @@ const calculatePosition = (coords) => {
   else return undefined;
 };
 
+export const calculateCoords = (parentNode, rect) => {
+  if (parentNode && rect) {
+    const parentRect = parentNode.getBoundingClientRect();
+    return {
+      top: rect.top - parentRect.top + rect.height,
+      left: rect.left - parentRect.left,
+    };
+  }
+  return undefined;
+};
+
 export const getNodeStyle = (rect, coord) => {
   if (rect && coord) {
     return {
@@ -23,17 +34,6 @@ export const getNodeStyle = (rect, coord) => {
       position: calculatePosition(coord),
     };
   }
-};
-
-export const calculateCoords = (parentNode, rect) => {
-  if (parentNode && rect) {
-    const parentRect = parentNode.getBoundingClientRect();
-    return {
-      top: rect.top - parentRect.top + rect.height,
-      left: rect.left - parentRect.left,
-    };
-  }
-  return undefined;
 };
 
 export const highlightStyles = (parentNode, rangeToHighlight) => {
