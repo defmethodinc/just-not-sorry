@@ -3,25 +3,9 @@ import WarningHighlight from './WarningHighlight.js';
 
 const YPOS_ADJUSTMENT = 3;
 
-export const calculateCoords = (parentNode, rectsToHighlight) => {
-  if (parentNode && rectsToHighlight) {
-    const parentRect = parentNode.getBoundingClientRect();
-    return rectsToHighlight.map((rect) => ({
-      top: rect.top - parentRect.top + rect.height,
-      left: rect.left - parentRect.left,
-    }));
-  }
-  return undefined;
-};
-
-export const highlightStyles = (parentNode, rangeToHighlight) => {
-  if (parentNode && rangeToHighlight) {
-    const rectsToHighlight = Array.from(rangeToHighlight.getClientRects());
-    const coords = calculateCoords(parentNode, rectsToHighlight);
-
-    return rectsToHighlight.map((rect, i) => getNodeStyle(rect, coords[i]));
-  }
-  return undefined;
+const calculatePosition = (coords) => {
+  if (coords) return coords.top <= 200 ? 'bottom' : 'top';
+  else return undefined;
 };
 
 export const getNodeStyle = (rect, coord) => {
@@ -41,9 +25,25 @@ export const getNodeStyle = (rect, coord) => {
   }
 };
 
-const calculatePosition = (coords) => {
-  if (coords) return coords.top <= 200 ? 'bottom' : 'top';
-  else return undefined;
+export const calculateCoords = (parentNode, rectsToHighlight) => {
+  if (parentNode && rectsToHighlight) {
+    const parentRect = parentNode.getBoundingClientRect();
+    return rectsToHighlight.map((rect) => ({
+      top: rect.top - parentRect.top + rect.height,
+      left: rect.left - parentRect.left,
+    }));
+  }
+  return undefined;
+};
+
+export const highlightStyles = (parentNode, rangeToHighlight) => {
+  if (parentNode && rangeToHighlight) {
+    const rectsToHighlight = Array.from(rangeToHighlight.getClientRects());
+    const coords = calculateCoords(parentNode, rectsToHighlight);
+
+    return rectsToHighlight.map((rect, i) => getNodeStyle(rect, coords[i]));
+  }
+  return undefined;
 };
 
 export default function Warning(props) {
