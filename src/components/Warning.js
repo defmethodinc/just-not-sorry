@@ -21,11 +21,11 @@ export const highlightStyles = (coords, rectsToHighlight) => {
   return undefined;
 };
 
-export const getNodeStyle = (rect, coords) => {
-  if (rect && coords) {
+export const getNodeStyle = (rect, coord) => {
+  if (rect && coord) {
     return {
-      top: `${coords.top - HIGHLIGHT_YPOS_ADJUSTMENT}px`,
-      left: `${coords.left}px`,
+      top: `${coord.top - HIGHLIGHT_YPOS_ADJUSTMENT}px`,
+      left: `${coord.left}px`,
       width: `${rect.width}px`,
       height: `${rect.height * 0.2}px`,
       zIndex: 10,
