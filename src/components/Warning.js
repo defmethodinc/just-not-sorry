@@ -33,7 +33,7 @@ export const getNodeStyle = (rect, coord) => {
         position: 'absolute',
         padding: '0px',
       },
-      highlightPosition: calculatePosition(coord),
+      position: calculatePosition(coord),
     };
   }
 };
@@ -51,19 +51,19 @@ export default function Warning(props) {
     : undefined;
 
   const coords = calculateCoords(parentNode, rectsToHighlight);
-  const warningStyles = highlightStyles(coords, rectsToHighlight);
+  const highlights = highlightStyles(coords, rectsToHighlight);
 
-  const highlights = warningStyles.map((warningStyle, index) => {
+  const warningHighlights = highlights.map((highlight, index) => {
     return (
       <WarningHighlight
         key={index}
-        styles={warningStyle.style}
+        styles={highlight.style}
         parent={parentNode}
         keyword={props.value.keyword}
         message={props.value.message}
-        position={warningStyle.highlightPosition}
+        position={highlight.position}
       />
     );
   });
-  return <div className="jns-warning">{highlights}</div>;
+  return <div className="jns-warning">{warningHighlights}</div>;
 }
