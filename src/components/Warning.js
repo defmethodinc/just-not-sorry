@@ -48,7 +48,7 @@ export default function Warning(props) {
 
   const rectsToHighlight = rangeToHighlight
     ? Array.from(rangeToHighlight.getClientRects())
-    : undefined;
+    : [];
 
   const coords = calculateCoords(parentNode, rectsToHighlight);
   const highlights = highlightStyles(coords, rectsToHighlight);
