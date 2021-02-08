@@ -85,8 +85,8 @@ class JustNotSorry extends Component {
     }));
     const node = event.currentTarget;
     node.removeEventListener('focus', this.addObserver);
-    node.removeEventListener('focus', this.checkForWarnings);
-    node.removeEventListener('input', this.checkForWarnings);
+    node.removeEventListener('focus', this.checkForWarnings(node));
+    node.removeEventListener('input', this.checkForWarnings(node));
   };
 
   applyEventListeners = (node) => {
