@@ -8,7 +8,7 @@ import domRegexpMatch from 'dom-regexp-match';
 import { handleContentEditableContentInsert } from '../callbacks/ContentEditableInsert';
 import { handleContentEditableChange } from '../callbacks/ContentEditableChange';
 
-const WAIT_TIME_BEFORE_RECALC_WARNINGS = 1;
+const WAIT_TIME_BEFORE_RECALC_WARNINGS = 500;
 
 const OPTIONS = {
   characterData: false,
