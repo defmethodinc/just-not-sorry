@@ -19,8 +19,8 @@ export const calculateCoords = (parentNode, rect) => {
   return undefined;
 };
 
-export const getHighlight = (rect, coord) => {
-  return rect && coord
+export const getHighlight = (rect, coord) =>
+  rect && coord
     ? {
         style: {
           top: `${coord.top - YPOS_ADJUSTMENT}px`,
@@ -34,15 +34,13 @@ export const getHighlight = (rect, coord) => {
         position: calculatePosition(coord),
       }
     : undefined;
-};
 
-export const getHighlights = (parentNode, rangeToHighlight) => {
-  return rangeToHighlight
-    ? Array.from(rangeToHighlight.getClientRects()).map((rect) =>
+export const getHighlights = (parentNode, rangeToHighlight) =>
+  rangeToHighlight
+    ? Array.from(rangeToHighlight.getClientRects(), (rect) =>
         getHighlight(rect, calculateCoords(parentNode, rect))
       )
     : undefined;
-};
 
 export default function Warning(props) {
   const { parentNode, rangeToHighlight } = props.value;
