@@ -70,23 +70,26 @@ class JustNotSorry extends Component {
 
   addObserver = (event) => {
     const node = event.currentTarget;
-    node.addEventListener('input', this.checkForWarnings(node));
     this.addWarnings(node);
     this.observer.observe(node, OPTIONS);
+    node.addEventListener('focus', this.checkForWarnings(node));
+    node.addEventListener('input', this.checkForWarnings(node));
   };
 
   removeObserver = (event) => {
+    this.observer.disconnect();
     // pass a function to ensure the call uses the updated version
     // eslint-disable-next-line no-unused-vars
     this.setState((state) => ({
       warnings: [],
     }));
-    event.currentTarget.removeEventListener('input', this.checkForWarnings);
-    this.observer.disconnect();
+    const node = event.currentTarget;
+    node.removeEventListener('focus', this.addObserver);
+    node.removeEventListener('focus', this.checkForWarnings);
+    node.removeEventListener('input', this.checkForWarnings);
   };
 
   applyEventListeners = (node) => {
-    node.removeEventListener('focus', this.addObserver);
     node.addEventListener('focus', this.addObserver);
     node.addEventListener('blur', this.removeObserver);
   };
