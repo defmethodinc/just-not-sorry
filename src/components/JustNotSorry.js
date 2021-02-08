@@ -59,34 +59,42 @@ class JustNotSorry extends Component {
       warning.message
     );
 
-  addWarnings = (node) =>
-    WARNINGS.forEach((warning) => this.addWarning(node, warning));
-
-  checkForWarnings = (node) =>
-    Util.debounce(() => {
-      this.setState({ warnings: [] });
-      this.addWarnings(node);
-    }, WAIT_TIME_BEFORE_RECALC_WARNINGS);
-
-  addObserver = (event) => {
-    const node = event.currentTarget;
-    this.addWarnings(node);
-    this.observer.observe(node, OPTIONS);
-    node.addEventListener('focus', this.checkForWarnings(node));
-    node.addEventListener('input', this.checkForWarnings(node));
-  };
-
-  removeObserver = (event) => {
-    this.observer.disconnect();
+  resetState = () => {
     // pass a function to ensure the call uses the updated version
     // eslint-disable-next-line no-unused-vars
     this.setState((state) => ({
       warnings: [],
     }));
+  };
+
+  addWarnings = (node) => {
+    this.resetState();
+    WARNINGS.forEach((warning) => this.addWarning(node, warning));
+  };
+
+  checkForWarnings = (node) =>
+    Util.debounce(
+      () => this.addWarnings(node),
+      WAIT_TIME_BEFORE_RECALC_WARNINGS
+    );
+
+  addObserver = (event) => {
+    const node = event.currentTarget;
+    this.addWarnings(node);
+    this.observer.observe(node, OPTIONS);
+    const warningCheck = this.checkForWarnings(node);
+    node.addEventListener('focus', warningCheck);
+    node.addEventListener('input', warningCheck);
+  };
+
+  removeObserver = (event) => {
+    this.observer.disconnect();
+    this.resetState();
     const node = event.currentTarget;
     node.removeEventListener('focus', this.addObserver);
-    node.removeEventListener('focus', this.checkForWarnings(node));
-    node.removeEventListener('input', this.checkForWarnings(node));
+    const warningCheck = this.checkForWarnings(node);
+    node.removeEventListener('focus', warningCheck);
+    node.removeEventListener('input', warningCheck);
   };
 
   applyEventListeners = (node) => {
