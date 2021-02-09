@@ -34,22 +34,18 @@ class JustNotSorry extends Component {
   }
 
   updateWarnings = (node, pattern, message) => {
-    if (node.childNodes) {
-      node.childNodes.forEach((childNode) => {
-        domRegexpMatch(childNode, pattern, (match, range) => {
-          const newWarning = {
-            pattern: pattern.source,
-            message: message,
-            parentNode: node.parentNode,
-            rangeToHighlight: range,
-          };
+    domRegexpMatch(node, pattern, (match, range) => {
+      const newWarning = {
+        pattern: pattern.source,
+        message: message,
+        parentNode: node.parentNode,
+        rangeToHighlight: range,
+      };
 
-          this.setState((state) => ({
-            warnings: state.warnings.concat(newWarning),
-          }));
-        });
-      });
-    }
+      this.setState((state) => ({
+        warnings: state.warnings.concat(newWarning),
+      }));
+    });
   };
 
   addWarning = (node, warning) =>
