@@ -53,8 +53,6 @@ export default function Warning(props) {
         <WarningHighlight
           key={index}
           styles={highlight.style}
-          parent={parentNode}
-          keyword={props.value.keyword}
           message={props.value.message}
           position={highlight.position}
         />
