@@ -51,7 +51,7 @@ describe('<Warning/>', () => {
   const testProps = {
     key: 'test-key',
     value: {
-      keyword: 'test-keyword',
+      pattern: 'test-pattern',
       message: 'test-message',
       parentNode: parent,
       rangeToHighlight: range,
@@ -80,7 +80,7 @@ describe('#calculateCoords', () => {
     expect(rectsToHighlight.length).toEqual(1);
 
     const rect = rectsToHighlight[0];
-    const coords = calculateCoords(parentNode, rect);
+    const coords = calculateCoords(parentNode.getBoundingClientRect(), rect);
     expect(coords).toEqual({
       top: 65,
       left: 0,

@@ -8,16 +8,13 @@ const calculatePosition = (coords) => {
   else return undefined;
 };
 
-export const calculateCoords = (parentNode, rect) => {
-  if (parentNode && rect) {
-    const parentRect = parentNode.getBoundingClientRect();
-    return {
-      top: rect.top - parentRect.top + rect.height,
-      left: rect.left - parentRect.left,
-    };
-  }
-  return undefined;
-};
+export const calculateCoords = (parentRect, rect) =>
+  parentRect && rect
+    ? {
+        top: rect.top - parentRect.top + rect.height,
+        left: rect.left - parentRect.left,
+      }
+    : undefined;
 
 export const getHighlight = (rect, coord) =>
   rect && coord
@@ -35,16 +32,18 @@ export const getHighlight = (rect, coord) =>
       }
     : undefined;
 
-export const getHighlights = (parentNode, rangeToHighlight) =>
-  rangeToHighlight
-    ? Array.from(rangeToHighlight.getClientRects(), (rect) =>
-        getHighlight(rect, calculateCoords(parentNode, rect))
-      )
-    : undefined;
+export const getHighlights = (parentNode, rangeToHighlight) => {
+  if (parentNode && rangeToHighlight) {
+    const parentRect = parentNode.getBoundingClientRect();
+    return Array.from(rangeToHighlight.getClientRects(), (rect) =>
+      getHighlight(rect, calculateCoords(parentRect, rect))
+    );
+  }
+  return undefined;
+};
 
 export default function Warning(props) {
   const { parentNode, rangeToHighlight } = props.value;
-
   const highlights = getHighlights(parentNode, rangeToHighlight);
 
   return (
