@@ -3,11 +3,6 @@ import WarningHighlight from './WarningHighlight.js';
 
 const YPOS_ADJUSTMENT = 3;
 
-const calculatePosition = (coords) => {
-  if (coords) return coords.top <= 200 ? 'bottom' : 'top';
-  else return undefined;
-};
-
 export const calculateCoords = (parentRect, rect) =>
   parentRect && rect
     ? {
@@ -28,7 +23,7 @@ export const getHighlight = (rect, coord) =>
           position: 'absolute',
           padding: '0px',
         },
-        position: calculatePosition(coord),
+        position: coord.top <= 200 ? 'bottom' : 'top',
       }
     : undefined;
 
