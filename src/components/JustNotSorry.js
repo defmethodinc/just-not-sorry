@@ -76,7 +76,7 @@ class JustNotSorry extends Component {
     }, WAIT_TIME_BEFORE_RECALC_WARNINGS);
 
   addObserver = (event) => {
-    const node = event.currentTarget;
+    const node = event.target;
     this.messageObserver.observe(node, OPTIONS);
     this.searchPhrases(node);
     const warningCheck = this.requestSearch(node);
@@ -89,7 +89,7 @@ class JustNotSorry extends Component {
 
     this.resetState();
 
-    const node = event.currentTarget;
+    const node = event.target;
 
     const warningCheck = this.requestSearch(node);
     node.removeEventListener('focus', warningCheck);
