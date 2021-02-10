@@ -3,7 +3,7 @@ import ReactDOM from 'react-dom';
 
 import Warning from './Warning.js';
 import * as Util from './util.js';
-import WARNINGS from '../warnings/phrases.json';
+import PHRASES from '../warnings/phrases.json';
 import domRegexpMatch from 'dom-regexp-match';
 import { handleContentEditableContentInsert } from '../callbacks/ContentEditableInsert';
 import { handleContentEditableChange } from '../callbacks/ContentEditableChange';
@@ -30,30 +30,16 @@ class JustNotSorry extends Component {
     );
     this.documentObserver.observe(document, { subtree: true, childList: true });
 
-    this.observer = new MutationObserver(handleContentEditableContentInsert);
+    this.messageObserver = new MutationObserver(
+      handleContentEditableContentInsert
+    );
   }
 
-  updateWarnings = (node, pattern, message) => {
-    domRegexpMatch(node, pattern, (match, range) => {
-      const newWarning = {
-        pattern: pattern.source,
-        message: message,
-        parentNode: node.parentNode,
-        rangeToHighlight: range,
-      };
-
-      this.setState((state) => ({
-        warnings: state.warnings.concat(newWarning),
-      }));
-    });
-  };
-
-  addWarning = (node, warning) =>
-    this.updateWarnings(
-      node,
-      new RegExp(warning.pattern, 'ig'),
-      warning.message
-    );
+  updateState(newWarning) {
+    this.setState((state) => ({
+      warnings: state.warnings.concat(newWarning),
+    }));
+  }
 
   resetState = () => {
     // pass a function to ensure the call uses the updated version
@@ -63,34 +49,52 @@ class JustNotSorry extends Component {
     }));
   };
 
-  addWarnings = (node) => {
-    this.resetState();
-    WARNINGS.forEach((warning) => this.addWarning(node, warning));
-  };
+  addPhrase(pattern, warning, node) {
+    return (match, range) => {
+      const newWarning = {
+        pattern: pattern.source,
+        message: warning.message,
+        parentNode: node.parentNode,
+        rangeToHighlight: range,
+      };
+      this.updateState(newWarning);
+    };
+  }
 
-  checkForWarnings = (node) =>
-    Util.debounce(
-      () => this.addWarnings(node),
-      WAIT_TIME_BEFORE_RECALC_WARNINGS
-    );
+  search(node, warning) {
+    const pattern = new RegExp(warning.pattern, 'ig');
+    domRegexpMatch(node, pattern, this.addPhrase(pattern, warning, node));
+  }
+
+  searchPhrases = (node) =>
+    PHRASES.forEach((phrase) => this.search(node, phrase));
+
+  requestSearch = (node) =>
+    Util.debounce(() => {
+      this.resetState();
+      this.searchPhrases(node);
+    }, WAIT_TIME_BEFORE_RECALC_WARNINGS);
 
   addObserver = (event) => {
     const node = event.currentTarget;
-    this.addWarnings(node);
-    this.observer.observe(node, OPTIONS);
-    const warningCheck = this.checkForWarnings(node);
+    this.messageObserver.observe(node, OPTIONS);
+    this.searchPhrases(node);
+    const warningCheck = this.requestSearch(node);
     node.addEventListener('focus', warningCheck);
     node.addEventListener('input', warningCheck);
   };
 
   removeObserver = (event) => {
-    this.observer.disconnect();
+    this.messageObserver.disconnect();
+
     this.resetState();
+
     const node = event.currentTarget;
-    node.removeEventListener('focus', this.addObserver);
-    const warningCheck = this.checkForWarnings(node);
+
+    const warningCheck = this.requestSearch(node);
     node.removeEventListener('focus', warningCheck);
     node.removeEventListener('input', warningCheck);
+    node.removeEventListener('focus', this.addObserver);
   };
 
   applyEventListeners = (mutation) => {
