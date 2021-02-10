@@ -49,52 +49,57 @@ class JustNotSorry extends Component {
     }));
   };
 
-  createWarning = (pattern, phrase, node) => {
+  createWarning = (pattern, phrase, message) => {
     return (match, range) => {
       const newWarning = {
         pattern: pattern.source,
         message: phrase.message,
-        parentNode: node.parentNode,
+        parentNode: message.parentNode,
         rangeToHighlight: range,
       };
       this.updateState(newWarning);
     };
   };
 
-  search = (node, phrase) => {
+  search = (message, phrase) => {
     const pattern = new RegExp(phrase.pattern, 'ig');
-    domRegexpMatch(node, pattern, this.createWarning(pattern, phrase, node));
+    domRegexpMatch(
+      message,
+      pattern,
+      this.createWarning(pattern, phrase, message)
+    );
   };
 
-  searchPhrases = (node) =>
-    PHRASES.forEach((phrase) => this.search(node, phrase));
+  searchPhrases = (message) =>
+    PHRASES.forEach((phrase) => this.search(message, phrase));
 
-  requestSearch = (node) =>
+  requestSearch = (message) =>
     Util.debounce(() => {
       this.resetState();
-      this.searchPhrases(node);
+      this.searchPhrases(message);
     }, WAIT_TIME_BEFORE_RECALC_WARNINGS);
 
   addObserver = (event) => {
-    const node = event.target;
-    this.messageObserver.observe(node, OPTIONS);
-    this.searchPhrases(node);
-    const warningCheck = this.requestSearch(node);
-    node.addEventListener('focus', warningCheck);
-    node.addEventListener('input', warningCheck);
+    const message = event.target;
+    this.messageObserver.observe(message, OPTIONS);
+
+    this.searchPhrases(message);
+
+    const searchMessage = this.requestSearch(message);
+    message.addEventListener('focus', searchMessage);
+    message.addEventListener('input', searchMessage);
   };
 
   removeObserver = (event) => {
+    const message = event.target;
     this.messageObserver.disconnect();
 
     this.resetState();
 
-    const node = event.target;
-
-    const warningCheck = this.requestSearch(node);
-    node.removeEventListener('focus', warningCheck);
-    node.removeEventListener('input', warningCheck);
-    node.removeEventListener('focus', this.addObserver);
+    const searchMessage = this.requestSearch(message);
+    message.removeEventListener('focus', searchMessage);
+    message.removeEventListener('input', searchMessage);
+    message.removeEventListener('focus', this.addObserver);
   };
 
   applyEventListeners = (mutation) => {
