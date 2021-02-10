@@ -49,7 +49,7 @@ class JustNotSorry extends Component {
     }));
   };
 
-  addPhrase(pattern, warning, node) {
+  addPhrase = (pattern, warning, node) => {
     return (match, range) => {
       const newWarning = {
         pattern: pattern.source,
@@ -59,12 +59,12 @@ class JustNotSorry extends Component {
       };
       this.updateState(newWarning);
     };
-  }
+  };
 
-  search(node, warning) {
+  search = (node, warning) => {
     const pattern = new RegExp(warning.pattern, 'ig');
     domRegexpMatch(node, pattern, this.addPhrase(pattern, warning, node));
-  }
+  };
 
   searchPhrases = (node) =>
     PHRASES.forEach((phrase) => this.search(node, phrase));
