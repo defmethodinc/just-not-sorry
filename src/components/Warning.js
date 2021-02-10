@@ -1,81 +1,56 @@
 import { h } from 'preact';
 import WarningHighlight from './WarningHighlight.js';
 
-export const HIGHLIGHT_YPOS_ADJUSTMENT = 3;
+const YPOS_ADJUSTMENT = 3;
 
-export const calculateCoords = (parentNode, rangeToHighlight) => {
-  if (parentNode && rangeToHighlight) {
-    let parentRect = parentNode.getBoundingClientRect();
-    let rectsToHighlight = rangeToHighlight.getClientRects();
-    let rect = rectsToHighlight[0];
-
-    if (rect) {
-      let coords = {
+export const calculateCoords = (parentRect, rect) =>
+  parentRect && rect
+    ? {
         top: rect.top - parentRect.top + rect.height,
         left: rect.left - parentRect.left,
-      };
-      return coords;
-    }
-  }
-  return;
-};
+      }
+    : undefined;
 
-export const highlightStyles = (parentNode, rangeToHighlight) => {
+export const getHighlight = (rect, coord) =>
+  rect && coord
+    ? {
+        style: {
+          top: `${coord.top - YPOS_ADJUSTMENT}px`,
+          left: `${coord.left}px`,
+          width: `${rect.width}px`,
+          height: `${rect.height * 0.2}px`,
+          zIndex: 10,
+          position: 'absolute',
+          padding: '0px',
+        },
+        position: coord.top <= 200 ? 'bottom' : 'top',
+      }
+    : undefined;
+
+export const getHighlights = (parentNode, rangeToHighlight) => {
   if (parentNode && rangeToHighlight) {
-    let coords = calculateCoords(parentNode, rangeToHighlight);
-    let rectsToHighlight = rangeToHighlight.getClientRects();
-    let rect = rectsToHighlight[0];
-
-    if (rect) {
-      return setNodeStyle(rect, coords);
-    }
+    const parentRect = parentNode.getBoundingClientRect();
+    return Array.from(rangeToHighlight.getClientRects(), (rect) =>
+      getHighlight(rect, calculateCoords(parentRect, rect))
+    );
   }
-  return;
-};
-
-export const setNodeStyle = (rect, coords) => {
-  if (rect && coords) {
-    return {
-      top: coords.top - HIGHLIGHT_YPOS_ADJUSTMENT + 'px',
-      left: coords.left + 'px',
-      width: rect.width + 'px',
-      height: rect.height * 0.2 + 'px',
-      zIndex: 10,
-      position: 'absolute',
-      padding: '0px',
-    };
-  }
-};
-
-export const calculatePosition = (coords) => {
-  if (coords) {
-    if (coords.top <= 200) {
-      return 'bottom';
-    } else if (coords.top > 200) {
-      return 'top';
-    }
-  }
-  return null;
+  return undefined;
 };
 
 export default function Warning(props) {
-  const warningStyle = props.value
-    ? highlightStyles(props.value.parentNode, props.value.rangeToHighlight)
-    : {};
-  const coords = props.value
-    ? calculateCoords(props.value.parentNode, props.value.rangeToHighlight)
-    : {};
-  const position = calculatePosition(coords);
+  const { parentNode, rangeToHighlight } = props.value;
+  const highlights = getHighlights(parentNode, rangeToHighlight);
 
   return (
     <div className="jns-warning">
-      <WarningHighlight
-        styles={warningStyle}
-        parent={props.value.parentNode}
-        keyword={props.value.keyword}
-        message={props.value.message}
-        position={position}
-      />
+      {highlights.map((highlight, index) => (
+        <WarningHighlight
+          key={index}
+          styles={highlight.style}
+          message={props.value.message}
+          position={highlight.position}
+        />
+      ))}
     </div>
   );
 }

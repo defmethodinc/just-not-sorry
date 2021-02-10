@@ -3,160 +3,112 @@ import ReactDOM from 'react-dom';
 
 import Warning from './Warning.js';
 import * as Util from './util.js';
-import WARNING_MESSAGES from '../warnings/phrases.json';
+import WARNINGS from '../warnings/phrases.json';
 import domRegexpMatch from 'dom-regexp-match';
+import { handleContentEditableContentInsert } from '../callbacks/ContentEditableInsert';
+import { handleContentEditableChange } from '../callbacks/ContentEditableChange';
 
-export const WAIT_TIME_BEFORE_RECALC_WARNINGS = 500;
+const WAIT_TIME_BEFORE_RECALC_WARNINGS = 500;
+
+const OPTIONS = {
+  characterData: false,
+  subtree: true,
+  childList: true,
+  attributes: false,
+};
 
 class JustNotSorry extends Component {
   constructor(props) {
     super(props);
 
     this.state = {
-      editableDivCount: 0,
       warnings: [],
     };
 
     this.documentObserver = new MutationObserver(
-      this.handleContentEditableDivChange.bind(this)
+      handleContentEditableChange(this.applyEventListeners)
     );
-    this.observer = new MutationObserver(
-      this.handleContentEditableContentInsert.bind(this)
-    );
-    this.initializeObserver();
-  }
-
-  initializeObserver() {
     this.documentObserver.observe(document, { subtree: true, childList: true });
+
+    this.observer = new MutationObserver(handleContentEditableContentInsert);
   }
 
-  handleContentEditableDivChange(mutations) {
-    let divCount = this.getEditableDivs().length;
-    if (divCount !== this.state.editableDivCount) {
-      this.setState({ editableDivCount: divCount });
-      if (mutations[0]) {
-        mutations
-          .filter(
-            (mutation) =>
-              mutation.type === 'childList' &&
-              mutation.target.hasAttribute('contentEditable')
-          )
-          .forEach((mutation) => this.applyEventListeners(mutation.target));
-      }
-    }
-  }
-
-  handleContentEditableContentInsert(mutations) {
-    if (mutations[0]) {
-      mutations
-        .filter(
-          (mutation) =>
-            mutation.type !== 'characterData' &&
-            mutation.target.hasAttribute('contentEditable')
-        )
-        .forEach((mutation) => {
-          // generate input event to fire checkForWarnings again
-          let inputEvent = new Event('input', {
-            bubbles: true,
-            cancelable: true,
-          });
-          mutation.target.dispatchEvent(inputEvent);
-        });
-    }
-  }
-
-  checkForWarningsImpl(parentElement) {
-    this.setState({ warnings: [] });
-    this.addWarnings(parentElement);
-  }
-
-  checkForWarnings(parentElement) {
-    return Util.debounce(
-      () => this.checkForWarningsImpl(parentElement),
-      WAIT_TIME_BEFORE_RECALC_WARNINGS
-    );
-  }
-
-  addObserver(event) {
-    const element = event.currentTarget;
-    element.addEventListener(
-      'input',
-      this.checkForWarnings(element.parentNode)
-    );
-    this.addWarnings(element.parentNode);
-    this.observer.observe(element, {
-      characterData: false,
-      subtree: true,
-      childList: true,
-      attributes: false,
-    });
-  }
-
-  removeObserver(event) {
-    const element = event.currentTarget;
-    this.setState({ warnings: [] });
-    element.removeEventListener('input', this.checkForWarnings);
-    this.observer.disconnect();
-  }
-
-  applyEventListeners(targetDiv) {
-    targetDiv.removeEventListener('focus', this.addObserver);
-    targetDiv.addEventListener('focus', this.addObserver.bind(this));
-    targetDiv.addEventListener('blur', this.removeObserver.bind(this));
-  }
-
-  getEditableDivs() {
-    return document.querySelectorAll('div[contentEditable=true]');
-  }
-
-  addWarning(node, pattern, message) {
-    this.updateWarnings(node, new RegExp(pattern, 'ig'), message);
-  }
-
-  addWarnings(node) {
-    WARNING_MESSAGES.forEach((warning) => {
-      this.addWarning(node, warning.pattern, warning.message);
-    });
-  }
-
-  updateWarnings(node, pattern, message) {
+  updateWarnings = (node, pattern, message) => {
     domRegexpMatch(node, pattern, (match, range) => {
-      let newWarning = {
+      const newWarning = {
         pattern: pattern.source,
         message: message,
-        parentNode: node,
+        parentNode: node.parentNode,
         rangeToHighlight: range,
       };
 
-      this.setState((state) => {
-        const warnings = state.warnings
-          .concat(newWarning)
-          .filter(
-            (warning) =>
-              warning.rangeToHighlight.startContainer &&
-              warning.rangeToHighlight.startContainer.textContent !==
-                newWarning.message
-          );
-        return {
-          warnings,
-        };
-      });
+      this.setState((state) => ({
+        warnings: state.warnings.concat(newWarning),
+      }));
     });
-  }
+  };
 
-  render() {
-    const warningList = this.state.warnings.map((warning) =>
-      ReactDOM.createPortal(
-        <Warning
-          className=".jns-warning"
-          key={warning.pattern}
-          value={warning}
-        />,
-        warning.parentNode
-      )
+  addWarning = (node, warning) =>
+    this.updateWarnings(
+      node,
+      new RegExp(warning.pattern, 'ig'),
+      warning.message
     );
 
-    return <div className=".jns-warnings-list">{warningList}</div>;
+  resetState = () => {
+    // pass a function to ensure the call uses the updated version
+    // eslint-disable-next-line no-unused-vars
+    this.setState((state) => ({
+      warnings: [],
+    }));
+  };
+
+  addWarnings = (node) => {
+    this.resetState();
+    WARNINGS.forEach((warning) => this.addWarning(node, warning));
+  };
+
+  checkForWarnings = (node) =>
+    Util.debounce(
+      () => this.addWarnings(node),
+      WAIT_TIME_BEFORE_RECALC_WARNINGS
+    );
+
+  addObserver = (event) => {
+    const node = event.currentTarget;
+    this.addWarnings(node);
+    this.observer.observe(node, OPTIONS);
+    const warningCheck = this.checkForWarnings(node);
+    node.addEventListener('focus', warningCheck);
+    node.addEventListener('input', warningCheck);
+  };
+
+  removeObserver = (event) => {
+    this.observer.disconnect();
+    this.resetState();
+    const node = event.currentTarget;
+    node.removeEventListener('focus', this.addObserver);
+    const warningCheck = this.checkForWarnings(node);
+    node.removeEventListener('focus', warningCheck);
+    node.removeEventListener('input', warningCheck);
+  };
+
+  applyEventListeners = (node) => {
+    node.addEventListener('focus', this.addObserver);
+    node.addEventListener('blur', this.removeObserver);
+  };
+
+  render() {
+    return (
+      <div className="jns-warnings-list">
+        {this.state.warnings.map((warning) =>
+          ReactDOM.createPortal(
+            <Warning key={warning.pattern} value={warning} />,
+            warning.parentNode
+          )
+        )}
+      </div>
+    );
   }
 }
 

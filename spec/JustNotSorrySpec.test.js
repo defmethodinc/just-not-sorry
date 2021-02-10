@@ -25,6 +25,7 @@ document.createRange = jest.fn(() => ({
   getClientRects: jest.fn(() => [{}]),
 }));
 
+const buildWarning = (pattern, message) => ({ pattern, message });
 describe('JustNotSorry', () => {
   let justNotSorry;
   let wrapper;
@@ -95,7 +96,7 @@ describe('JustNotSorry', () => {
       });
       node.simulate('focus');
 
-      expect(spy).toHaveBeenCalledWith(node.getDOMNode().parentNode);
+      expect(spy).toHaveBeenCalledWith(node.getDOMNode());
     });
   });
 
@@ -172,14 +173,17 @@ describe('JustNotSorry', () => {
         'test!!!'
       ).getDOMNode();
 
-      instance.addWarning(node, '\\b!{3,}\\B', 'warning message');
+      instance.addWarning(node, {
+        pattern: '\\b!{3,}\\B',
+        message: 'warning message',
+      });
 
       expect(wrapper.state('warnings').length).toEqual(1);
       expect(wrapper.state('warnings')[0]).toEqual(
         expect.objectContaining({
           pattern: '\\b!{3,}\\B',
           message: 'warning message',
-          parentNode: node,
+          parentNode: node.parentNode,
         })
       );
     });
@@ -190,14 +194,14 @@ describe('JustNotSorry', () => {
         'test just test'
       ).getDOMNode();
 
-      instance.addWarning(node, 'just', 'warning message');
+      instance.addWarning(node, buildWarning('just', 'warning message'));
 
       expect(wrapper.state('warnings').length).toEqual(1);
       expect(wrapper.state('warnings')[0]).toEqual(
         expect.objectContaining({
           pattern: 'just',
           message: 'warning message',
-          parentNode: node,
+          parentNode: node.parentNode,
         })
       );
     });
@@ -207,7 +211,10 @@ describe('JustNotSorry', () => {
         { id: 'div-id' },
         'test justify test'
       ).getDOMNode();
-      instance.addWarning(node, '\\b(just)\\b', 'warning message');
+      instance.addWarning(
+        node,
+        buildWarning('\\b(just)\\b', 'warning message')
+      );
 
       expect(wrapper.state('warnings').length).toEqual(0);
       expect(wrapper.state('warnings')).toEqual([]);
@@ -219,13 +226,13 @@ describe('JustNotSorry', () => {
         'jUsT kidding'
       ).getDOMNode();
 
-      instance.addWarning(node, 'just', 'warning message');
+      instance.addWarning(node, buildWarning('just', 'warning message'));
       expect(wrapper.state('warnings').length).toEqual(1);
       expect(wrapper.state('warnings')[0]).toEqual(
         expect.objectContaining({
           pattern: 'just',
           message: 'warning message',
-          parentNode: node,
+          parentNode: node.parentNode,
         })
       );
     });
@@ -236,13 +243,13 @@ describe('JustNotSorry', () => {
         'just. test'
       ).getDOMNode();
 
-      instance.addWarning(node, 'just', 'warning message');
+      instance.addWarning(node, buildWarning('just', 'warning message'));
       expect(wrapper.state('warnings').length).toEqual(1);
       expect(wrapper.state('warnings')[0]).toEqual(
         expect.objectContaining({
           pattern: 'just',
           message: 'warning message',
-          parentNode: node,
+          parentNode: node.parentNode,
         })
       );
     });
@@ -253,13 +260,13 @@ describe('JustNotSorry', () => {
         'my cat is so sorry because of you'
       ).getDOMNode();
 
-      instance.addWarning(node, 'so sorry', 'warning message');
+      instance.addWarning(node, buildWarning('so sorry', 'warning message'));
       expect(wrapper.state('warnings').length).toEqual(1);
       expect(wrapper.state('warnings')[0]).toEqual(
         expect.objectContaining({
           pattern: 'so sorry',
           message: 'warning message',
-          parentNode: node,
+          parentNode: node.parentNode,
         })
       );
     });
@@ -281,7 +288,7 @@ describe('JustNotSorry', () => {
         { id: 'div-3' },
         'test justify test'
       ).getDOMNode();
-      instance.addWarning(node, 'very', 'warning message');
+      instance.addWarning(node, buildWarning('very', 'warning message'));
 
       expect(wrapper.state('warnings').length).toEqual(0);
       expect(wrapper.state('warnings')).toEqual([]);
@@ -321,80 +328,6 @@ describe('JustNotSorry', () => {
       node.simulate('input');
       expect(spy).toHaveBeenCalledTimes(3);
       node.unmount();
-    });
-  });
-
-  describe('#handleContentEditableDivChange', () => {
-    describe('when a new content editable div is added', () => {
-      let spy;
-      beforeEach(() => {
-        spy = jest
-          .spyOn(instance, 'applyEventListeners')
-          .mockImplementationOnce(() => {});
-        jest.spyOn(instance, 'getEditableDivs').mockReturnValue([1]);
-      });
-
-      it('should apply the event listeners', () => {
-        const id = 'testing';
-        const node = generateEditableDiv({ id }, 'just not sorry');
-        const mockMutation = {
-          type: 'childList',
-          target: node.getDOMNode(),
-        };
-
-        instance.handleContentEditableDivChange([mockMutation]);
-
-        expect(spy).toHaveBeenCalledWith(node.getDOMNode());
-      });
-
-      describe('and the new div does not have an id', () => {
-        it('should still apply the event listeners', () => {
-          const node = generateEditableDiv({}, 'just not sorry');
-          const mockMutation = {
-            type: 'childList',
-            target: node.getDOMNode(),
-          };
-
-          instance.handleContentEditableDivChange([mockMutation]);
-
-          expect(spy).toHaveBeenCalledWith(node.getDOMNode());
-        });
-      });
-    });
-  });
-
-  describe('#handleContentEditableContentInsert', () => {
-    let mockNode;
-    beforeEach(() => {
-      mockNode = {
-        dispatchEvent: jest.fn(),
-        hasAttribute: () => true,
-      };
-    });
-    describe('when an observed content editable sees a non-text change (such as a line break)', () => {
-      it('should dispatch an input event to trigger checking for warnings', () => {
-        const mockMutation = {
-          type: 'childList',
-          target: mockNode,
-        };
-
-        instance.handleContentEditableContentInsert([mockMutation]);
-
-        expect(mockNode.dispatchEvent).toHaveBeenCalledWith(expect.any(Event));
-      });
-    });
-
-    describe('when an observed content editable sees a text change', () => {
-      it('should NOT dispatch an extra input event', () => {
-        const mockMutation = {
-          type: 'characterData',
-          target: mockNode,
-        };
-
-        instance.handleContentEditableContentInsert([mockMutation]);
-
-        expect(mockNode.dispatchEvent).not.toHaveBeenCalled();
-      });
     });
   });
 });
