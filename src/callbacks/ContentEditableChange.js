@@ -3,6 +3,4 @@ const isContentEditableChildList = (mutation) =>
   mutation.target.hasAttribute('contentEditable');
 
 export const handleContentEditableChange = (action) => (mutations) =>
-  mutations
-    .filter(isContentEditableChildList)
-    .forEach((mutation) => action(mutation.target));
+  mutations.filter(isContentEditableChildList).forEach(action);

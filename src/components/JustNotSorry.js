@@ -93,9 +93,9 @@ class JustNotSorry extends Component {
     node.removeEventListener('input', warningCheck);
   };
 
-  applyEventListeners = (node) => {
-    node.addEventListener('focus', this.addObserver);
-    node.addEventListener('blur', this.removeObserver);
+  applyEventListeners = (mutation) => {
+    mutation.target.addEventListener('focus', this.addObserver);
+    mutation.target.addEventListener('blur', this.removeObserver);
   };
 
   render() {

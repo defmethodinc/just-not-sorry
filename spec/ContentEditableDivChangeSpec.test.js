@@ -17,18 +17,20 @@ describe('handleContentEditableDivChange', () => {
       const div = document.createElement('div');
       div.setAttribute('contentEditable', 'true');
 
-      handler([buildMutation('characterData', div)]);
+      const mutation = buildMutation('characterData', div);
+      handler([mutation]);
 
-      expect(spy).not.toHaveBeenCalledWith(div);
+      expect(spy).not.toHaveBeenCalledWith(mutation);
     });
 
     it('should call the action callback for each mutation of type childList', () => {
       const div = document.createElement('div');
       div.setAttribute('contentEditable', 'true');
 
-      handler([buildMutation('childList', div)]);
+      const mutation = buildMutation('childList', div);
+      handler([mutation]);
 
-      expect(spy).toHaveBeenCalledWith(div);
+      expect(spy).toHaveBeenCalledWith(mutation);
     });
   });
 
@@ -36,17 +38,19 @@ describe('handleContentEditableDivChange', () => {
     it('should not call the action callback for each mutation of type childList', () => {
       const div = document.createElement('div');
 
-      handler([buildMutation('childList', div)]);
+      const mutation = buildMutation('childList', div);
+      handler([mutation]);
 
-      expect(spy).not.toHaveBeenCalledWith(div);
+      expect(spy).not.toHaveBeenCalledWith(mutation);
     });
 
     it('should not call the action if mutation is not type childList', () => {
       const div = document.createElement('div');
 
-      handler([buildMutation('characterData', div)]);
+      const mutation = buildMutation('characterData', div);
+      handler([mutation]);
 
-      expect(spy).not.toHaveBeenCalledWith(div);
+      expect(spy).not.toHaveBeenCalledWith(mutation);
     });
   });
 });
