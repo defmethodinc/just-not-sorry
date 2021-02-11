@@ -5,8 +5,10 @@ import Warning from './Warning.js';
 import * as Util from './util.js';
 import PHRASES from '../warnings/phrases.json';
 import domRegexpMatch from 'dom-regexp-match';
-import { handleContentEditableContentInsert } from '../callbacks/ContentEditableInsert';
-import { handleContentEditableChange } from '../callbacks/ContentEditableChange';
+import {
+  handleKeyPress,
+  handleCarriageReturn,
+} from '../callbacks/ContentEditableDiv.js';
 
 const WAIT_TIME_BEFORE_RECALC_WARNINGS = 500;
 
@@ -36,12 +38,10 @@ class JustNotSorry extends Component {
     this.searchPhrases = this.searchPhrases.bind(this);
 
     this.documentObserver = new MutationObserver(
-      handleContentEditableChange(this.applyEventListeners)
+      handleKeyPress(this.applyEventListeners)
     );
     this.documentObserver.observe(document, { subtree: true, childList: true });
-    this.messageObserver = new MutationObserver(
-      handleContentEditableContentInsert
-    );
+    this.messageObserver = new MutationObserver(handleCarriageReturn);
   }
 
   updateState(newWarning) {
@@ -80,7 +80,6 @@ class JustNotSorry extends Component {
 
   requestSearch(anEmail) {
     return Util.debounce(() => {
-      this.resetState();
       this.searchPhrases(anEmail);
     }, WAIT_TIME_BEFORE_RECALC_WARNINGS);
   }
