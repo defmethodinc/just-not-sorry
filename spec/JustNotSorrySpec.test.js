@@ -25,7 +25,10 @@ document.createRange = jest.fn(() => ({
   getClientRects: jest.fn(() => [{}]),
 }));
 
-const buildWarning = (pattern, message) => ({ pattern, message });
+const buildWarning = (pattern, message) => ({
+  regex: new RegExp(pattern, 'ig'),
+  message,
+});
 describe('JustNotSorry', () => {
   let justNotSorry;
   let wrapper;
@@ -55,7 +58,7 @@ describe('JustNotSorry', () => {
   };
 
   describe('#addObserver', () => {
-    it('adds an messageObserver that listens for structural changes to the content editable div', () => {
+    it('adds a messageObserver that listens for structural changes to the content editable div', () => {
       const spy = jest.spyOn(instance, 'addObserver');
       const node = generateEditableDiv({
         id: 'div-focus',
@@ -78,7 +81,7 @@ describe('JustNotSorry', () => {
     });
 
     it('starts checking for warnings', () => {
-      const spy = jest.spyOn(instance, 'searchPhrases');
+      const spy = jest.spyOn(instance, 'requestSearch');
       const node = generateEditableDiv({
         id: 'div-focus',
         onFocus: instance.addObserver.bind(instance),
@@ -89,7 +92,7 @@ describe('JustNotSorry', () => {
     });
 
     it('adds warnings to the content editable div', () => {
-      const spy = jest.spyOn(instance, 'searchPhrases');
+      const spy = jest.spyOn(instance, 'requestSearch');
       const node = generateEditableDiv({
         id: 'div-focus',
         onFocus: instance.addObserver.bind(instance),
@@ -173,10 +176,7 @@ describe('JustNotSorry', () => {
         'test!!!'
       ).getDOMNode();
 
-      instance.search(node, {
-        pattern: '\\b!{3,}\\B',
-        message: 'warning message',
-      });
+      instance.search(node, buildWarning('\\b!{3,}\\B', 'warning message'));
 
       expect(wrapper.state('warnings').length).toEqual(1);
       expect(wrapper.state('warnings')[0]).toEqual(

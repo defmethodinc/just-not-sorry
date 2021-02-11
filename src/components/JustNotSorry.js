@@ -17,6 +17,11 @@ const OPTIONS = {
   attributes: false,
 };
 
+const MESSAGE_PATTERNS = PHRASES.map((phrase) => ({
+  regex: new RegExp(phrase.pattern, 'ig'),
+  message: phrase.message,
+}));
+
 class JustNotSorry extends Component {
   constructor(props) {
     super(props);
@@ -25,11 +30,15 @@ class JustNotSorry extends Component {
       warnings: [],
     };
 
+    this.applyEventListeners = this.applyEventListeners.bind(this);
+    this.addObserver = this.addObserver.bind(this);
+    this.removeObserver = this.removeObserver.bind(this);
+    this.searchPhrases = this.searchPhrases.bind(this);
+
     this.documentObserver = new MutationObserver(
       handleContentEditableChange(this.applyEventListeners)
     );
     this.documentObserver.observe(document, { subtree: true, childList: true });
-
     this.messageObserver = new MutationObserver(
       handleContentEditableContentInsert
     );
@@ -41,71 +50,68 @@ class JustNotSorry extends Component {
     }));
   }
 
-  resetState = () => {
+  resetState() {
     // pass a function to ensure the call uses the updated version
     // eslint-disable-next-line no-unused-vars
     this.setState((state) => ({
       warnings: [],
     }));
-  };
+  }
 
-  createWarning = (pattern, phrase, message) => {
+  createWarning(email, phrase) {
     return (match, range) => {
       const newWarning = {
-        pattern: pattern.source,
+        pattern: phrase.regex.source,
         message: phrase.message,
-        parentNode: message.parentNode,
+        parentNode: email.parentNode,
         rangeToHighlight: range,
       };
       this.updateState(newWarning);
     };
-  };
+  }
 
-  search = (message, phrase) => {
-    const pattern = new RegExp(phrase.pattern, 'ig');
-    domRegexpMatch(
-      message,
-      pattern,
-      this.createWarning(pattern, phrase, message)
-    );
-  };
+  search(email, phrase) {
+    domRegexpMatch(email, phrase.regex, this.createWarning(email, phrase));
+  }
 
-  searchPhrases = (message) =>
-    PHRASES.forEach((phrase) => this.search(message, phrase));
+  searchPhrases(email) {
+    MESSAGE_PATTERNS.forEach((phrase) => this.search(email, phrase));
+  }
 
-  requestSearch = (message) =>
-    Util.debounce(() => {
+  requestSearch(anEmail) {
+    return Util.debounce(() => {
       this.resetState();
-      this.searchPhrases(message);
+      this.searchPhrases(anEmail);
     }, WAIT_TIME_BEFORE_RECALC_WARNINGS);
+  }
 
-  addObserver = (event) => {
-    const message = event.target;
-    this.messageObserver.observe(message, OPTIONS);
+  addObserver(event) {
+    const thisEmail = event.target;
+    this.messageObserver.observe(thisEmail, OPTIONS);
 
-    this.searchPhrases(message);
+    this.searchPhrases(thisEmail);
 
-    const searchMessage = this.requestSearch(message);
-    message.addEventListener('focus', searchMessage);
-    message.addEventListener('input', searchMessage);
-  };
+    const searchMessage = this.requestSearch(thisEmail);
+    thisEmail.addEventListener('focus', searchMessage);
+    thisEmail.addEventListener('input', searchMessage);
+  }
 
-  removeObserver = (event) => {
-    const message = event.target;
+  removeObserver(event) {
+    const thisEmail = event.target;
     this.messageObserver.disconnect();
 
     this.resetState();
 
-    const searchMessage = this.requestSearch(message);
-    message.removeEventListener('focus', searchMessage);
-    message.removeEventListener('input', searchMessage);
-    message.removeEventListener('focus', this.addObserver);
-  };
+    const searchMessage = this.requestSearch(thisEmail);
+    thisEmail.removeEventListener('focus', searchMessage);
+    thisEmail.removeEventListener('input', searchMessage);
+    thisEmail.removeEventListener('focus', this.addObserver);
+  }
 
-  applyEventListeners = (mutation) => {
+  applyEventListeners(mutation) {
     mutation.target.addEventListener('focus', this.addObserver);
     mutation.target.addEventListener('blur', this.removeObserver);
-  };
+  }
 
   render() {
     return (
