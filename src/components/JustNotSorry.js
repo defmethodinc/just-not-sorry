@@ -7,15 +7,12 @@ import { handleCarriageReturn } from '../callbacks/ContentEditableDiv.js';
 
 const WAIT_TIME_BEFORE_RECALC_WARNINGS = 500;
 
-//TODO consider expression literals for improved performance
 const MESSAGE_PATTERNS = PHRASES.map((phrase) => ({
   regex: new RegExp(phrase.pattern, 'gi'),
   message: phrase.message,
 }));
 
-//subtree: true - monitor targeted node AND all descendants
-//childList: true - monitor the node or nodes for addition or removal of new childNodes
-const NEW_NODES_AND_CHANGES_TO_TARGET_AND_CHILDREN = {
+const WATCH_FOR_NEW_NODES = {
   subtree: true,
   childList: true,
 };
@@ -39,10 +36,7 @@ class JustNotSorry extends Component {
     this.documentObserver = new MutationObserver(
       handleCarriageReturn(this.applyEventListeners)
     );
-    this.documentObserver.observe(
-      document.body,
-      NEW_NODES_AND_CHANGES_TO_TARGET_AND_CHILDREN
-    );
+    this.documentObserver.observe(document.body, WATCH_FOR_NEW_NODES);
   }
 
   resetState() {
@@ -50,8 +44,7 @@ class JustNotSorry extends Component {
   }
 
   search(phrase) {
-    const ranges = Util.match(this.email, phrase.regex);
-    return ranges.map((range) => ({
+    return Util.match(this.email, phrase.regex).map((range) => ({
       message: phrase.message,
       parentNode: this.email.parentNode,
       rangeToHighlight: range,

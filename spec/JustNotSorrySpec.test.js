@@ -58,7 +58,7 @@ describe('JustNotSorry', () => {
     return divNode;
   };
 
-  describe('#addObserver', () => {
+  describe('#documentObserver', () => {
     it('adds a an observer that listens for structural changes to the content editable div from document body', () => {
       const spy = jest.spyOn(instance, 'searchEmail');
       const node = generateEditableDiv({
