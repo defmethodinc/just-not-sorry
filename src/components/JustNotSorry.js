@@ -1,127 +1,93 @@
 import { h, Component } from 'preact';
 import ReactDOM from 'react-dom';
-
 import Warning from './Warning.js';
 import * as Util from './util.js';
 import PHRASES from '../warnings/phrases.json';
-import domRegexpMatch from 'dom-regexp-match';
-import {
-  handleKeyPress,
-  handleCarriageReturn,
-} from '../callbacks/ContentEditableDiv.js';
+import { handleCarriageReturn } from '../callbacks/ContentEditableDiv.js';
 
 const WAIT_TIME_BEFORE_RECALC_WARNINGS = 500;
 
-const OPTIONS = {
-  characterData: false,
-  subtree: true,
-  childList: true,
-  attributes: false,
-};
-
+//TODO consider expression literals for improved performance
 const MESSAGE_PATTERNS = PHRASES.map((phrase) => ({
-  regex: new RegExp(phrase.pattern, 'ig'),
+  regex: new RegExp(phrase.pattern, 'gi'),
   message: phrase.message,
 }));
+
+//subtree: true - monitor targeted node AND all descendants
+//childList: true - monitor the node or nodes for addition or removal of new childNodes
+const NEW_NODES_AND_CHANGES_TO_TARGET_AND_CHILDREN = {
+  subtree: true,
+  childList: true,
+};
 
 class JustNotSorry extends Component {
   constructor(props) {
     super(props);
+    this.applyEventListeners = this.applyEventListeners.bind(this);
+    this.resetState = this.resetState.bind(this);
+    this.searchEmail = this.searchEmail.bind(this);
+    this.search = this.search.bind(this);
 
+    this.email = undefined;
+    this.handleSearch = Util.debounce(
+      this.searchEmail,
+      WAIT_TIME_BEFORE_RECALC_WARNINGS
+    );
     this.state = {
       warnings: [],
     };
-
-    this.applyEventListeners = this.applyEventListeners.bind(this);
-    this.addObserver = this.addObserver.bind(this);
-    this.removeObserver = this.removeObserver.bind(this);
-    this.searchPhrases = this.searchPhrases.bind(this);
-
     this.documentObserver = new MutationObserver(
-      handleKeyPress(this.applyEventListeners)
+      handleCarriageReturn(this.applyEventListeners)
     );
-    this.documentObserver.observe(document, { subtree: true, childList: true });
-    this.messageObserver = new MutationObserver(handleCarriageReturn);
-  }
-
-  updateState(newWarning) {
-    this.setState((state) => ({
-      warnings: state.warnings.concat(newWarning),
-    }));
+    this.documentObserver.observe(
+      document.body,
+      NEW_NODES_AND_CHANGES_TO_TARGET_AND_CHILDREN
+    );
   }
 
   resetState() {
-    // pass a function to ensure the call uses the updated version
-    // eslint-disable-next-line no-unused-vars
-    this.setState((state) => ({
-      warnings: [],
+    this.setState({ warnings: [] });
+  }
+
+  search(phrase) {
+    const ranges = Util.match(this.email, phrase.regex);
+    return ranges.map((range) => ({
+      message: phrase.message,
+      parentNode: this.email.parentNode,
+      rangeToHighlight: range,
     }));
   }
 
-  createWarning(email, phrase) {
-    return (match, range) => {
-      const newWarning = {
-        pattern: phrase.regex.source,
-        message: phrase.message,
-        parentNode: email.parentNode,
-        rangeToHighlight: range,
-      };
-      this.updateState(newWarning);
-    };
-  }
-
-  search(email, phrase) {
-    domRegexpMatch(email, phrase.regex, this.createWarning(email, phrase));
-  }
-
-  searchPhrases(email) {
-    MESSAGE_PATTERNS.forEach((phrase) => this.search(email, phrase));
-  }
-
-  requestSearch(anEmail) {
-    return Util.debounce(() => {
-      this.searchPhrases(anEmail);
-    }, WAIT_TIME_BEFORE_RECALC_WARNINGS);
-  }
-
-  addObserver(event) {
-    const thisEmail = event.target;
-    this.messageObserver.observe(thisEmail, OPTIONS);
-
-    this.searchPhrases(thisEmail);
-
-    const searchMessage = this.requestSearch(thisEmail);
-    thisEmail.addEventListener('focus', searchMessage);
-    thisEmail.addEventListener('input', searchMessage);
-  }
-
-  removeObserver(event) {
-    const thisEmail = event.target;
-    this.messageObserver.disconnect();
-
-    this.resetState();
-
-    const searchMessage = this.requestSearch(thisEmail);
-    thisEmail.removeEventListener('focus', searchMessage);
-    thisEmail.removeEventListener('input', searchMessage);
-    thisEmail.removeEventListener('focus', this.addObserver);
+  searchEmail() {
+    const newWarnings = [];
+    for (let i = 0; i < MESSAGE_PATTERNS.length; i++) {
+      const warnings = this.search(MESSAGE_PATTERNS[i]);
+      if (warnings.length > 0) {
+        newWarnings.push(...warnings);
+      }
+    }
+    this.setState({ warnings: newWarnings });
   }
 
   applyEventListeners(mutation) {
-    mutation.target.addEventListener('focus', this.addObserver);
-    mutation.target.addEventListener('blur', this.removeObserver);
+    if (this.email) {
+      this.email.removeEventListener('input', this.handleSearch);
+      this.email.removeEventListener('focus', this.handleSearch);
+      this.email.removeEventListener('blur', this.resetState);
+    }
+
+    this.email = mutation.target;
+    this.email.addEventListener('input', this.handleSearch);
+    this.email.addEventListener('focus', this.handleSearch);
+    this.email.addEventListener('blur', this.resetState);
   }
 
   render() {
-    return (
-      <div className="jns-warnings-list">
-        {this.state.warnings.map((warning) =>
-          ReactDOM.createPortal(
-            <Warning key={warning.pattern} value={warning} />,
-            warning.parentNode
-          )
-        )}
-      </div>
+    return this.state.warnings.map((warning, index) =>
+      ReactDOM.createPortal(
+        <Warning key={index} value={warning} />,
+        warning.parentNode
+      )
     );
   }
 }

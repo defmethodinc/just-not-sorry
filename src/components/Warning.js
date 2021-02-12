@@ -52,10 +52,10 @@ export default function Warning(props) {
     <div className="jns-warning">
       {highlights.map((highlight, index) => (
         <WarningHighlight
-          key={index}
-          styles={highlight.style}
           message={props.value.message}
           position={highlight.position}
+          styles={highlight.style}
+          key={index}
         />
       ))}
     </div>
