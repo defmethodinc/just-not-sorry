@@ -1,4 +1,4 @@
-import { handleCarriageReturn } from '../src/callbacks/ContentEditableDiv.js';
+import { ifEmailModified } from '../src/callbacks/ContentEditableDiv.js';
 
 const buildMutation = (type, target) => {
   return { type, target };
@@ -7,7 +7,7 @@ const buildMutation = (type, target) => {
 describe('handleContentEditableDivChange', () => {
   const action = (node) => console.log(node);
   let spy;
-  let handler = handleCarriageReturn(action);
+  let handler = ifEmailModified(action);
 
   beforeEach(() => {
     spy = jest.spyOn(console, 'log').mockImplementationOnce(() => {});

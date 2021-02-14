@@ -3,7 +3,7 @@ import ReactDOM from 'react-dom';
 import Warning from './Warning.js';
 import * as Util from './util.js';
 import PHRASES from '../warnings/phrases.json';
-import { handleCarriageReturn } from '../callbacks/ContentEditableDiv.js';
+import { ifEmailModified } from '../callbacks/ContentEditableDiv.js';
 
 const WAIT_TIME_BEFORE_RECALC_WARNINGS = 500;
 
@@ -34,7 +34,7 @@ class JustNotSorry extends Component {
       warnings: [],
     };
     this.documentObserver = new MutationObserver(
-      handleCarriageReturn(this.applyEventListeners)
+      ifEmailModified(this.applyEventListeners)
     );
     this.documentObserver.observe(document.body, WATCH_FOR_NEW_NODES);
   }
