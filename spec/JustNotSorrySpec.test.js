@@ -31,9 +31,7 @@ const buildWarning = (pattern, message) => ({
 });
 
 describe('JustNotSorry', () => {
-  let justNotSorry;
-  let wrapper;
-  let instance;
+  let justNotSorry, wrapper, instance;
   const divsForCleanUp = [];
 
   beforeEach(() => {
@@ -59,28 +57,31 @@ describe('JustNotSorry', () => {
   };
 
   describe('#documentObserver', () => {
-    it('adds a an observer that listens for structural changes to the content editable div from document body', () => {
-      const spy = jest.spyOn(instance, 'searchEmail');
-      const node = generateEditableDiv({
-        id: 'div-focus',
-        onFocus: instance.searchEmail.bind(instance),
-      });
-      instance.email = node;
-
-      node.simulate('focus');
-
-      // There should be the document observer
+    it('adds a an observer that listens for structural changes to the content editable div in document body', () => {
       const observerInstances = mutationObserverMock.mock.instances;
-
       expect(observerInstances.length).toBe(1);
-      expect(spy).toHaveBeenCalledTimes(1);
       expect(observerInstances[0].observe).toHaveBeenCalledWith(document.body, {
         childList: true,
         subtree: true,
       });
     });
+  });
 
-    it('starts checking for warnings', () => {
+  describe('#applyEventListeners', () => {
+    it('populates this.email from mutation target field', () => {
+      const node = generateEditableDiv({ id: 'new-email' });
+      const domNode = node.getDOMNode();
+      const mockMutation = {
+        target: domNode,
+      };
+      instance.applyEventListeners(mockMutation);
+
+      expect(instance.email).toEqual(domNode);
+    });
+  });
+
+  describe('#focus action', () => {
+    it('starts checking for warnings on focus', () => {
       const spy = jest.spyOn(instance, 'searchEmail');
       const node = generateEditableDiv({
         id: 'div-focus',
@@ -263,11 +264,10 @@ describe('JustNotSorry', () => {
         getClientRects: jest.fn(() => [{}]),
       }));
 
-      const node = generateEditableDiv(
+      instance.email = generateEditableDiv(
         { id: 'div-3' },
         'test justify test'
       ).getDOMNode();
-      instance.email = node;
       instance.searchEmail();
 
       expect(wrapper.state('warnings').length).toEqual(0);
@@ -277,7 +277,7 @@ describe('JustNotSorry', () => {
 
   describe('#searchEmail', () => {
     it('does nothing when given an empty string', () => {
-      instance.email = generateEditableDiv({ id: 'some-id' });
+      instance.email = generateEditableDiv({ id: 'some-id' }).getDOMNode();
 
       instance.searchEmail();
 
@@ -300,6 +300,7 @@ describe('JustNotSorry', () => {
         { id: 'test', onInput: instance.searchEmail },
         'just not sorry'
       );
+
       instance.email = node;
 
       node.simulate('input');
