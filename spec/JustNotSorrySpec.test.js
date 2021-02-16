@@ -328,14 +328,11 @@ describe('JustNotSorry', () => {
       );
 
       const domNode = node.getDOMNode();
-      const mockedMutation = { type: 'childList', target: domNode };
-      const documentObserver = mutationObserverMock.mock.instances[0];
-      documentObserver.trigger([mockedMutation]);
 
-      node.simulate('focus');
-      jest.runOnlyPendingTimers();
-
-      expect(wrapper.state('warnings').length).toEqual(3);
+      instance.setState({ email: domNode }, () => {
+        instance.searchEmail();
+        expect(wrapper.state('warnings').length).toEqual(3);
+      });
     });
   });
 });
