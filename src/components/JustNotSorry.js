@@ -20,19 +20,20 @@ const WATCH_FOR_NEW_NODES = {
 class JustNotSorry extends Component {
   constructor(props) {
     super(props);
+    this.state = {
+      email: undefined,
+      warnings: [],
+    };
     this.applyEventListeners = this.applyEventListeners.bind(this);
     this.resetState = this.resetState.bind(this);
     this.searchEmail = this.searchEmail.bind(this);
     this.search = this.search.bind(this);
 
-    this.email = undefined;
     this.handleSearch = Util.debounce(
       this.searchEmail,
       WAIT_TIME_BEFORE_RECALC_WARNINGS
     );
-    this.state = {
-      warnings: [],
-    };
+
     this.documentObserver = new MutationObserver(
       ifEmailModified(this.applyEventListeners)
     );
@@ -44,9 +45,9 @@ class JustNotSorry extends Component {
   }
 
   search(phrase) {
-    return Util.match(this.email, phrase.regex).map((range) => ({
+    return Util.match(this.state.email, phrase.regex).map((range) => ({
       message: phrase.message,
-      parentNode: this.email.parentNode,
+      parentNode: this.state.email.parentNode,
       rangeToHighlight: range,
     }));
   }
@@ -63,16 +64,17 @@ class JustNotSorry extends Component {
   }
 
   applyEventListeners(mutation) {
-    if (this.email) {
-      this.email.removeEventListener('input', this.handleSearch);
-      this.email.removeEventListener('focus', this.handleSearch);
-      this.email.removeEventListener('blur', this.resetState);
+    if (this.state.email) {
+      this.state.email.removeEventListener('input', this.handleSearch);
+      this.state.email.removeEventListener('focus', this.handleSearch);
+      this.state.email.removeEventListener('blur', this.resetState);
     }
 
-    this.email = mutation.target;
-    this.email.addEventListener('input', this.handleSearch);
-    this.email.addEventListener('focus', this.handleSearch);
-    this.email.addEventListener('blur', this.resetState);
+    const email = mutation.target;
+    email.addEventListener('input', this.handleSearch);
+    email.addEventListener('focus', this.handleSearch);
+    email.addEventListener('blur', this.resetState);
+    this.setState({ email });
   }
 
   render() {

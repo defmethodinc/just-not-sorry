@@ -5,15 +5,6 @@ import Adapter from 'enzyme-adapter-preact-pure';
 
 configure({ adapter: new Adapter() });
 
-const mutationObserverMock = jest.fn(function MutationObserver(callback) {
-  this.observe = jest.fn();
-  this.disconnect = jest.fn();
-  this.trigger = (mockedMutationList) => {
-    callback(mockedMutationList, this);
-  };
-});
-global.MutationObserver = mutationObserverMock;
-
 document.createRange = jest.fn(() => ({
   setStart: jest.fn(),
   setEnd: jest.fn(),
@@ -31,19 +22,28 @@ const buildWarning = (pattern, message) => ({
 });
 
 describe('JustNotSorry', () => {
-  let justNotSorry, wrapper, instance;
+  jest.useFakeTimers();
+  let wrapper, instance, mutationObserverMock;
   const divsForCleanUp = [];
 
   beforeEach(() => {
-    justNotSorry = mount(<JustNotSorry />);
-    wrapper = justNotSorry;
-    instance = justNotSorry.instance();
+    mutationObserverMock = jest.fn(function MutationObserver(callback) {
+      this.observe = jest.fn();
+      this.disconnect = jest.fn();
+      this.trigger = (mockedMutationList) => {
+        callback(mockedMutationList, this);
+      };
+    });
+    global.MutationObserver = mutationObserverMock;
+
+    wrapper = mount(<JustNotSorry />);
+    instance = wrapper.instance();
   });
 
   afterEach(() => {
     divsForCleanUp.forEach((divNode) => divNode.unmount());
     divsForCleanUp.length = 0;
-    justNotSorry.unmount();
+    wrapper.unmount();
   });
 
   const generateEditableDiv = (props, innerHtml) => {
@@ -56,199 +56,219 @@ describe('JustNotSorry', () => {
     return divNode;
   };
 
-  describe('#documentObserver', () => {
-    it('adds a an observer that listens for structural changes to the content editable div in document body', () => {
-      const observerInstances = mutationObserverMock.mock.instances;
-      expect(observerInstances.length).toBe(1);
-      expect(observerInstances[0].observe).toHaveBeenCalledWith(document.body, {
-        childList: true,
-        subtree: true,
-      });
+  it('adds a an observer that listens for structural changes to the content editable div in document body', () => {
+    const observerInstances = mutationObserverMock.mock.instances;
+    expect(observerInstances.length).toBe(1);
+    expect(observerInstances[0].observe).toHaveBeenCalledWith(document.body, {
+      childList: true,
+      subtree: true,
     });
   });
 
-  describe('#applyEventListeners', () => {
-    it('populates this.email from mutation target field', () => {
-      const node = generateEditableDiv({ id: 'new-email' });
-      const domNode = node.getDOMNode();
-      const mockMutation = {
-        target: domNode,
-      };
-      instance.applyEventListeners(mockMutation);
+  it('populates email from mutation target field when is of type childList', () => {
+    const node = generateEditableDiv({ id: 'new-email' });
+    const domNode = node.getDOMNode();
 
-      expect(instance.email).toEqual(domNode);
-    });
+    const mockedMutation = { type: 'childList', target: domNode };
+    const documentObserver = mutationObserverMock.mock.instances[0];
+    documentObserver.trigger([mockedMutation]);
+
+    expect(wrapper.state('email')).toEqual(domNode);
   });
 
-  describe('#focus action', () => {
+  describe('#focus', () => {
     it('starts checking for warnings on focus', () => {
-      const spy = jest.spyOn(instance, 'searchEmail');
-      const node = generateEditableDiv({
-        id: 'div-focus',
-        onFocus: instance.searchEmail.bind(instance),
-      });
-      instance.email = node;
-      node.simulate('focus');
+      const handleSearch = jest.spyOn(instance, 'handleSearch');
 
-      expect(spy).toHaveBeenCalled();
+      const node = generateEditableDiv(
+        {
+          id: 'div-focus',
+        },
+        'just not sorry'
+      );
+      const domNode = node.getDOMNode();
+
+      const mockedMutation = { type: 'childList', target: domNode };
+      const documentObserver = mutationObserverMock.mock.instances[0];
+      documentObserver.trigger([mockedMutation]);
+
+      node.simulate('focus');
+      jest.runOnlyPendingTimers();
+
+      expect(handleSearch).toHaveBeenCalledTimes(1);
+      expect(wrapper.state('warnings').length).toEqual(2);
+    });
+
+    it('does nothing when given an empty string', () => {
+      const handleSearch = jest.spyOn(instance, 'handleSearch');
+
+      const node = generateEditableDiv({ id: 'some-id' });
+
+      const domNode = node.getDOMNode();
+      const mockedMutation = { type: 'childList', target: domNode };
+      const documentObserver = mutationObserverMock.mock.instances[0];
+      documentObserver.trigger([mockedMutation]);
+
+      node.simulate('focus');
+      jest.runOnlyPendingTimers();
+
+      expect(handleSearch).toHaveBeenCalledTimes(1);
+      expect(wrapper.state('warnings').length).toEqual(0);
     });
   });
 
   describe('#blur action', () => {
     it('removes any existing warnings', () => {
       const spy = jest.spyOn(instance, 'resetState');
+
       const node = generateEditableDiv(
         {
           id: 'div-focus',
-          onFocus: instance.searchEmail,
-          onBlur: instance.resetState,
         },
         'just not sorry'
       );
-      instance.email = node.getDOMNode();
 
-      node.simulate('focus');
+      const domNode = node.getDOMNode();
+      const mockedMutation = { type: 'childList', target: domNode };
+      const documentObserver = mutationObserverMock.mock.instances[0];
+      documentObserver.trigger([mockedMutation]);
 
-      expect(wrapper.state('warnings').length).toEqual(2);
-
-      // remount the node
-      node.mount();
       node.simulate('blur');
 
       expect(spy).toHaveBeenCalledTimes(1);
       expect(wrapper.state('warnings').length).toEqual(0);
-
-      node.unmount();
     });
 
     it('no longer checks for warnings on input events', () => {
-      justNotSorry.unmount();
-      justNotSorry.mount();
       const node = generateEditableDiv({
         id: 'div-remove',
-        onFocus: instance.searchEmail.bind(instance),
-        onBlur: instance.resetState.bind(instance),
       });
 
-      instance.email = node.getDOMNode();
+      const domNode = node.getDOMNode();
+      const mockedMutation = { type: 'childList', target: domNode };
+      const documentObserver = mutationObserverMock.mock.instances[0];
+      documentObserver.trigger([mockedMutation]);
 
       node.simulate('focus');
       node.simulate('blur');
 
-      const spy = jest.spyOn(instance, 'searchEmail');
+      const searchEmail = jest.spyOn(instance, 'searchEmail');
 
       node.simulate('input');
 
-      expect(spy).not.toHaveBeenCalled();
-
-      node.unmount();
+      expect(searchEmail).not.toHaveBeenCalled();
     });
   });
 
   describe('#search', () => {
     it('adds a valid range for a punctuation keyword', () => {
-      const node = generateEditableDiv(
-        { id: 'meaningless-id' },
-        'test!!!'
-      ).getDOMNode();
-      instance.email = node;
-
-      const ranges = instance.search(
-        buildWarning('\\b!{3,}\\B', 'warning message')
-      );
-
-      expect(ranges.length).toEqual(1);
-      expect(ranges[0]).toEqual(
-        expect.objectContaining({
-          message: 'warning message',
-          parentNode: node.parentNode,
-        })
-      );
+      const node = generateEditableDiv({ id: 'meaningless-id' }, 'test!!!');
+      const domNode = node.getDOMNode();
+      instance.setState({ email: domNode }, () => {
+        const ranges = instance.search(
+          buildWarning('\\b!{3,}\\B', 'warning message')
+        );
+        expect(ranges.length).toEqual(1);
+        expect(ranges[0].rangeToHighlight).toBeTruthy();
+        expect(ranges[0]).toEqual(
+          expect.objectContaining({
+            message: 'warning message',
+            parentNode: domNode.parentNode,
+          })
+        );
+      });
     });
 
     it('adds a warning for a single keyword', () => {
       const node = generateEditableDiv(
         { id: 'meaningless-id' },
         'test just test'
-      ).getDOMNode();
-      instance.email = node;
-      const ranges = instance.search(buildWarning('just', 'warning message'));
-
-      expect(ranges.length).toEqual(1);
-      expect(ranges[0]).toEqual(
-        expect.objectContaining({
-          message: 'warning message',
-          parentNode: node.parentNode,
-        })
       );
+
+      const domNode = node.getDOMNode();
+
+      instance.setState({ email: domNode }, () => {
+        const ranges = instance.search(buildWarning('just', 'warning message'));
+
+        expect(ranges.length).toEqual(1);
+        expect(ranges[0]).toEqual(
+          expect.objectContaining({
+            message: 'warning message',
+            parentNode: domNode.parentNode,
+          })
+        );
+      });
     });
 
     it('does not add warnings for partial matches', () => {
-      const node = generateEditableDiv(
-        { id: 'div-id' },
-        'test justify test'
-      ).getDOMNode();
-      instance.email = node;
+      const node = generateEditableDiv({ id: 'div-id' }, 'test justify test');
 
-      const ranges = instance.search(
-        buildWarning('\\b(just)\\b', 'warning message')
-      );
+      const domNode = node.getDOMNode();
 
-      expect(ranges.length).toEqual(0);
-      expect(ranges).toEqual([]);
+      instance.setState({ email: domNode }, () => {
+        const ranges = instance.search(
+          buildWarning('\\b(just)\\b', 'warning message')
+        );
+        expect(ranges.length).toEqual(0);
+        expect(ranges).toEqual([]);
+      });
     });
 
     it('matches case insensitive', () => {
-      const node = generateEditableDiv(
-        { id: 'div-case' },
-        'jUsT kidding'
-      ).getDOMNode();
+      const node = generateEditableDiv({ id: 'div-case' }, 'jUsT kidding');
 
-      instance.email = node;
-      const ranges = instance.search(buildWarning('just', 'warning message'));
+      const domNode = node.getDOMNode();
 
-      expect(ranges.length).toEqual(1);
-      expect(ranges[0]).toEqual(
-        expect.objectContaining({
-          message: 'warning message',
-          parentNode: node.parentNode,
-        })
-      );
+      instance.setState({ email: domNode }, () => {
+        const ranges = instance.search(buildWarning('just', 'warning message'));
+
+        expect(ranges.length).toEqual(1);
+        expect(ranges[0]).toEqual(
+          expect.objectContaining({
+            message: 'warning message',
+            parentNode: domNode.parentNode,
+          })
+        );
+      });
     });
 
     it('catches keywords with punctuation', () => {
-      const node = generateEditableDiv(
-        { id: 'div-punctuation' },
-        'just. test'
-      ).getDOMNode();
+      const node = generateEditableDiv({ id: 'div-punctuation' }, 'just. test');
 
-      instance.email = node;
-      const ranges = instance.search(buildWarning('just', 'warning message'));
-      expect(ranges.length).toEqual(1);
-      expect(ranges[0]).toEqual(
-        expect.objectContaining({
-          message: 'warning message',
-          parentNode: node.parentNode,
-        })
-      );
+      const domNode = node.getDOMNode();
+
+      instance.setState({ email: domNode }, () => {
+        const ranges = instance.search(buildWarning('just', 'warning message'));
+        expect(ranges.length).toEqual(1);
+        expect(ranges[0]).toEqual(
+          expect.objectContaining({
+            message: 'warning message',
+            parentNode: domNode.parentNode,
+          })
+        );
+      });
     });
 
     it('matches phrases', () => {
       const node = generateEditableDiv(
         { id: 'div-phrase' },
         'my cat is so sorry because of you'
-      ).getDOMNode();
-      instance.email = node;
-      const ranges = instance.search(
-        buildWarning('so sorry', 'warning message')
       );
-      expect(ranges.length).toEqual(1);
-      expect(ranges[0]).toEqual(
-        expect.objectContaining({
-          message: 'warning message',
-          parentNode: node.parentNode,
-        })
-      );
+
+      const domNode = node.getDOMNode();
+
+      instance.setState({ email: domNode }, () => {
+        const ranges = instance.search(
+          buildWarning('so sorry', 'warning message')
+        );
+        expect(ranges.length).toEqual(1);
+        expect(ranges[0]).toEqual(
+          expect.objectContaining({
+            message: 'warning message',
+            parentNode: domNode.parentNode,
+          })
+        );
+      });
     });
 
     it('does not add warnings for tooltip matches', () => {
@@ -264,11 +284,15 @@ describe('JustNotSorry', () => {
         getClientRects: jest.fn(() => [{}]),
       }));
 
-      instance.email = generateEditableDiv(
-        { id: 'div-3' },
-        'test justify test'
-      ).getDOMNode();
-      instance.searchEmail();
+      const node = generateEditableDiv({ id: 'div-3' }, 'test justify test');
+
+      const domNode = node.getDOMNode();
+      const mockedMutation = { type: 'childList', target: domNode };
+      const documentObserver = mutationObserverMock.mock.instances[0];
+      documentObserver.trigger([mockedMutation]);
+
+      node.simulate('focus');
+      jest.runOnlyPendingTimers();
 
       expect(wrapper.state('warnings').length).toEqual(0);
       expect(wrapper.state('warnings')).toEqual([]);
@@ -276,39 +300,38 @@ describe('JustNotSorry', () => {
   });
 
   describe('#searchEmail', () => {
-    it('does nothing when given an empty string', () => {
-      instance.email = generateEditableDiv({ id: 'some-id' }).getDOMNode();
-
-      instance.searchEmail();
-
-      expect(wrapper.state('warnings').length).toEqual(0);
-      expect(wrapper.state('warnings')).toEqual([]);
-    });
-
     it('adds warnings to all keywords', () => {
-      instance.email = generateEditableDiv(
+      const node = generateEditableDiv(
         { id: 'div-keywords' },
         'I am just so sorry. Yes, just.'
-      ).getDOMNode();
-      instance.searchEmail();
+      );
+
+      const domNode = node.getDOMNode();
+      const mockedMutation = { type: 'childList', target: domNode };
+      const documentObserver = mutationObserverMock.mock.instances[0];
+      documentObserver.trigger([mockedMutation]);
+
+      node.simulate('focus');
+      jest.runOnlyPendingTimers();
+
       expect(wrapper.state('warnings').length).toEqual(3);
     });
 
     it('updates warnings each time input is triggered', () => {
-      const spy = jest.spyOn(instance, 'searchEmail');
-      const node = generateEditableDiv(
-        { id: 'test', onInput: instance.searchEmail },
-        'just not sorry'
-      );
+      const spy = jest.spyOn(instance, 'handleSearch');
+      const node = generateEditableDiv({ id: 'test' }, 'just not sorry');
 
-      instance.email = node;
+      const domNode = node.getDOMNode();
+      const mockedMutation = { type: 'childList', target: domNode };
+      const documentObserver = mutationObserverMock.mock.instances[0];
+      documentObserver.trigger([mockedMutation]);
 
       node.simulate('input');
       node.simulate('input');
       node.simulate('input');
 
+      jest.runOnlyPendingTimers();
       expect(spy).toHaveBeenCalledTimes(3);
-      node.unmount();
     });
   });
 });
