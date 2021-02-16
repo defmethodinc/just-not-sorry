@@ -118,6 +118,24 @@ describe('JustNotSorry', () => {
         expect(wrapper.state('warnings').length).toEqual(0);
       });
     });
+    describe('on input', () => {
+      it('updates warnings each time input is triggered', () => {
+        const handleSearch = jest.spyOn(instance, 'handleSearch');
+        const node = generateEditableDiv({ id: 'test' }, 'just not sorry');
+
+        const domNode = node.getDOMNode();
+        const mockedMutation = { type: 'childList', target: domNode };
+        const documentObserver = mutationObserverMock.mock.instances[0];
+        documentObserver.trigger([mockedMutation]);
+
+        node.simulate('input');
+        node.simulate('input');
+        node.simulate('input');
+
+        jest.runOnlyPendingTimers();
+        expect(handleSearch).toHaveBeenCalledTimes(3);
+      });
+    });
   });
 
   describe('#resetState', () => {
@@ -191,7 +209,6 @@ describe('JustNotSorry', () => {
       );
 
       const domNode = node.getDOMNode();
-
       instance.setState({ email: domNode }, () => {
         const ranges = instance.search(buildWarning('just', 'warning message'));
 
@@ -210,7 +227,6 @@ describe('JustNotSorry', () => {
       const node = generateEditableDiv({ id: 'div-id' }, 'test justify test');
 
       const domNode = node.getDOMNode();
-
       instance.setState({ email: domNode }, () => {
         const ranges = instance.search(
           buildWarning('\\b(just)\\b', 'warning message')
@@ -224,7 +240,6 @@ describe('JustNotSorry', () => {
       const node = generateEditableDiv({ id: 'div-case' }, 'jUsT kidding');
 
       const domNode = node.getDOMNode();
-
       instance.setState({ email: domNode }, () => {
         const ranges = instance.search(buildWarning('just', 'warning message'));
 
@@ -243,7 +258,6 @@ describe('JustNotSorry', () => {
       const node = generateEditableDiv({ id: 'div-punctuation' }, 'just. test');
 
       const domNode = node.getDOMNode();
-
       instance.setState({ email: domNode }, () => {
         const ranges = instance.search(buildWarning('just', 'warning message'));
         expect(ranges.length).toEqual(1);
@@ -264,7 +278,6 @@ describe('JustNotSorry', () => {
       );
 
       const domNode = node.getDOMNode();
-
       instance.setState({ email: domNode }, () => {
         const ranges = instance.search(
           buildWarning('so sorry', 'warning message')
@@ -294,7 +307,6 @@ describe('JustNotSorry', () => {
       }));
 
       const node = generateEditableDiv({ id: 'div-3' }, 'test justify test');
-
       const domNode = node.getDOMNode();
       const mockedMutation = { type: 'childList', target: domNode };
       const documentObserver = mutationObserverMock.mock.instances[0];
@@ -324,23 +336,6 @@ describe('JustNotSorry', () => {
       jest.runOnlyPendingTimers();
 
       expect(wrapper.state('warnings').length).toEqual(3);
-    });
-
-    it('updates warnings each time input is triggered', () => {
-      const spy = jest.spyOn(instance, 'handleSearch');
-      const node = generateEditableDiv({ id: 'test' }, 'just not sorry');
-
-      const domNode = node.getDOMNode();
-      const mockedMutation = { type: 'childList', target: domNode };
-      const documentObserver = mutationObserverMock.mock.instances[0];
-      documentObserver.trigger([mockedMutation]);
-
-      node.simulate('input');
-      node.simulate('input');
-      node.simulate('input');
-
-      jest.runOnlyPendingTimers();
-      expect(spy).toHaveBeenCalledTimes(3);
     });
   });
 });
