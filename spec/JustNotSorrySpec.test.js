@@ -120,46 +120,48 @@ describe('JustNotSorry', () => {
     });
   });
 
-  describe('#blur action', () => {
-    it('removes any existing warnings', () => {
-      const spy = jest.spyOn(instance, 'resetState');
+  describe('#resetState', () => {
+    describe('on blur', () => {
+      it('removes any existing warnings', () => {
+        const spy = jest.spyOn(instance, 'resetState');
 
-      const node = generateEditableDiv(
-        {
-          id: 'div-focus',
-        },
-        'just not sorry'
-      );
+        const node = generateEditableDiv(
+          {
+            id: 'div-focus',
+          },
+          'just not sorry'
+        );
 
-      const domNode = node.getDOMNode();
-      const mockedMutation = { type: 'childList', target: domNode };
-      const documentObserver = mutationObserverMock.mock.instances[0];
-      documentObserver.trigger([mockedMutation]);
+        const domNode = node.getDOMNode();
+        const mockedMutation = { type: 'childList', target: domNode };
+        const documentObserver = mutationObserverMock.mock.instances[0];
+        documentObserver.trigger([mockedMutation]);
 
-      node.simulate('blur');
+        node.simulate('blur');
 
-      expect(spy).toHaveBeenCalledTimes(1);
-      expect(wrapper.state('warnings').length).toEqual(0);
-    });
-
-    it('no longer checks for warnings on input events', () => {
-      const node = generateEditableDiv({
-        id: 'div-remove',
+        expect(spy).toHaveBeenCalledTimes(1);
+        expect(wrapper.state('warnings').length).toEqual(0);
       });
 
-      const domNode = node.getDOMNode();
-      const mockedMutation = { type: 'childList', target: domNode };
-      const documentObserver = mutationObserverMock.mock.instances[0];
-      documentObserver.trigger([mockedMutation]);
+      it('no longer checks for warnings on input events', () => {
+        const node = generateEditableDiv({
+          id: 'div-remove',
+        });
 
-      node.simulate('focus');
-      node.simulate('blur');
+        const domNode = node.getDOMNode();
+        const mockedMutation = { type: 'childList', target: domNode };
+        const documentObserver = mutationObserverMock.mock.instances[0];
+        documentObserver.trigger([mockedMutation]);
 
-      const searchEmail = jest.spyOn(instance, 'searchEmail');
+        node.simulate('focus');
+        node.simulate('blur');
 
-      node.simulate('input');
+        const searchEmail = jest.spyOn(instance, 'searchEmail');
 
-      expect(searchEmail).not.toHaveBeenCalled();
+        node.simulate('input');
+
+        expect(searchEmail).not.toHaveBeenCalled();
+      });
     });
   });
 
