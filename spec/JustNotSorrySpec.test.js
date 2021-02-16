@@ -65,17 +65,17 @@ describe('JustNotSorry', () => {
         subtree: true,
       });
     });
-  });
 
-  it('populates email from mutation target field when is of type childList', () => {
-    const node = generateEditableDiv({ id: 'new-email' });
-    const domNode = node.getDOMNode();
+    it('populates email state from mutation target field when is of type childList', () => {
+      const node = generateEditableDiv({ id: 'new-email' });
+      const domNode = node.getDOMNode();
 
-    const mockedMutation = { type: 'childList', target: domNode };
-    const documentObserver = mutationObserverMock.mock.instances[0];
-    documentObserver.trigger([mockedMutation]);
+      const mockedMutation = { type: 'childList', target: domNode };
+      const documentObserver = mutationObserverMock.mock.instances[0];
+      documentObserver.trigger([mockedMutation]);
 
-    expect(wrapper.state('email')).toEqual(domNode);
+      expect(wrapper.state('email')).toEqual(domNode);
+    });
   });
 
   describe('#focus', () => {
