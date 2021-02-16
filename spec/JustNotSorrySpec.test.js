@@ -78,44 +78,45 @@ describe('JustNotSorry', () => {
     });
   });
 
-  describe('#focus', () => {
-    it('starts checking for warnings on focus', () => {
-      const handleSearch = jest.spyOn(instance, 'handleSearch');
+  describe('#handleSearch', () => {
+    describe('on focus', () => {
+      it('checks for warnings', () => {
+        const handleSearch = jest.spyOn(instance, 'handleSearch');
 
-      const node = generateEditableDiv(
-        {
-          id: 'div-focus',
-        },
-        'just not sorry'
-      );
-      const domNode = node.getDOMNode();
+        const node = generateEditableDiv(
+          {
+            id: 'div-focus',
+          },
+          'just not sorry'
+        );
+        const domNode = node.getDOMNode();
+        const mockedMutation = { type: 'childList', target: domNode };
+        const documentObserver = mutationObserverMock.mock.instances[0];
+        documentObserver.trigger([mockedMutation]);
 
-      const mockedMutation = { type: 'childList', target: domNode };
-      const documentObserver = mutationObserverMock.mock.instances[0];
-      documentObserver.trigger([mockedMutation]);
+        node.simulate('focus');
+        jest.runOnlyPendingTimers();
 
-      node.simulate('focus');
-      jest.runOnlyPendingTimers();
+        expect(handleSearch).toHaveBeenCalledTimes(1);
+        expect(wrapper.state('warnings').length).toEqual(2);
+      });
 
-      expect(handleSearch).toHaveBeenCalledTimes(1);
-      expect(wrapper.state('warnings').length).toEqual(2);
-    });
+      it('does nothing when given an empty string', () => {
+        const handleSearch = jest.spyOn(instance, 'handleSearch');
 
-    it('does nothing when given an empty string', () => {
-      const handleSearch = jest.spyOn(instance, 'handleSearch');
+        const node = generateEditableDiv({ id: 'some-id' });
 
-      const node = generateEditableDiv({ id: 'some-id' });
+        const domNode = node.getDOMNode();
+        const mockedMutation = { type: 'childList', target: domNode };
+        const documentObserver = mutationObserverMock.mock.instances[0];
+        documentObserver.trigger([mockedMutation]);
 
-      const domNode = node.getDOMNode();
-      const mockedMutation = { type: 'childList', target: domNode };
-      const documentObserver = mutationObserverMock.mock.instances[0];
-      documentObserver.trigger([mockedMutation]);
+        node.simulate('focus');
+        jest.runOnlyPendingTimers();
 
-      node.simulate('focus');
-      jest.runOnlyPendingTimers();
-
-      expect(handleSearch).toHaveBeenCalledTimes(1);
-      expect(wrapper.state('warnings').length).toEqual(0);
+        expect(handleSearch).toHaveBeenCalledTimes(1);
+        expect(wrapper.state('warnings').length).toEqual(0);
+      });
     });
   });
 
