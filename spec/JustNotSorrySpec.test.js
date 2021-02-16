@@ -56,12 +56,14 @@ describe('JustNotSorry', () => {
     return divNode;
   };
 
-  it('adds a an observer that listens for structural changes to the content editable div in document body', () => {
-    const observerInstances = mutationObserverMock.mock.instances;
-    expect(observerInstances.length).toBe(1);
-    expect(observerInstances[0].observe).toHaveBeenCalledWith(document.body, {
-      childList: true,
-      subtree: true,
+  describe('documentObserver', () => {
+    it('listens for structural changes to the content editable div in document body', () => {
+      const observerInstances = mutationObserverMock.mock.instances;
+      expect(observerInstances.length).toBe(1);
+      expect(observerInstances[0].observe).toHaveBeenCalledWith(document.body, {
+        childList: true,
+        subtree: true,
+      });
     });
   });
 
