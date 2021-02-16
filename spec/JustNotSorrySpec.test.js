@@ -196,6 +196,7 @@ describe('JustNotSorry', () => {
         const ranges = instance.search(buildWarning('just', 'warning message'));
 
         expect(ranges.length).toEqual(1);
+        expect(ranges[0].rangeToHighlight).toBeTruthy();
         expect(ranges[0]).toEqual(
           expect.objectContaining({
             message: 'warning message',
@@ -228,6 +229,7 @@ describe('JustNotSorry', () => {
         const ranges = instance.search(buildWarning('just', 'warning message'));
 
         expect(ranges.length).toEqual(1);
+        expect(ranges[0].rangeToHighlight).toBeTruthy();
         expect(ranges[0]).toEqual(
           expect.objectContaining({
             message: 'warning message',
@@ -245,6 +247,7 @@ describe('JustNotSorry', () => {
       instance.setState({ email: domNode }, () => {
         const ranges = instance.search(buildWarning('just', 'warning message'));
         expect(ranges.length).toEqual(1);
+        expect(ranges[0].rangeToHighlight).toBeTruthy();
         expect(ranges[0]).toEqual(
           expect.objectContaining({
             message: 'warning message',
@@ -267,6 +270,7 @@ describe('JustNotSorry', () => {
           buildWarning('so sorry', 'warning message')
         );
         expect(ranges.length).toEqual(1);
+        expect(ranges[0].rangeToHighlight).toBeTruthy();
         expect(ranges[0]).toEqual(
           expect.objectContaining({
             message: 'warning message',
