@@ -1,4 +1,4 @@
-import * as Util from '../src/components/util.js';
+import * as Util from '../src/helpers/util.js';
 
 describe('Util', () => {
   describe('#debounce', () => {

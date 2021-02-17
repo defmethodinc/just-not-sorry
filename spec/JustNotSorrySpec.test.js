@@ -119,6 +119,8 @@ describe('JustNotSorry', () => {
         expect(handleSearch).toHaveBeenCalledTimes(1);
       });
     });
+
+    //TODO cut
   });
 
   describe('#resetState', () => {
@@ -146,114 +148,17 @@ describe('JustNotSorry', () => {
     });
   });
 
-  describe('#search', () => {
-    it('adds a valid range for a punctuation keyword', () => {
-      const node = generateEditableDiv({ id: 'meaningless-id' }, 'test!!!');
-      const domNode = node.getDOMNode();
-      const ranges = instance.search(
-        domNode,
-        buildWarning('\\b!{3,}\\B', 'warning message')
-      );
-      expect(ranges.length).toEqual(1);
-      expect(ranges[0].rangeToHighlight).toBeTruthy();
-      expect(ranges[0]).toEqual(
-        expect.objectContaining({
-          message: 'warning message',
-          parentNode: domNode.parentNode,
-        })
-      );
-    });
+  describe('#updateWarnings', () => {
+    it('updates state and parentNode for a match', () => {
+      const elem = generateEditableDiv({ id: 'meaningless-id' }, 'test!!!');
 
-    it('adds a warning for a single keyword', () => {
-      const node = generateEditableDiv(
-        { id: 'meaningless-id' },
-        'test just test'
-      );
+      const domNode = elem.getDOMNode();
+      instance.updateWarnings(domNode, [
+        buildWarning('\\b!{3,}\\B', 'warning message'),
+      ]);
 
-      const domNode = node.getDOMNode();
-      const ranges = instance.search(
-        domNode,
-        buildWarning('just', 'warning message')
-      );
-
-      expect(ranges.length).toEqual(1);
-      expect(ranges[0].rangeToHighlight).toBeTruthy();
-      expect(ranges[0]).toEqual(
-        expect.objectContaining({
-          message: 'warning message',
-          parentNode: domNode.parentNode,
-        })
-      );
-    });
-
-    it('does not add warnings for partial matches', () => {
-      const node = generateEditableDiv({ id: 'div-id' }, 'test justify test');
-
-      const domNode = node.getDOMNode();
-      const ranges = instance.search(
-        domNode,
-        buildWarning('\\b(just)\\b', 'warning message')
-      );
-      expect(ranges.length).toEqual(0);
-      expect(ranges).toEqual([]);
-    });
-
-    it('matches case insensitive', () => {
-      const node = generateEditableDiv({ id: 'div-case' }, 'jUsT kidding');
-
-      const domNode = node.getDOMNode();
-      const ranges = instance.search(
-        domNode,
-        buildWarning('just', 'warning message')
-      );
-
-      expect(ranges.length).toEqual(1);
-      expect(ranges[0].rangeToHighlight).toBeTruthy();
-      expect(ranges[0]).toEqual(
-        expect.objectContaining({
-          message: 'warning message',
-          parentNode: domNode.parentNode,
-        })
-      );
-    });
-
-    it('catches keywords with punctuation', () => {
-      const node = generateEditableDiv({ id: 'div-punctuation' }, 'just. test');
-
-      const domNode = node.getDOMNode();
-      const ranges = instance.search(
-        domNode,
-        buildWarning('just', 'warning message')
-      );
-      expect(ranges.length).toEqual(1);
-      expect(ranges[0].rangeToHighlight).toBeTruthy();
-      expect(ranges[0]).toEqual(
-        expect.objectContaining({
-          message: 'warning message',
-          parentNode: domNode.parentNode,
-        })
-      );
-    });
-
-    it('matches phrases', () => {
-      const node = generateEditableDiv(
-        { id: 'div-phrase' },
-        'my cat is so sorry because of you'
-      );
-
-      const domNode = node.getDOMNode();
-      const ranges = instance.search(
-        domNode,
-        buildWarning('so sorry', 'warning message')
-      );
-      expect(ranges.length).toEqual(1);
-      expect(ranges[0].rangeToHighlight).toBeTruthy();
-      expect(ranges[0]).toEqual(
-        expect.objectContaining({
-          message: 'warning message',
-          parentNode: domNode.parentNode,
-        })
-      );
+      expect(wrapper.state('warnings').length).toBe(1);
+      expect(wrapper.state('parentNode')).toBe(domNode.parentNode);
     });
 
     it('does not add warnings for tooltip matches', () => {
@@ -280,19 +185,6 @@ describe('JustNotSorry', () => {
 
       expect(wrapper.state('warnings').length).toEqual(0);
       expect(wrapper.state('warnings')).toEqual([]);
-    });
-  });
-
-  describe('#searchEmail', () => {
-    it('adds warnings to all keywords', () => {
-      const node = generateEditableDiv(
-        { id: 'div-keywords' },
-        'I am just so sorry. Yes, just.'
-      );
-
-      const domNode = node.getDOMNode();
-      instance.searchEmail(domNode);
-      expect(wrapper.state('warnings').length).toEqual(3);
     });
   });
 });
