@@ -120,7 +120,21 @@ describe('JustNotSorry', () => {
       });
     });
 
-    //TODO cut
+    describe('on cut', () => {
+      it('updates warnings each time input is triggered', () => {
+        const handleSearch = jest.spyOn(instance, 'handleSearch');
+        const node = generateEditableDiv({ id: 'test' }, 'just not sorry');
+
+        const domNode = node.getDOMNode();
+        const mockedMutation = { type: 'childList', target: domNode };
+        const documentObserver = mutationObserverMock.mock.instances[0];
+        documentObserver.trigger([mockedMutation]);
+
+        node.simulate('cut');
+        jest.runOnlyPendingTimers();
+        expect(handleSearch).toHaveBeenCalledTimes(1);
+      });
+    });
   });
 
   describe('#resetState', () => {
