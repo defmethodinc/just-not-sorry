@@ -16,7 +16,8 @@
       "matches": [
         "https://mail.google.com/*",
         "https://inbox.google.com/*",
-        "https://outlook.live.com/*"
+        "https://outlook.live.com/*",
+        "https://mail.superhuman.com/*"
       ],
       "css": ["./just-not-sorry.css"],
       "js": ["bundle.js"]
