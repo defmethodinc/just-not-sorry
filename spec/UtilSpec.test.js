@@ -1,4 +1,4 @@
-import * as Util from '../src/components/util.js';
+import * as Util from '../src/helpers/util.js';
 
 describe('Util', () => {
   describe('#debounce', () => {
@@ -27,6 +27,32 @@ describe('Util', () => {
       }
       jest.runAllTimers();
       expect(func).toBeCalledTimes(3);
+    });
+  });
+
+  describe('match', () => {
+    it('should find a match if it exists', () => {
+      const div = document.createElement('div');
+      div.textContent = 'just checking';
+
+      const ranges = Util.match(div, /just/gi);
+      expect(ranges.length).toEqual(1);
+    });
+
+    it('should find multiple a match if it exists', () => {
+      const div = document.createElement('div');
+      div.textContent = 'just checking just';
+
+      const ranges = Util.match(div, /just/gi);
+      expect(ranges.length).toEqual(2);
+    });
+
+    it('should not find a match if it doesnt exist', () => {
+      const div = document.createElement('div');
+      div.textContent = 'just checking';
+
+      const ranges = Util.match(div, /bogus/gi);
+      expect(ranges.length).toEqual(0);
     });
   });
 });

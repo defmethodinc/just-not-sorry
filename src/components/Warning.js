@@ -2,17 +2,17 @@ import { h } from 'preact';
 import WarningHighlight from './WarningHighlight.js';
 
 const YPOS_ADJUSTMENT = 3;
-
-export const calculateCoords = (parentRect, rect) =>
-  parentRect && rect
+export function calculateCoords(parentRect, rect) {
+  return parentRect && rect
     ? {
         top: rect.top - parentRect.top + rect.height,
         left: rect.left - parentRect.left,
       }
     : undefined;
+}
 
-export const getHighlight = (rect, coord) =>
-  rect && coord
+export function getHighlight(rect, coord) {
+  return rect && coord
     ? {
         style: {
           top: `${coord.top - YPOS_ADJUSTMENT}px`,
@@ -26,31 +26,26 @@ export const getHighlight = (rect, coord) =>
         position: coord.top <= 200 ? 'bottom' : 'top',
       }
     : undefined;
-
-export const getHighlights = (parentNode, rangeToHighlight) => {
-  if (parentNode && rangeToHighlight) {
-    const parentRect = parentNode.getBoundingClientRect();
-    return Array.from(rangeToHighlight.getClientRects(), (rect) =>
-      getHighlight(rect, calculateCoords(parentRect, rect))
-    );
-  }
-  return undefined;
-};
+}
 
 export default function Warning(props) {
-  const { parentNode, rangeToHighlight } = props.value;
-  const highlights = getHighlights(parentNode, rangeToHighlight);
-
+  const rects = props.value.rangeToHighlight.getClientRects();
   return (
     <div className="jns-warning">
-      {highlights.map((highlight, index) => (
-        <WarningHighlight
-          key={index}
-          styles={highlight.style}
-          message={props.value.message}
-          position={highlight.position}
-        />
-      ))}
+      {Array.from(rects, (rect, index) => {
+        const highlight = getHighlight(
+          rect,
+          calculateCoords(props.parentRect, rect)
+        );
+        return (
+          <WarningHighlight
+            message={props.value.message}
+            position={highlight.position}
+            styles={highlight.style}
+            key={index}
+          />
+        );
+      })}
     </div>
   );
 }

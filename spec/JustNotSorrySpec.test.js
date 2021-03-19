@@ -5,15 +5,6 @@ import Adapter from 'enzyme-adapter-preact-pure';
 
 configure({ adapter: new Adapter() });
 
-const mutationObserverMock = jest.fn(function MutationObserver(callback) {
-  this.observe = jest.fn();
-  this.disconnect = jest.fn();
-  this.trigger = (mockedMutationList) => {
-    callback(mockedMutationList, this);
-  };
-});
-global.MutationObserver = mutationObserverMock;
-
 document.createRange = jest.fn(() => ({
   setStart: jest.fn(),
   setEnd: jest.fn(),
@@ -25,23 +16,31 @@ document.createRange = jest.fn(() => ({
   getClientRects: jest.fn(() => [{}]),
 }));
 
-const buildWarning = (pattern, message) => ({ pattern, message });
+const buildWarning = (pattern, message) => ({
+  regex: new RegExp(pattern, 'ig'),
+  message,
+});
+
 describe('JustNotSorry', () => {
-  let justNotSorry;
-  let wrapper;
-  let instance;
-  const divsForCleanUp = [];
+  jest.useFakeTimers();
+  let wrapper, instance, mutationObserverMock;
 
   beforeEach(() => {
-    justNotSorry = mount(<JustNotSorry />);
-    wrapper = justNotSorry;
-    instance = justNotSorry.instance();
+    mutationObserverMock = jest.fn(function MutationObserver(callback) {
+      this.observe = jest.fn();
+      this.disconnect = jest.fn();
+      this.trigger = (mockedMutationList) => {
+        callback(mockedMutationList, this);
+      };
+    });
+    global.MutationObserver = mutationObserverMock;
+
+    wrapper = mount(<JustNotSorry />);
+    instance = wrapper.instance();
   });
 
   afterEach(() => {
-    divsForCleanUp.forEach((divNode) => divNode.unmount());
-    divsForCleanUp.length = 0;
-    justNotSorry.unmount();
+    wrapper.unmount();
   });
 
   const generateEditableDiv = (props, innerHtml) => {
@@ -50,225 +49,130 @@ describe('JustNotSorry', () => {
         {innerHtml ? innerHtml : ''}
       </div>
     );
-    divsForCleanUp.push(divNode);
     return divNode;
   };
 
-  describe('#addObserver', () => {
-    it('adds an observer that listens for structural changes to the content editable div', () => {
-      const spy = jest.spyOn(instance, 'addObserver');
-      const node = generateEditableDiv({
-        id: 'div-focus',
-        onFocus: instance.addObserver.bind(instance),
-      });
-      node.simulate('focus');
-
-      // There should be the document observer and the observer specifically for the target div
+  describe('documentObserver', () => {
+    it('listens for structural changes to the content editable div in document body', () => {
       const observerInstances = mutationObserverMock.mock.instances;
-      const observerInstance = observerInstances[observerInstances.length - 1];
-
-      expect(observerInstances.length).toBe(2);
-      expect(spy).toHaveBeenCalledTimes(1);
-      expect(observerInstance.observe).toHaveBeenCalledWith(node.getDOMNode(), {
-        attributes: false,
-        characterData: false,
+      expect(observerInstances.length).toBe(1);
+      expect(observerInstances[0].observe).toHaveBeenCalledWith(document.body, {
         childList: true,
         subtree: true,
       });
     });
+  });
 
-    it('starts checking for warnings', () => {
-      const spy = jest.spyOn(instance, 'checkForWarnings');
-      const node = generateEditableDiv({
-        id: 'div-focus',
-        onFocus: instance.addObserver.bind(instance),
+  describe('#handleSearch', () => {
+    describe('on focus', () => {
+      it('checks for warnings', () => {
+        const handleSearch = jest.spyOn(instance, 'handleSearch');
+
+        const node = generateEditableDiv(
+          {
+            id: 'div-focus',
+          },
+          'just not sorry'
+        );
+        const domNode = node.getDOMNode();
+        const mockedMutation = { type: 'childList', target: domNode };
+        const documentObserver = mutationObserverMock.mock.instances[0];
+        documentObserver.trigger([mockedMutation]);
+
+        node.simulate('focus');
+        jest.runOnlyPendingTimers();
+
+        expect(handleSearch).toHaveBeenCalledTimes(1);
+        expect(wrapper.state('warnings').length).toEqual(2);
       });
-      node.simulate('focus');
 
-      expect(spy).toHaveBeenCalled();
+      it('does nothing when given an empty string', () => {
+        const handleSearch = jest.spyOn(instance, 'handleSearch');
+
+        const node = generateEditableDiv({ id: 'some-id' });
+
+        const domNode = node.getDOMNode();
+        const mockedMutation = { type: 'childList', target: domNode };
+        const documentObserver = mutationObserverMock.mock.instances[0];
+        documentObserver.trigger([mockedMutation]);
+
+        node.simulate('focus');
+        jest.runOnlyPendingTimers();
+
+        expect(handleSearch).toHaveBeenCalledTimes(1);
+        expect(wrapper.state('warnings').length).toEqual(0);
+      });
     });
 
-    it('adds warnings to the content editable div', () => {
-      const spy = jest.spyOn(instance, 'addWarnings');
-      const node = generateEditableDiv({
-        id: 'div-focus',
-        onFocus: instance.addObserver.bind(instance),
-      });
-      node.simulate('focus');
+    describe('on input', () => {
+      it('updates warnings each time input is triggered', () => {
+        const handleSearch = jest.spyOn(instance, 'handleSearch');
+        const node = generateEditableDiv({ id: 'test' }, 'just not sorry');
 
-      expect(spy).toHaveBeenCalledWith(node.getDOMNode());
+        const domNode = node.getDOMNode();
+        const mockedMutation = { type: 'childList', target: domNode };
+        const documentObserver = mutationObserverMock.mock.instances[0];
+        documentObserver.trigger([mockedMutation]);
+
+        node.simulate('input');
+        jest.runOnlyPendingTimers();
+        expect(handleSearch).toHaveBeenCalledTimes(1);
+      });
+    });
+
+    describe('on cut', () => {
+      it('updates warnings each time input is triggered', () => {
+        const handleSearch = jest.spyOn(instance, 'handleSearch');
+        const node = generateEditableDiv({ id: 'test' }, 'just not sorry');
+
+        const domNode = node.getDOMNode();
+        const mockedMutation = { type: 'childList', target: domNode };
+        const documentObserver = mutationObserverMock.mock.instances[0];
+        documentObserver.trigger([mockedMutation]);
+
+        node.simulate('cut');
+        jest.runOnlyPendingTimers();
+        expect(handleSearch).toHaveBeenCalledTimes(1);
+      });
     });
   });
 
-  describe('#removeObserver', () => {
-    it('removes any existing warnings', () => {
-      const spy = jest.spyOn(instance, 'removeObserver');
-      const node = generateEditableDiv(
-        {
-          id: 'div-focus',
-          onFocus: instance.addObserver.bind(instance),
-          onBlur: instance.removeObserver.bind(instance),
-        },
-        'just not sorry'
-      );
-      node.simulate('focus');
+  describe('#resetState', () => {
+    describe('on blur', () => {
+      it('removes any existing warnings', () => {
+        const spy = jest.spyOn(instance, 'resetState');
 
-      expect(justNotSorry.state('warnings').length).toEqual(2);
+        const node = generateEditableDiv(
+          {
+            id: 'div-focus',
+          },
+          'just not sorry'
+        );
 
-      // remount the node
-      node.mount();
-      node.simulate('blur');
+        const domNode = node.getDOMNode();
+        const mockedMutation = { type: 'childList', target: domNode };
+        const documentObserver = mutationObserverMock.mock.instances[0];
+        documentObserver.trigger([mockedMutation]);
 
-      expect(spy).toHaveBeenCalledTimes(1);
-      expect(justNotSorry.state('warnings').length).toEqual(0);
+        node.simulate('blur');
 
-      node.unmount();
-    });
-
-    it('no longer checks for warnings on input events', () => {
-      justNotSorry.unmount();
-      justNotSorry.mount();
-      const node = generateEditableDiv({
-        id: 'div-remove',
-        onFocus: instance.addObserver.bind(instance),
-        onBlur: instance.removeObserver.bind(instance),
+        expect(spy).toHaveBeenCalledTimes(1);
+        expect(wrapper.state('warnings').length).toEqual(0);
       });
-      node.simulate('focus');
-      node.simulate('blur');
-
-      const spy = jest.spyOn(instance, 'checkForWarnings');
-
-      node.simulate('input');
-
-      expect(spy).not.toHaveBeenCalled();
-
-      node.unmount();
-    });
-
-    it('disconnects the observer', () => {
-      const spy = jest.spyOn(instance, 'removeObserver');
-      const node = generateEditableDiv({
-        id: 'div-disconnect',
-        onFocus: instance.addObserver.bind(instance),
-        onBlur: instance.removeObserver.bind(instance),
-      });
-      node.simulate('focus');
-      node.simulate('blur');
-
-      // There should be the document observer and the observer specifically for the target div
-      const observerInstances = mutationObserverMock.mock.instances;
-      const observerInstance = observerInstances[observerInstances.length - 1];
-
-      expect(spy).toHaveBeenCalled();
-      expect(observerInstance.disconnect).toHaveBeenCalled();
-
-      node.unmount();
     });
   });
 
-  describe('#addWarning', () => {
-    it('adds a warning for a punctuation keyword', () => {
-      const node = generateEditableDiv(
-        { id: 'meaningless-id' },
-        'test!!!'
-      ).getDOMNode();
+  describe('#updateWarnings', () => {
+    it('updates state and parentNode for a match', () => {
+      const elem = generateEditableDiv({ id: 'meaningless-id' }, 'test!!!');
 
-      instance.addWarning(node, {
-        pattern: '\\b!{3,}\\B',
-        message: 'warning message',
-      });
+      const domNode = elem.getDOMNode();
+      instance.updateWarnings(domNode, [
+        buildWarning('\\b!{3,}\\B', 'warning message'),
+      ]);
 
-      expect(wrapper.state('warnings').length).toEqual(1);
-      expect(wrapper.state('warnings')[0]).toEqual(
-        expect.objectContaining({
-          pattern: '\\b!{3,}\\B',
-          message: 'warning message',
-          parentNode: node.parentNode,
-        })
-      );
-    });
-
-    it('adds a warning for a single keyword', () => {
-      const node = generateEditableDiv(
-        { id: 'meaningless-id' },
-        'test just test'
-      ).getDOMNode();
-
-      instance.addWarning(node, buildWarning('just', 'warning message'));
-
-      expect(wrapper.state('warnings').length).toEqual(1);
-      expect(wrapper.state('warnings')[0]).toEqual(
-        expect.objectContaining({
-          pattern: 'just',
-          message: 'warning message',
-          parentNode: node.parentNode,
-        })
-      );
-    });
-
-    it('does not add warnings for partial matches', () => {
-      const node = generateEditableDiv(
-        { id: 'div-id' },
-        'test justify test'
-      ).getDOMNode();
-      instance.addWarning(
-        node,
-        buildWarning('\\b(just)\\b', 'warning message')
-      );
-
-      expect(wrapper.state('warnings').length).toEqual(0);
-      expect(wrapper.state('warnings')).toEqual([]);
-    });
-
-    it('matches case insensitive', () => {
-      const node = generateEditableDiv(
-        { id: 'div-case' },
-        'jUsT kidding'
-      ).getDOMNode();
-
-      instance.addWarning(node, buildWarning('just', 'warning message'));
-      expect(wrapper.state('warnings').length).toEqual(1);
-      expect(wrapper.state('warnings')[0]).toEqual(
-        expect.objectContaining({
-          pattern: 'just',
-          message: 'warning message',
-          parentNode: node.parentNode,
-        })
-      );
-    });
-
-    it('catches keywords with punctuation', () => {
-      const node = generateEditableDiv(
-        { id: 'div-punctuation' },
-        'just. test'
-      ).getDOMNode();
-
-      instance.addWarning(node, buildWarning('just', 'warning message'));
-      expect(wrapper.state('warnings').length).toEqual(1);
-      expect(wrapper.state('warnings')[0]).toEqual(
-        expect.objectContaining({
-          pattern: 'just',
-          message: 'warning message',
-          parentNode: node.parentNode,
-        })
-      );
-    });
-
-    it('matches phrases', () => {
-      const node = generateEditableDiv(
-        { id: 'div-phrase' },
-        'my cat is so sorry because of you'
-      ).getDOMNode();
-
-      instance.addWarning(node, buildWarning('so sorry', 'warning message'));
-      expect(wrapper.state('warnings').length).toEqual(1);
-      expect(wrapper.state('warnings')[0]).toEqual(
-        expect.objectContaining({
-          pattern: 'so sorry',
-          message: 'warning message',
-          parentNode: node.parentNode,
-        })
-      );
+      expect(wrapper.state('warnings').length).toBe(1);
+      expect(wrapper.state('parentNode')).toBe(domNode.parentNode);
     });
 
     it('does not add warnings for tooltip matches', () => {
@@ -284,50 +188,17 @@ describe('JustNotSorry', () => {
         getClientRects: jest.fn(() => [{}]),
       }));
 
-      const node = generateEditableDiv(
-        { id: 'div-3' },
-        'test justify test'
-      ).getDOMNode();
-      instance.addWarning(node, buildWarning('very', 'warning message'));
+      const node = generateEditableDiv({ id: 'div-3' }, 'test justify test');
+      const domNode = node.getDOMNode();
+      const mockedMutation = { type: 'childList', target: domNode };
+      const documentObserver = mutationObserverMock.mock.instances[0];
+      documentObserver.trigger([mockedMutation]);
+
+      node.simulate('focus');
+      jest.runOnlyPendingTimers();
 
       expect(wrapper.state('warnings').length).toEqual(0);
       expect(wrapper.state('warnings')).toEqual([]);
-    });
-  });
-
-  describe('#addWarnings', () => {
-    it('does nothing when given an empty string', () => {
-      const node = generateEditableDiv({ id: 'some-id' });
-      instance.addWarnings(node);
-
-      expect(wrapper.state('warnings').length).toEqual(0);
-      expect(wrapper.state('warnings')).toEqual([]);
-    });
-
-    it('adds warnings to all keywords', () => {
-      const node = generateEditableDiv(
-        { id: 'div-keywords' },
-        'I am just so sorry. Yes, just.'
-      ).getDOMNode();
-
-      instance.addWarnings(node);
-      expect(wrapper.state('warnings').length).toEqual(3);
-    });
-  });
-
-  describe('#checkForWarnings', () => {
-    it('updates warnings each time input is triggered', () => {
-      const spy = jest.spyOn(instance, 'checkForWarnings');
-      const node = generateEditableDiv(
-        { id: 'test', onInput: instance.checkForWarnings },
-        'just not sorry'
-      );
-
-      node.simulate('input');
-      node.simulate('input');
-      node.simulate('input');
-      expect(spy).toHaveBeenCalledTimes(3);
-      node.unmount();
     });
   });
 });

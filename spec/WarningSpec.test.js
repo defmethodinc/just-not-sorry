@@ -1,8 +1,7 @@
 import { h } from 'preact';
 import Warning, {
-  getHighlights,
-  getHighlight,
   calculateCoords,
+  getHighlight,
 } from '../src/components/Warning.js';
 import { configure, shallow } from 'enzyme';
 import Adapter from 'enzyme-adapter-preact-pure';
@@ -59,7 +58,13 @@ describe('<Warning/>', () => {
   };
 
   beforeEach(() => {
-    wrapper = shallow(<Warning value={testProps.value} key={testProps.key} />);
+    wrapper = shallow(
+      <Warning
+        parentRect={parent.getBoundingClientRect()}
+        value={testProps.value}
+        key={testProps.key}
+      />
+    );
   });
 
   it('should return a warning div', () => {
@@ -84,33 +89,6 @@ describe('#calculateCoords', () => {
     expect(coords).toEqual({
       top: 65,
       left: 0,
-    });
-  });
-});
-
-describe('#getHighlights', () => {
-  it('should return undefined if the parentNode or rangeToHighlight are invalid', () => {
-    expect(getHighlights(null, null)).toEqual(undefined);
-    expect(getHighlights(undefined, undefined)).toEqual(undefined);
-  });
-
-  it('should return valid highlights when both parentNode and rangeToHighlight are valid', () => {
-    const parentNode = parent;
-    const rangeToHighlight = range;
-
-    const highlights = getHighlights(parentNode, rangeToHighlight);
-    expect(highlights.length).toEqual(1);
-    expect(highlights[0]).toEqual({
-      style: {
-        top: '62px',
-        left: '0px',
-        width: '39px',
-        height: '3px',
-        zIndex: 10,
-        position: 'absolute',
-        padding: '0px',
-      },
-      position: 'bottom',
     });
   });
 });
