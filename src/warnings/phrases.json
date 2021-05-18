@@ -94,10 +94,10 @@
     "message": "If you write an opinion, the reader understands that you also believe it is right. --David Bowman"
   },
   {
-    "displayLabel": ["I believe"],
-    "pattern": "(I believe)",
+    "displayLabel": ["I believe", "we believe"],
+    "pattern": "(I believe|we believe)",
     "source": "https://hbr.org/2011/12/replace-meaningless-words-with",
-    "message": "Phrases containing \"we believe,\" \"we think,\" and \"we feel\" pervade presentation narratives to such a degree that they spill over into sentences where caution is unnecessary. --Jerry Weissman"
+    "message": "Phrases containing \"we believe,\" \"we think,\" and \"we feel\" pervade presentation narratives to such a degree that they spill over into sentences where caution is unnecessary...the spillage weakens what should otherwise be assertive language. --Jerry Weissman"
   },
   {
     "displayLabel": ["I'm just saying"],
