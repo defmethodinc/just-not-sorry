@@ -138,13 +138,13 @@
     ],
     "pattern": "(I'm just being honest here|If I'm being honest|Honestly|to be honest|if I'm honest|to be perfectly honest|in all honesty)",
     "source": "https://lifehacker.com/the-verbal-tee-ups-that-often-reveal-dishonesty-1505870461",
-    "message": "Tee-ups like this may make the reader shut down and respond negatively to your comment."
+    "message": "Tee-ups like this may make the reader shut down and respond negatively to your comment. --Thorin Klosowski"
   },
   {
     "displayLabel": ["I guess"],
     "pattern": "(I guess)",
     "source": "https://www.inc.com/mary-rezek/cut-kinda-sorta-i-guess-how-to-end-your-filler-word-bad-habits.html",
-    "message": "If you're sure of something, \"guessing\" detracts from your message and opens doubt in the reader's mind."
+    "message": "If you're sure of something, \"guessing\" detracts from your message and opens doubt in the reader's mind. --Mary Rezek"
   },
   {
     "displayLabel": ["Maybe"],
