@@ -71,7 +71,7 @@
       "Does this make sense",
       "Did this make sense"
     ],
-    "pattern": "\\b(does that make sense|did that make sense|does this make sense|did this make sense)\\b",
+    "pattern": "(does that make sense|did that make sense|does this make sense|did this make sense)",
     "source": "http://goop.com/how-women-undermine-themselves-with-words/",
     "message": "\"does that make sense\" comes across either as condescending (like your audience can't understand) or it implies you feel you've been incoherent. A better way to close is something like \"I look forward to hearing your thoughts.\" You can leave it up to the other party to let you know if they are confused about something, rather than implying that you \"didn't make sense.\" --Tara Sophia Mohr"
   },
