@@ -26,7 +26,7 @@ const buildWarning = (pattern, message) => ({
 const enterText = (text) => {
   return mount(
     <div props={{ id: 'div-focus' }} contentEditable={'true'}>
-      {text ? text : ''}
+      {text ?? ''}
     </div>
   );
 };
