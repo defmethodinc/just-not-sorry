@@ -193,7 +193,6 @@ describe('JustNotSorry', () => {
       node.simulate('focus');
       jest.runOnlyPendingTimers();
 
-      expect(wrapper.state('warnings').length).toEqual(0);
       expect(wrapper.state('warnings')).toEqual([]);
     });
   });
