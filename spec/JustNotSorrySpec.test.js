@@ -36,9 +36,8 @@ describe('JustNotSorry', () => {
 
   const simulateEvent = (node, event) => {
     const domNode = node.getDOMNode();
-    const mockedMutation = { type: 'childList', target: domNode };
     const documentObserver = mutationObserverMock.mock.instances[0];
-    documentObserver.trigger([mockedMutation]);
+    documentObserver.trigger([{ type: 'childList', target: domNode }]);
     node.simulate(event);
     jest.runOnlyPendingTimers();
   };
