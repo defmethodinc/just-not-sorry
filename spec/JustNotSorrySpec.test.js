@@ -34,6 +34,14 @@ const enterText = (text) => {
 describe('JustNotSorry', () => {
   let wrapper, instance, mutationObserverMock;
 
+  const simulateEvent = (node, event) => {
+    const domNode = node.getDOMNode();
+    const mockedMutation = { type: 'childList', target: domNode };
+    const documentObserver = mutationObserverMock.mock.instances[0];
+    documentObserver.trigger([mockedMutation]);
+    node.simulate(event);
+  };
+
   beforeEach(() => {
     mutationObserverMock = jest.fn(function MutationObserver(callback) {
       this.observe = jest.fn();
@@ -80,12 +88,8 @@ describe('JustNotSorry', () => {
       it('checks for warnings', () => {
         const node = enterText('just not sorry');
 
-        const domNode = node.getDOMNode();
-        const mockedMutation = { type: 'childList', target: domNode };
-        const documentObserver = mutationObserverMock.mock.instances[0];
-        documentObserver.trigger([mockedMutation]);
+        simulateEvent(node, 'focus');
 
-        node.simulate('focus');
         jest.runOnlyPendingTimers();
 
         expect(wrapper.state('warnings').length).toEqual(2);
@@ -94,12 +98,8 @@ describe('JustNotSorry', () => {
       it('does nothing when given an empty string', () => {
         const node = enterText();
 
-        const domNode = node.getDOMNode();
-        const mockedMutation = { type: 'childList', target: domNode };
-        const documentObserver = mutationObserverMock.mock.instances[0];
-        documentObserver.trigger([mockedMutation]);
+        simulateEvent(node, 'focus');
 
-        node.simulate('focus');
         jest.runOnlyPendingTimers();
 
         expect(wrapper.state('warnings').length).toEqual(0);
@@ -110,12 +110,8 @@ describe('JustNotSorry', () => {
       it('updates warnings each time input is triggered', () => {
         const node = enterText('just not sorry');
 
-        const domNode = node.getDOMNode();
-        const mockedMutation = { type: 'childList', target: domNode };
-        const documentObserver = mutationObserverMock.mock.instances[0];
-        documentObserver.trigger([mockedMutation]);
+        simulateEvent(node, 'input');
 
-        node.simulate('input');
         jest.runOnlyPendingTimers();
       });
     });
@@ -124,12 +120,8 @@ describe('JustNotSorry', () => {
       it('updates warnings each time input is triggered', () => {
         const node = enterText('just not sorry');
 
-        const domNode = node.getDOMNode();
-        const mockedMutation = { type: 'childList', target: domNode };
-        const documentObserver = mutationObserverMock.mock.instances[0];
-        documentObserver.trigger([mockedMutation]);
+        simulateEvent(node, 'cut');
 
-        node.simulate('cut');
         jest.runOnlyPendingTimers();
       });
     });
@@ -142,12 +134,7 @@ describe('JustNotSorry', () => {
 
         const node = enterText('just not sorry');
 
-        const domNode = node.getDOMNode();
-        const mockedMutation = { type: 'childList', target: domNode };
-        const documentObserver = mutationObserverMock.mock.instances[0];
-        documentObserver.trigger([mockedMutation]);
-
-        node.simulate('blur');
+        simulateEvent(node, 'blur');
 
         expect(spy).toHaveBeenCalledTimes(1);
         expect(wrapper.state('warnings').length).toEqual(0);
@@ -170,12 +157,9 @@ describe('JustNotSorry', () => {
 
     it('does not add warnings for tooltip matches', () => {
       const node = enterText('test justify test');
-      const domNode = node.getDOMNode();
-      const mockedMutation = { type: 'childList', target: domNode };
-      const documentObserver = mutationObserverMock.mock.instances[0];
-      documentObserver.trigger([mockedMutation]);
 
-      node.simulate('focus');
+      simulateEvent(node, 'focus');
+
       jest.runOnlyPendingTimers();
 
       expect(wrapper.state('warnings').length).toBe(0);
