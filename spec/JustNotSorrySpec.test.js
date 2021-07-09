@@ -65,18 +65,18 @@ describe('JustNotSorry', () => {
 
   describe('#handleSearch', () => {
     let handleSearch;
+
+    const setupHandler = () => {
+      handleSearch = jest.spyOn(instance, 'handleSearch');
+    };
+
+    const assertHandlerWasCalled = () => {
+      expect(handleSearch).toHaveBeenCalledTimes(1);
+    };
+
+    beforeEach(setupHandler);
+    afterEach(assertHandlerWasCalled);
     describe('on focus', () => {
-      const setupHandler = () => {
-        handleSearch = jest.spyOn(instance, 'handleSearch');
-      };
-
-      const assertHandlerWasCalled = () => {
-        expect(handleSearch).toHaveBeenCalledTimes(1);
-      };
-
-      beforeEach(setupHandler);
-      afterEach(assertHandlerWasCalled);
-
       it('checks for warnings', () => {
         const node = enterText('just not sorry');
 
@@ -108,7 +108,6 @@ describe('JustNotSorry', () => {
 
     describe('on input', () => {
       it('updates warnings each time input is triggered', () => {
-        const handleSearch = jest.spyOn(instance, 'handleSearch');
         const node = enterText('just not sorry');
 
         const domNode = node.getDOMNode();
@@ -118,13 +117,11 @@ describe('JustNotSorry', () => {
 
         node.simulate('input');
         jest.runOnlyPendingTimers();
-        expect(handleSearch).toHaveBeenCalledTimes(1);
       });
     });
 
     describe('on cut', () => {
       it('updates warnings each time input is triggered', () => {
-        const handleSearch = jest.spyOn(instance, 'handleSearch');
         const node = enterText('just not sorry');
 
         const domNode = node.getDOMNode();
@@ -134,7 +131,6 @@ describe('JustNotSorry', () => {
 
         node.simulate('cut');
         jest.runOnlyPendingTimers();
-        expect(handleSearch).toHaveBeenCalledTimes(1);
       });
     });
   });
