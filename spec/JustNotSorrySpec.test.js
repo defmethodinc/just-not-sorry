@@ -13,7 +13,8 @@ document.createRange = jest.fn(() => ({
     nodeName: 'BODY',
     ownerDocument: document,
   },
-  startContainer: 'test',
+  startContainer:
+    "The word 'very' does not communicate enough information. Find a stronger, more meaningful adverb, or omit it completely. --Andrea Ayres",
   getClientRects: jest.fn(() => [{}]),
 }));
 
@@ -172,18 +173,6 @@ describe('JustNotSorry', () => {
     });
 
     it('does not add warnings for tooltip matches', () => {
-      document.createRange = jest.fn(() => ({
-        setStart: jest.fn(),
-        setEnd: jest.fn(),
-        commonAncestorContainer: {
-          nodeName: 'BODY',
-          ownerDocument: document,
-        },
-        startContainer:
-          "The word 'very' does not communicate enough information. Find a stronger, more meaningful adverb, or omit it completely. --Andrea Ayres",
-        getClientRects: jest.fn(() => [{}]),
-      }));
-
       const node = enterText('test justify test');
       const domNode = node.getDOMNode();
       const mockedMutation = { type: 'childList', target: domNode };
