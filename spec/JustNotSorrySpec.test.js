@@ -40,6 +40,7 @@ describe('JustNotSorry', () => {
     const documentObserver = mutationObserverMock.mock.instances[0];
     documentObserver.trigger([mockedMutation]);
     node.simulate(event);
+    jest.runOnlyPendingTimers();
   };
 
   beforeEach(() => {
@@ -83,14 +84,14 @@ describe('JustNotSorry', () => {
     };
 
     beforeEach(setupHandler);
+
     afterEach(assertHandlerWasCalled);
+
     describe('on focus', () => {
       it('checks for warnings', () => {
         const node = enterText('just not sorry');
 
         simulateEvent(node, 'focus');
-
-        jest.runOnlyPendingTimers();
 
         expect(wrapper.state('warnings').length).toEqual(2);
       });
@@ -99,8 +100,6 @@ describe('JustNotSorry', () => {
         const node = enterText();
 
         simulateEvent(node, 'focus');
-
-        jest.runOnlyPendingTimers();
 
         expect(wrapper.state('warnings').length).toEqual(0);
       });
@@ -111,8 +110,6 @@ describe('JustNotSorry', () => {
         const node = enterText('just not sorry');
 
         simulateEvent(node, 'input');
-
-        jest.runOnlyPendingTimers();
       });
     });
 
@@ -121,8 +118,6 @@ describe('JustNotSorry', () => {
         const node = enterText('just not sorry');
 
         simulateEvent(node, 'cut');
-
-        jest.runOnlyPendingTimers();
       });
     });
   });
@@ -157,11 +152,7 @@ describe('JustNotSorry', () => {
 
     it('does not add warnings for tooltip matches', () => {
       const node = enterText('test justify test');
-
       simulateEvent(node, 'focus');
-
-      jest.runOnlyPendingTimers();
-
       expect(wrapper.state('warnings').length).toBe(0);
     });
   });
