@@ -4,6 +4,7 @@ import { configure, mount } from 'enzyme';
 import Adapter from 'enzyme-adapter-preact-pure';
 
 configure({ adapter: new Adapter() });
+jest.useFakeTimers();
 
 document.createRange = jest.fn(() => ({
   setStart: jest.fn(),
@@ -21,17 +22,15 @@ const buildWarning = (pattern, message) => ({
   message,
 });
 
-const generateEditableDiv = (props, innerHtml) => {
-  const divNode = mount(
-    <div {...props} contentEditable={'true'}>
-      {innerHtml ? innerHtml : ''}
+const enterText = (text) => {
+  return mount(
+    <div props={{ id: 'div-focus' }} contentEditable={'true'}>
+      {text ? text : ''}
     </div>
   );
-  return divNode;
 };
 
 describe('JustNotSorry', () => {
-  jest.useFakeTimers();
   let wrapper, instance, mutationObserverMock;
 
   beforeEach(() => {
@@ -64,16 +63,22 @@ describe('JustNotSorry', () => {
   });
 
   describe('#handleSearch', () => {
+    let handleSearch;
     describe('on focus', () => {
-      it('checks for warnings', () => {
-        const handleSearch = jest.spyOn(instance, 'handleSearch');
+      const setupHandler = () => {
+        handleSearch = jest.spyOn(instance, 'handleSearch');
+      };
 
-        const node = generateEditableDiv(
-          {
-            id: 'div-focus',
-          },
-          'just not sorry'
-        );
+      const assertHandlerWasCalled = () => {
+        expect(handleSearch).toHaveBeenCalledTimes(1);
+      };
+
+      beforeEach(setupHandler);
+      afterEach(assertHandlerWasCalled);
+
+      it('checks for warnings', () => {
+        const node = enterText('just not sorry');
+
         const domNode = node.getDOMNode();
         const mockedMutation = { type: 'childList', target: domNode };
         const documentObserver = mutationObserverMock.mock.instances[0];
@@ -82,14 +87,11 @@ describe('JustNotSorry', () => {
         node.simulate('focus');
         jest.runOnlyPendingTimers();
 
-        expect(handleSearch).toHaveBeenCalledTimes(1);
         expect(wrapper.state('warnings').length).toEqual(2);
       });
 
       it('does nothing when given an empty string', () => {
-        const handleSearch = jest.spyOn(instance, 'handleSearch');
-
-        const node = generateEditableDiv({ id: 'some-id' });
+        const node = enterText();
 
         const domNode = node.getDOMNode();
         const mockedMutation = { type: 'childList', target: domNode };
@@ -99,7 +101,6 @@ describe('JustNotSorry', () => {
         node.simulate('focus');
         jest.runOnlyPendingTimers();
 
-        expect(handleSearch).toHaveBeenCalledTimes(1);
         expect(wrapper.state('warnings').length).toEqual(0);
       });
     });
@@ -107,7 +108,7 @@ describe('JustNotSorry', () => {
     describe('on input', () => {
       it('updates warnings each time input is triggered', () => {
         const handleSearch = jest.spyOn(instance, 'handleSearch');
-        const node = generateEditableDiv({ id: 'test' }, 'just not sorry');
+        const node = enterText('just not sorry');
 
         const domNode = node.getDOMNode();
         const mockedMutation = { type: 'childList', target: domNode };
@@ -123,7 +124,7 @@ describe('JustNotSorry', () => {
     describe('on cut', () => {
       it('updates warnings each time input is triggered', () => {
         const handleSearch = jest.spyOn(instance, 'handleSearch');
-        const node = generateEditableDiv({ id: 'test' }, 'just not sorry');
+        const node = enterText('just not sorry');
 
         const domNode = node.getDOMNode();
         const mockedMutation = { type: 'childList', target: domNode };
@@ -142,12 +143,7 @@ describe('JustNotSorry', () => {
       it('removes any existing warnings', () => {
         const spy = jest.spyOn(instance, 'resetState');
 
-        const node = generateEditableDiv(
-          {
-            id: 'div-focus',
-          },
-          'just not sorry'
-        );
+        const node = enterText('just not sorry');
 
         const domNode = node.getDOMNode();
         const mockedMutation = { type: 'childList', target: domNode };
@@ -164,7 +160,7 @@ describe('JustNotSorry', () => {
 
   describe('#updateWarnings', () => {
     it('updates state and parentNode for a match', () => {
-      const elem = generateEditableDiv({ id: 'meaningless-id' }, 'test!!!');
+      const elem = enterText('test!!!');
 
       const domNode = elem.getDOMNode();
       instance.updateWarnings(domNode, [
@@ -188,7 +184,7 @@ describe('JustNotSorry', () => {
         getClientRects: jest.fn(() => [{}]),
       }));
 
-      const node = generateEditableDiv({ id: 'div-3' }, 'test justify test');
+      const node = enterText('test justify test');
       const domNode = node.getDOMNode();
       const mockedMutation = { type: 'childList', target: domNode };
       const documentObserver = mutationObserverMock.mock.instances[0];
