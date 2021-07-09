@@ -21,6 +21,15 @@ const buildWarning = (pattern, message) => ({
   message,
 });
 
+const generateEditableDiv = (props, innerHtml) => {
+  const divNode = mount(
+    <div {...props} contentEditable={'true'}>
+      {innerHtml ? innerHtml : ''}
+    </div>
+  );
+  return divNode;
+};
+
 describe('JustNotSorry', () => {
   jest.useFakeTimers();
   let wrapper, instance, mutationObserverMock;
@@ -42,15 +51,6 @@ describe('JustNotSorry', () => {
   afterEach(() => {
     wrapper.unmount();
   });
-
-  const generateEditableDiv = (props, innerHtml) => {
-    const divNode = mount(
-      <div {...props} contentEditable={'true'}>
-        {innerHtml ? innerHtml : ''}
-      </div>
-    );
-    return divNode;
-  };
 
   describe('documentObserver', () => {
     it('listens for structural changes to the content editable div in document body', () => {
