@@ -74,15 +74,13 @@ describe('JustNotSorry', () => {
   describe('#handleSearch', () => {
     let handleSearch;
 
-    const setupHandler = () => {
+    beforeEach(() => {
       handleSearch = jest.spyOn(instance, 'handleSearch');
-    };
+    });
 
     const assertHandlerWasCalled = () => {
       expect(handleSearch).toHaveBeenCalledTimes(1);
     };
-
-    beforeEach(setupHandler);
 
     afterEach(assertHandlerWasCalled);
 
