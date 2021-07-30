@@ -45,15 +45,15 @@ class JustNotSorry extends Component {
     const newWarnings =
       email.children.length > 0
         ? Array.from(email.children)
-            .filter((node) => node.text !== '')
-            .flatMap((node) => findRanges(node, patterns))
+            .filter((node) => node.textContent !== '')
+            .flatMap((text) => findRanges(text, patterns))
         : findRanges(email, patterns);
+
     this.setState(({ parentNode }) =>
       parentNode.id !== email.parentNode.id
         ? { parentNode: email.parentNode, warnings: newWarnings }
         : { parentNode, warnings: newWarnings }
     );
-    this.setState({ parentNode: email.parentNode, warnings: newWarnings });
   }
 
   handleSearch(email, patterns) {
