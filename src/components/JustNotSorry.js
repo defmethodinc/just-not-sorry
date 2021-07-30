@@ -51,7 +51,7 @@ class JustNotSorry extends Component {
     this.setState(({ parentNode }) =>
       parentNode.id !== email.parentNode.id
         ? { parentNode: email.parentNode, warnings: newWarnings }
-        : { parentNode, warning: newWarnings }
+        : { parentNode, warnings: newWarnings }
     );
     this.setState({ parentNode: email.parentNode, warnings: newWarnings });
   }
