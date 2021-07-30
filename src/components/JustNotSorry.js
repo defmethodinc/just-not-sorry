@@ -43,7 +43,7 @@ class JustNotSorry extends Component {
 
   updateWarnings(email, patterns) {
     const newWarnings =
-      email.children.size > 0
+      email.children.length > 0
         ? Array.from(email.children)
             .filter((node) => node.text !== '')
             .flatMap((node) => findRanges(node, patterns))
