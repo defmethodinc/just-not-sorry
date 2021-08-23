@@ -41,14 +41,24 @@ class JustNotSorry extends Component {
     this.setState({ parentNode: {}, warnings: [] });
   }
 
-  updateWarnings(elem, patterns) {
-    const newWarnings = findRanges(elem, patterns);
-    this.setState({ parentNode: elem.parentNode, warnings: newWarnings });
+  updateWarnings(email, patterns) {
+    const newWarnings =
+      email.children.length > 0
+        ? Array.from(email.children)
+            .filter((node) => node.textContent !== '')
+            .flatMap((text) => findRanges(text, patterns))
+        : findRanges(email, patterns);
+
+    this.setState(({ parentNode }) =>
+      parentNode.id !== email.parentNode.id
+        ? { parentNode: email.parentNode, warnings: newWarnings }
+        : { parentNode, warnings: newWarnings }
+    );
   }
 
-  handleSearch(elem, patterns) {
+  handleSearch(email, patterns) {
     return Util.debounce(
-      () => this.updateWarnings(elem, patterns),
+      () => this.updateWarnings(email, patterns),
       WAIT_TIME_BEFORE_RECALC_WARNINGS
     );
   }
