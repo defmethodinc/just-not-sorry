@@ -147,6 +147,25 @@ describe('JustNotSorry', () => {
       expect(wrapper.state('parentNode')).toBe(domNode.parentNode);
     });
 
+    describe('when there are top-level and child nodes', () => {
+      it('catches the warnings for both', () => {
+        const elem = mount(
+          <div props={{ id: 'div-focus' }} contentEditable={'true'}>
+            test!!!
+            <div>Hello!!!</div>
+          </div>
+        );
+
+        const domNode = elem.getDOMNode();
+        instance.updateWarnings(domNode, [
+          buildWarning('\\b!{3,}\\B', 'warning message'),
+        ]);
+
+        expect(wrapper.state('warnings').length).toBe(2);
+        expect(wrapper.state('parentNode')).toBe(domNode.parentNode);
+      });
+    });
+
     it('does not add warnings for tooltip matches', () => {
       const node = enterText('test justify test');
       simulateEvent(node, 'focus');
