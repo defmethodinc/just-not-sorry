@@ -30,7 +30,7 @@ If you're a developer, you're welcome to submit a pull request. Please run the t
 Prerequisites:
 
 - [git](https://git-scm.com/)
-- [node.js 12.X+](https://nodejs.org/)
+- [node.js 14.X+](https://nodejs.org/)
 
 Setup:
 

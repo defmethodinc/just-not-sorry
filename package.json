@@ -55,8 +55,6 @@
     "webpack-dev-server": "^4.0.0"
   },
   "dependencies": {
-    "dom-regexp-match": "^1.1.0",
-    "fastdom": "^1.0.9",
     "preact": "^10.4.1",
     "prop-types": "^15.7.2",
     "range-at-index": "^1.0.4",
@@ -77,12 +75,10 @@
   "lint-staged": {
     "*.js": [
       "prettier --write",
-      "eslint --cache --fix",
-      "git add"
+      "eslint --cache --fix"
     ],
     "*.{md,css,json}": [
-      "prettier --write",
-      "git add"
+      "prettier --write"
     ]
   },
   "jest": {
