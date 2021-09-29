@@ -6,3 +6,4 @@ dist
 *.json.old
 build
 .eslintcache
+coverage

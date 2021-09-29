@@ -50,8 +50,8 @@ class JustNotSorry extends Component {
         : findRanges(email, patterns);
 
     this.setState(({ parentNode }) =>
-      parentNode.id !== email.parentNode.id
-        ? { parentNode: email.parentNode, warnings: newWarnings }
+      parentNode.id !== email.offsetParent.id
+        ? { parentNode: email.offsetParent, warnings: newWarnings }
         : { parentNode, warnings: newWarnings }
     );
   }
