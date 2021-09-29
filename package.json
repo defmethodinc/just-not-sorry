@@ -86,7 +86,10 @@
       "^react$": "preact/compat",
       "^react-dom/test-utils$": "preact/test-utils",
       "^react-dom$": "preact/compat"
-    }
+    },
+    "setupFilesAfterEnv": [
+      "<rootDir>/spec/setupTests.js"
+    ]
   },
   "snapshotSerializers": [
     "preact-render-spy/snapshot"
