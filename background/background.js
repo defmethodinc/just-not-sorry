@@ -1,6 +1,6 @@
 var gaService = analytics.getService('JustNotSorryTest');
 
-chrome.runtime.onInstalled.addListener(function () {
+chrome.runtime.onInstalled.addListener(async function ({ reason }) {
   var tracker = gaService.getTracker('UA-3535278-4'); // prod
   var timing = tracker.startTiming('Analytics Performance', 'Send Event');
   tracker.sendAppView('JustNotSorryInstalled');
@@ -24,6 +24,11 @@ chrome.runtime.onInstalled.addListener(function () {
       },
     ]);
   });
+
+  if (reason === 'update') {
+    const url = 'https://defmethodinc.github.io/just-not-sorry/upgraded';
+    await chrome.tabs.create({ url });
+  }
 });
 
 chrome.pageAction.onClicked.addListener(function () {
