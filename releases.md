@@ -1,9 +1,7 @@
-# New Version Installed
-
-Your version of the Just Not Sorry extension has just been updated.  Here is what's new:
+# Release Notes
 
 ### v2.1.0
-* Added support for Outlook webmail - https://outlook.live.com/
+* Added support for Outlook webmail - [https://outlook.live.com/](https://outlook.live.com/)
 * Added display of all warning phrases to the options UI, along with links to the source articles.  Click the JustNotSorry extension button in your toolbar to see them.
 
 ### v2.0.0

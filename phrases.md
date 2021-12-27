@@ -1,4 +1,4 @@
-# Phrases that trigger warnings
+# List of Warning Phrases
 <table>
   <thead>
   <tr>
