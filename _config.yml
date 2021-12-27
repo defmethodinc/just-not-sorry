@@ -1,2 +1,4 @@
 theme: jekyll-theme-minimal
 logo: JustNotSorry-128.png
+title: JustNotSorry
+description: The Chrome extension that warns you when you write emails using words which undermine your message.
