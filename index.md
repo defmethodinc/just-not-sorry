@@ -1,4 +1,6 @@
-<iframe width="560" height="315" src="https://www.youtube-nocookie.com/embed/riVZvP9zv0Y" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+<div class="video-container">
+    <iframe src="https://www.youtube-nocookie.com/embed/riVZvP9zv0Y" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+</div>
 
 The [Chrome Extension](https://chrome.google.com/webstore/detail/just-not-sorry-the-gmail/fmegmibednnlgojepmidhlhpjbppmlci) that helps you send more confident emails by warning you when you use words which undermine your message.
 
