@@ -8,4 +8,6 @@ Inspired by the writings of Tara Mohr and others, this Chrome Extension for Gmai
 
 Created by [Tami Reiss](https://linkedin.com/in/tamireiss), Steve Brudz, Manish Kakwani, and Eric Tillberg of [Def Method](https://www.defmethod.com/). Read the [backstory here](https://medium.com/@tamireiss/just-not-sorry-the-backstory-33f54b30fe48).
 
-[Install Just Not Sorry](https://chrome.google.com/webstore/detail/just-not-sorry-the-gmail/fmegmibednnlgojepmidhlhpjbppmlci)
+<div class="h-center">
+    <a class="button" href="https://chrome.google.com/webstore/detail/just-not-sorry-the-gmail/fmegmibednnlgojepmidhlhpjbppmlci">Install Just Not Sorry</a>
+</div>

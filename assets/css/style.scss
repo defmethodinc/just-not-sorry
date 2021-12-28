@@ -1,0 +1,28 @@
+---
+---
+
+@import "{{ site.theme }}";
+
+a.button {
+  cursor: pointer!important;
+  border: 0.2em solid #267CB9;
+  text-decoration: none;
+  color: white;
+  background-color: #267CB9;
+  border-radius: 1em;
+  padding: 0.5em;
+  transition: border-color .8s ease 0s, background-color  .8s ease 0s;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.6);
+}
+a:hover.button, a:focus.button {
+  font-weight: normal;
+  background-color: #069;
+  border-color: #069;
+  transition: border-color .4s ease 0s, background-color  .4s ease 0s;
+}
+.h-center {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
