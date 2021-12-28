@@ -41,6 +41,11 @@ section {
     width: auto;
   }
 }
+@media print, screen and (max-width: 480px) {
+  .logo {
+    width: 50%;
+  }
+}
 .video-container {
   position: relative;
   padding-bottom: 56.25%;

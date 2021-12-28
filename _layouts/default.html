@@ -16,7 +16,7 @@
 <div class="wrapper">
   <header>
     {% if site.logo %}
-    <img src="{{site.logo | relative_url}}" alt="Logo" />
+    <img src="{{site.logo | relative_url}}" alt="Just Not Sorry Logo" class="logo" />
     {% endif %}
 
     <h1><a href="{{ "/" | absolute_url }}">{{ site.title | default: site.github.repository_name }}</a></h1>
@@ -26,7 +26,7 @@
     <p class="view"><a href="./index.html">Home</a></p>
     <p class="view"><a href="./phrases.html">List of Warning Phrases</a></p>
     <p class="view"><a href="./releases.html">Release Notes</a></p>
-    <p class="view"><a href="{{ site.github.repository_url }}">View the Source Code on GitHub <small>{{ site.github.repository_nwo }}</small></a></p>
+    <p class="view"><a href="{{ site.github.repository_url }}">View the Source Code on GitHub</a></p>
 
   </header>
   <section>
