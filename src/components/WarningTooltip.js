@@ -7,6 +7,7 @@ export default function WarningTooltip() {
       class="jns-tooltip"
       type="dark"
       effect="float"
+      border={true}
       multiline={true}
     />
   );

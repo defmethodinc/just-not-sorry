@@ -44,7 +44,7 @@
   "permissions": [
     "https://www.google-analytics.com/",
     "storage",
-    "tabs",
-    "declarativeContent"
+    "declarativeContent",
+    "notifications"
   ]
 }
