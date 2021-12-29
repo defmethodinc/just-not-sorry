@@ -30,6 +30,21 @@ table ul {
   margin: 0;
   list-style-type: none;
 }
+.gallery {
+  width: 100%;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-evenly;
+  align-items: center;
+  margin-bottom: 15px;
+  gap: 12px;
+}
+.gallery img {
+  height: 25px;
+}
+.gallery img.tall {
+  height: 40px;
+}
 .wrapper {
   width: 920px;
 }
