@@ -23,10 +23,14 @@
 
     <p>{{ site.description | default: site.github.project_tagline }}</p>
 
-    <p class="view"><a href="./index.html">Home</a></p>
-    <p class="view"><a href="./phrases.html">List of Warning Phrases</a></p>
-    <p class="view"><a href="./releases.html">Release Notes</a></p>
-    <p class="view"><a href="{{ site.github.repository_url }}">View the Source Code on GitHub</a></p>
+    <ul>
+      {% for item in site.html_pages %}
+      <li class="{% if item.url == page.url %}active{% endif %}">
+        <a href="{{ item.url | relative_url }}">{{ item.title }}</a>
+      </li>
+      {% endfor %}
+      <li><a href="{{ site.github.repository_url }}">View the Source Code on GitHub</a></li>
+    </ul>
 
   </header>
   <section>

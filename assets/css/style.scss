@@ -51,6 +51,11 @@ table ul {
 section {
   width: 560px;
 }
+li.active a {
+  color: #069;
+  font-weight: bold;
+  cursor: default;
+}
 @media print, screen and (max-width: 960px) {
   section {
     width: auto;
