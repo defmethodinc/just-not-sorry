@@ -1,9 +1,42 @@
 # Release Notes
 
-### v2.1.0
-* Added support for Outlook webmail - [https://outlook.live.com/](https://outlook.live.com/)
-* Added display of all warning phrases to the options UI, along with links to the source articles.  Click the JustNotSorry extension button in your toolbar to see them.
-
-### v2.0.0
+### v2.1.0 - Dec 30, 2021
+* Added support for Outlook for web - [https://outlook.live.com/](https://outlook.live.com/)
 * Major rewrite of code for better maintainability
-* The primary visible difference is that when you hover over an underline, the message box will pop up instantly and use easier-to-ready styling
+* Added display of all warning phrases to the options UI, along with links to the source articles.  Click the JustNotSorry extension button in your toolbar to see them.
+* Improved message box when you hover over an underline
+
+### v1.6.3 - Apr 27, 2020
+* Performance enhancements for longer emails
+
+### v1.6.2 - Apr 20, 2020
+* Fixed issue with JustNotSorry breaking Send button in Gmail.
+
+### v1.6.1 - Apr 15, 2020
+* Fixed issue with positioning of underlines
+* Removed Google Inbox support because Inbox has been retired
+
+### v1.5.1 - Feb 13, 2017
+* Quick fix for crashing tab when used with certain other extensions.
+
+### v1.5.0 - Feb 6, 2017
+* This release adds Inbox support (in addition to the existing Gmail support) and fixes a couple of small UX bugs.
+
+### v1.0.0 - Apr 3, 2016
+* Additional warning phrases
+* Improved highlighting
+
+### v0.2.6 - Jan 18, 2016
+* This release fixes issues with the cursor jumping to the previous paragraph when all the characters in a paragraph are deleted.
+
+### v0.2.1 - Dec 18, 2015
+* The v0.2.0 package was missing options.html so the extension would not install. This release fixes that problem.
+
+### v0.2.0 - Dec 18, 2015
+* Capture data about who is installing JustNotSorry via Google Analytics.
+
+### v0.1.3 - Dec 18, 2015
+* Fixed issue where Gmail would crash when both JustNotSorry and SalesforceIQ Chrome Extensions were installed.
+
+### v0.1.2 - Dec 16, 2015
+* The first public release that was published to the Chrome Web Store.
