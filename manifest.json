@@ -1,11 +1,11 @@
 {
   "manifest_version": 2,
-  "name": "Just Not Sorry -- the Gmail Plug-in",
+  "name": "Just Not Sorry -- the Chrome extension",
   "short_name": "JustNotSorry",
   "author": "Steve Brudz, Manish Kakwani, Tami Reiss, and Eric Tillberg of Def Method",
-  "version": "2.0.0",
-  "version_name": "2.0.0",
-  "description": "A Gmail Plug-in that warns you when you write emails using words which undermine your message",
+  "version": "2.1.0.1",
+  "version_name": "2.1.0-beta.1",
+  "description": "A Chrome extension that warns you when you write emails using words which undermine your message",
   "icons": {
     "16": "img/JustNotSorry-16.png",
     "48": "img/JustNotSorry-48.png",
@@ -13,7 +13,11 @@
   },
   "content_scripts": [
     {
-      "matches": ["https://mail.google.com/*", "https://inbox.google.com/*"],
+      "matches": [
+        "https://mail.google.com/*",
+        "https://inbox.google.com/*",
+        "https://outlook.live.com/*"
+      ],
       "css": ["./just-not-sorry.css"],
       "js": ["bundle.js"]
     }
@@ -33,13 +37,14 @@
     "default_title": "Just Not Sorry"
   },
   "options_ui": {
-    "page": "options/options.html",
+    "page": "options.html",
     "chrome_style": true
   },
   "web_accessible_resources": [],
   "permissions": [
     "https://www.google-analytics.com/",
     "storage",
-    "declarativeContent"
+    "declarativeContent",
+    "notifications"
   ]
 }

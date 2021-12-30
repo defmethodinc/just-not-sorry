@@ -6,3 +6,6 @@ dist
 *.json.old
 build
 .eslintcache
+coverage
+.jekyll-cache
+_site

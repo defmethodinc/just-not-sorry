@@ -1,7 +1,7 @@
 {
   "name": "just-not-sorry",
-  "description": "Gmail Plug-in that warns you when you write emails using words which undermine your message",
-  "version": "2.0.0",
+  "description": "Chrome extension that warns you when you write emails using words which undermine your message",
+  "version": "2.1.0-beta.1",
   "author": "Steve Brudz, Manish Kakwani, Tami Reiss, and Eric Tillberg of Def Method",
   "license": "MIT",
   "repository": "git@github.com:defmethodinc/just-not-sorry.git",
@@ -12,7 +12,7 @@
     "test:watch": "npm run test -- --watch",
     "build": "webpack --config webpack.config.js",
     "build:watch": "webpack --config webpack.config.js --watch",
-    "webext:run": "web-ext run --source-dir ./build/ --start-url gmail.com",
+    "webext:run": "sleep 10 && web-ext run --source-dir ./build/ --start-url gmail.com",
     "webext:lint": "web-ext lint -s ./build",
     "start:firefox": "concurrently \"npm:build:watch\" \"npm:webext:run\"",
     "start:chrome": "concurrently \"npm:build:watch\" \"npm:webext:run -- -t chromium\"",
@@ -21,6 +21,7 @@
   },
   "devDependencies": {
     "@babel/core": "^7.9.6",
+    "@babel/plugin-proposal-class-properties": "^7.12.1",
     "@babel/plugin-transform-react-jsx": "^7.9.4",
     "@babel/preset-env": "^7.9.6",
     "@os33/preact-render-spy": "^1.4.0",
@@ -29,9 +30,9 @@
     "babel": "^6.23.0",
     "babel-eslint": "^8.2.6",
     "babel-loader": "^8.0.6",
-    "commitizen": "^4.0.4",
+    "commitizen": "^4.2.4",
     "concurrently": "^5.2.0",
-    "copy-webpack-plugin": "^5.1.1",
+    "copy-webpack-plugin": "^9.0.1",
     "cz-conventional-changelog": "^3.1.0",
     "enzyme": "^3.11.0",
     "enzyme-adapter-preact-pure": "^2.2.0",
@@ -41,23 +42,22 @@
     "eslint-plugin-jasmine": "^4.1.1",
     "eslint-plugin-jest": "^23.13.1",
     "eslint-plugin-react": "^7.20.0",
+    "html-webpack-plugin": "^5.3.2",
     "husky": "^4.2.5",
-    "jest": "^26.0.1",
+    "jest": "^26.6.3",
     "jest-enzyme": "^7.1.2",
     "lint-staged": "^10.2.2",
     "prettier": "^2.0.5",
-    "semantic-release": "^17.0.4",
-    "web-ext": "^4.2.0",
-    "webpack": "^4.43.0",
-    "webpack-cli": "^3.3.11",
-    "webpack-dev-server": "^3.11.0",
-    "webpack-stream": "^5.2.1"
+    "semantic-release": "^17.4.3",
+    "web-ext": "^6.3.0",
+    "webpack": "^5.51.1",
+    "webpack-cli": "^4.8.0",
+    "webpack-dev-server": "^4.0.0"
   },
   "dependencies": {
-    "dom-regexp-match": "^1.1.0",
-    "fastdom": "^1.0.9",
     "preact": "^10.4.1",
     "prop-types": "^15.7.2",
+    "range-at-index": "^1.0.4",
     "react-tooltip": "^4.2.6"
   },
   "husky": {
@@ -75,12 +75,10 @@
   "lint-staged": {
     "*.js": [
       "prettier --write",
-      "eslint --cache --fix",
-      "git add"
+      "eslint --cache --fix"
     ],
     "*.{md,css,json}": [
-      "prettier --write",
-      "git add"
+      "prettier --write"
     ]
   },
   "jest": {
@@ -88,7 +86,10 @@
       "^react$": "preact/compat",
       "^react-dom/test-utils$": "preact/test-utils",
       "^react-dom$": "preact/compat"
-    }
+    },
+    "setupFilesAfterEnv": [
+      "<rootDir>/spec/setupTests.js"
+    ]
   },
   "snapshotSerializers": [
     "preact-render-spy/snapshot"
