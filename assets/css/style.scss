@@ -3,6 +3,10 @@
 
 @import "{{ site.theme }}";
 
+a:hover, a:focus {
+  font-weight: revert;
+  text-decoration: underline;
+}
 a.button {
   cursor: pointer!important;
   border: 0.2em solid #267CB9;
@@ -55,6 +59,9 @@ li.active a {
   color: #069;
   font-weight: bold;
   cursor: default;
+}
+li.active a:hover, li.active a:focus {
+  text-decoration: none;
 }
 @media print, screen and (max-width: 960px) {
   section {

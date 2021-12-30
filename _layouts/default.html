@@ -21,7 +21,7 @@
 
     <h1><a href="{{ "/" | absolute_url }}">{{ site.title | default: site.github.repository_name }}</a></h1>
 
-    <p>{{ site.description | default: site.github.project_tagline }}</p>
+    <p>{% include extension-description.html %}</p>
 
     <ul>
       {% for item in site.html_pages %}
@@ -36,9 +36,7 @@
   <section>
     <div class="banner h-center">
       <div class="inner-banner">
-        Now with support for both <img height="14" src="{{ '/img/Gmail.svg' | absolute_url }}" alt="Gmail" /> <a
-        href="https://mail.google.com/">Gmail</a> and
-        <img height="14" src="{{ '/img/Outlook.svg' | absolute_url }}" alt="Outlook Webmail" /> <a href="https://outlook.live.com/">Outlook for web</a>
+        Now with support for both {% include supported-sites.html %}
       </div>
     </div>
     {{ content }}
