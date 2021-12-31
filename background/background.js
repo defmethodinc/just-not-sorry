@@ -14,7 +14,7 @@ chrome.runtime.onInstalled.addListener(async function ({ reason }) {
             pageUrl: { urlContains: 'mail.google.com' },
           }),
           new chrome.declarativeContent.PageStateMatcher({
-            pageUrl: { urlContains: 'inbox.google.com' },
+            pageUrl: { urlContains: 'outlook.office.com' },
           }),
           new chrome.declarativeContent.PageStateMatcher({
             pageUrl: { urlContains: 'outlook.live.com' },
