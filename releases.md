@@ -1,7 +1,7 @@
 # Release Notes
 
-### v2.1.0 - Dec 30, 2021
-* Added support for Outlook for web - [https://outlook.live.com/](https://outlook.live.com/)
+### v2.1.1 - Dec 31, 2021
+* Added support for Outlook for web - [https://outlook.live.com/](https://outlook.live.com/) and [https://outlook.office.com/](https://outlook.office.com/)
 * Major rewrite of code for better maintainability
 * Added display of all warning phrases to the options UI, along with links to the source articles.  Click the JustNotSorry extension button in your toolbar to see them.
 * Improved message box when you hover over an underline
