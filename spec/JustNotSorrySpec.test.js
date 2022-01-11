@@ -147,6 +147,32 @@ describe('JustNotSorry', () => {
       expect(wrapper.state('parentNode')).toBe(domNode.parentNode);
     });
 
+    describe('when the email node is null', () => {
+      it('clears the state', () => {
+        instance.updateWarnings(null, [
+          buildWarning('\\b!{3,}\\B', 'warning message'),
+        ]);
+
+        expect(wrapper.state('warnings').length).toEqual(0);
+        expect(wrapper.state('parentNode')).toEqual({});
+      });
+    });
+
+    describe('when the email node has an offsetParent of null', () => {
+      it('clears the state', () => {
+        const emailNode = {
+          offsetParent: null,
+          childNodes: [],
+        };
+        instance.updateWarnings(emailNode, [
+          buildWarning('\\b!{3,}\\B', 'warning message'),
+        ]);
+
+        expect(wrapper.state('warnings').length).toEqual(0);
+        expect(wrapper.state('parentNode')).toEqual({});
+      });
+    });
+
     describe('when there are top-level and child nodes', () => {
       it('catches the warnings for both', () => {
         const elem = mount(
