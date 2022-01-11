@@ -42,6 +42,10 @@ class JustNotSorry extends Component {
   }
 
   updateWarnings(email, patterns) {
+    if (!email || !email.offsetParent) {
+      this.resetState();
+      return;
+    }
     const newWarnings =
       email.childNodes.length > 0
         ? Array.from(email.childNodes)
