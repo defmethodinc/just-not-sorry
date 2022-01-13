@@ -1,6 +1,6 @@
 # Release Notes
 
-### v2.1.2 - Jan 12, 2022
+### v2.1.2 - Jan 13, 2022
 * Added support for Outlook for web - [https://outlook.live.com/](https://outlook.live.com/) and [https://outlook.office.com/](https://outlook.office.com/)
 * Major rewrite of code for better maintainability
 * Added display of all warning phrases to the options UI, along with links to the source articles.  Click the JustNotSorry extension button in your toolbar to see them.
