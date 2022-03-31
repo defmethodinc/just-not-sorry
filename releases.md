@@ -1,5 +1,11 @@
 # Release Notes
 
+### v2.3.0 - Mar 31, 2022
+* Added "if that makes sense" as a warning
+
+### v2.2.0 - Mar 31, 2022
+* Added support for Outlook for web using the [https://outlook.office365.com](https://outlook.office365.com) url
+
 ### v2.1.2 - Jan 13, 2022
 * Added support for Outlook for web - [https://outlook.live.com/](https://outlook.live.com/) and [https://outlook.office.com/](https://outlook.office.com/)
 * Major rewrite of code for better maintainability
