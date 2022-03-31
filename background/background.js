@@ -19,6 +19,9 @@ chrome.runtime.onInstalled.addListener(async function ({ reason }) {
           new chrome.declarativeContent.PageStateMatcher({
             pageUrl: { urlContains: 'outlook.live.com' },
           }),
+          new chrome.declarativeContent.PageStateMatcher({
+            pageUrl: { urlContains: 'outlook.office365.com' },
+          }),
         ],
         actions: [new chrome.declarativeContent.ShowPageAction()],
       },
