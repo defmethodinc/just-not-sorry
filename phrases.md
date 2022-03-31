@@ -129,6 +129,7 @@
         <li>"Did that make sense"</li>
         <li>"Does this make sense"</li>
         <li>"Did this make sense"</li>
+        <li>"If that makes sense"</li>
       </ul>
     </th>
     <td>"does that make sense" comes across either as condescending (like your audience can't understand) or it implies
