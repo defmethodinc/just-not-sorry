@@ -48,7 +48,7 @@
     "jest-enzyme": "^7.1.2",
     "lint-staged": "^10.2.2",
     "prettier": "^2.0.5",
-    "semantic-release": "^19.0.2",
+    "semantic-release": "^19.0.3",
     "web-ext": "^6.3.0",
     "webpack": "^5.51.1",
     "webpack-cli": "^4.8.0",
