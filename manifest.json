@@ -1,5 +1,5 @@
 {
-  "manifest_version": 2,
+  "manifest_version": 3,
   "name": "Just Not Sorry -- the Chrome extension",
   "short_name": "JustNotSorry",
   "author": "Steve Brudz, Manish Kakwani, Tami Reiss, and Eric Tillberg of Def Method",
@@ -24,10 +24,9 @@
     }
   ],
   "background": {
-    "scripts": ["background/background.js"],
-    "persistent": false
+    "service_worker": "background.js"
   },
-  "page_action": {
+  "action": {
     "default_icon": {
       "19": "img/JustNotSorry-19.png",
       "38": "img/JustNotSorry-38.png"
@@ -36,8 +35,8 @@
   },
   "options_ui": {
     "page": "options.html",
-    "chrome_style": true
+    "open_in_tab": false
   },
   "web_accessible_resources": [],
-  "permissions": ["storage", "declarativeContent", "notifications"]
+  "permissions": ["notifications"]
 }

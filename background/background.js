@@ -1,26 +1,4 @@
-chrome.runtime.onInstalled.addListener(async function ({ reason }) {
-  chrome.declarativeContent.onPageChanged.removeRules(undefined, function () {
-    chrome.declarativeContent.onPageChanged.addRules([
-      {
-        conditions: [
-          new chrome.declarativeContent.PageStateMatcher({
-            pageUrl: { urlContains: 'mail.google.com' },
-          }),
-          new chrome.declarativeContent.PageStateMatcher({
-            pageUrl: { urlContains: 'outlook.office.com' },
-          }),
-          new chrome.declarativeContent.PageStateMatcher({
-            pageUrl: { urlContains: 'outlook.live.com' },
-          }),
-          new chrome.declarativeContent.PageStateMatcher({
-            pageUrl: { urlContains: 'outlook.office365.com' },
-          }),
-        ],
-        actions: [new chrome.declarativeContent.ShowPageAction()],
-      },
-    ]);
-  });
-
+chrome.runtime.onInstalled.addListener(function ({ reason }) {
   if (reason === 'update') {
     const notificationId = `JNS-${Date.now()}`;
     const url = 'https://defmethodinc.github.io/just-not-sorry/releases.html';
@@ -30,20 +8,18 @@ chrome.runtime.onInstalled.addListener(async function ({ reason }) {
       iconUrl: 'img/JustNotSorry-48.png',
       title: `JustNotSorry updated to v${manifest.version_name}`,
       message: "Click here to see what's new",
+      buttons: [{ title: 'View Release Notes' }],
       type: 'basic',
     });
-    chrome.notifications.onClicked.addListener(function () {
-      window.open(url);
+    const handleClick = function () {
+      chrome.tabs.create({ url });
       chrome.notifications.clear(notificationId);
-    });
+    };
+    chrome.notifications.onClicked.addListener(handleClick);
+    chrome.notifications.onButtonClicked.addListener(handleClick);
   }
 });
 
-chrome.pageAction.onClicked.addListener(function () {
-  if (chrome.runtime.openOptionsPage) {
-    chrome.runtime.openOptionsPage();
-  } else {
-    // fallback to old way
-    window.open(chrome.runtime.getURL('options.html'));
-  }
+chrome.action.onClicked.addListener(function () {
+  chrome.runtime.openOptionsPage();
 });

@@ -16,7 +16,6 @@ module.exports = {
       patterns: [
         { from: 'img', to: 'img' },
         { from: 'manifest.json' },
-        { from: 'background', to: 'background' },
         { from: 'just-not-sorry.css' },
       ],
     }),
@@ -25,6 +24,7 @@ module.exports = {
   entry: {
     bundle: './src/index.js',
     options: './options/options.js',
+    background: './background/background.js',
   },
   output: {
     path: path.join(__dirname, 'build'),
