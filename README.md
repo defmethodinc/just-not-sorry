@@ -25,7 +25,7 @@ If you're a developer, you're welcome to submit a pull request. Please run the t
 Prerequisites:
 
 - [git](https://git-scm.com/)
-- [node.js 14.X+](https://nodejs.org/)
+- [node.js 16.X+](https://nodejs.org/)
 
 Setup:
 
@@ -65,7 +65,7 @@ npm run test:watch
 
 ### To Publish a New Version to Chrome Webstore
 
-This project uses the [semantic-release](https://semantic-release.gitbook.io/semantic-release/) library and [GitHub Actions](https://help.github.com/en/actions) to automate the release process. Once a pull request has been merged into the master branch, a new [GitHub release](https://github.com/defmethodinc/just-not-sorry/releases) will be created. A zip file containing the updated files for the Chrome web store will be attached.
+This project uses the [semantic-release](https://semantic-release.gitbook.io/semantic-release/) library and [GitHub Actions](https://help.github.com/en/actions) to automate the release process. Once a pull request has been merged into the main branch, a new [GitHub release](https://github.com/defmethodinc/just-not-sorry/releases) will be created. A zip file containing the updated files for the Chrome web store will be attached.
 
 To publish this release, download the zip file from GitHub. Find the Just Not Sorry extension on the [Chrome Developer Dashboard](https://chrome.google.com/webstore/devconsole/) (credentials available to DefMethod developers upon request), upload the zip file, and click the "Publish Item" button.
 

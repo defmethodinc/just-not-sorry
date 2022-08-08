@@ -3,8 +3,8 @@
   "name": "Just Not Sorry -- the Chrome extension",
   "short_name": "JustNotSorry",
   "author": "Steve Brudz, Manish Kakwani, Tami Reiss, and Eric Tillberg of Def Method",
-  "version": "2.1.0.2",
-  "version_name": "2.1.0-beta.2",
+  "version": "2.3.0",
+  "version_name": "2.3.0",
   "description": "A Chrome extension that warns you when you write emails using words which undermine your message",
   "icons": {
     "16": "img/JustNotSorry-16.png",
@@ -16,7 +16,8 @@
       "matches": [
         "https://mail.google.com/*",
         "https://outlook.office.com/*",
-        "https://outlook.live.com/*"
+        "https://outlook.live.com/*",
+        "https://outlook.office365.com/*"
       ],
       "css": ["./just-not-sorry.css"],
       "js": ["bundle.js"]
