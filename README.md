@@ -74,7 +74,6 @@ To publish this release, download the zip file from GitHub. Find the Just Not So
 For production:
 
 - [dom-regexp-match](https://github.com/webmodules/dom-regexp-match)
-- [chrome-platform-analytics](https://github.com/GoogleChrome/chrome-platform-analytics)
 - Based on [gmail-chrome-extension-boilerplate](https://github.com/KartikTalwar/gmail-chrome-extension-boilerplate)
 - [preact/compat](https://github.com/preactjs/preact-compat)
 
