@@ -4,28 +4,23 @@ This privacy policy has been compiled to better serve those who are concerned wi
 
 ### What information do we collect from the people that use our app?
 
-We do not collect any PII. We collect anonymous information via Google analytics, including the following:
+The JustNotSorry extension does not collect any PII. We collect anonymous, aggregated information which is sent to our Google analytics account, including the following:
 
 - Language
 - Country and City
 - Operating System
-- Screen Resolution
 
 ### When do we collect information?
 
-We collect this information from you when you install the JustNotSorry Chrome extension.
+Google collects this information from you when you install the JustNotSorry Chrome extension using the Chrome Web Store and then provides this information in aggregate form to the JustNotSorry developers.
 
 ### How do we use your information?
 
-We may use the information we collect from you to improve the JustNotSorry extension and to better understand who is using it.
-
-### How do we protect visitor information?
-
-We send all information to Google over SSL.
+We may use the information that the Chrome Web Store collects to improve the JustNotSorry extension and to better understand who is using it.
 
 ### Do we use 'cookies'?
 
-We use Google Analytics, which uses first party cookies to report on user interactions. These cookies are used to store non-personally identifiable information.
+We use Google Analytics via the Chrome Web Store, which uses first party cookies to report on user interactions. These cookies are used to store non-personally identifiable information.
 
 See https://support.google.com/analytics/answer/6004245 for more information.
 
@@ -39,7 +34,7 @@ We do not include or offer third party products or services on our website.
 
 ### Opting out
 
-Users can set preferences for whether or not JustNotSorry collects usage information by going to the JustNotSorry options page via the chrome://extensions/ link. Alternatively, you can opt out permanently using the Google Analytics Opt Out Browser add on.
+You can manage your privacy settings for your Google Account as described in the [Google Privacy Policy](https://policies.google.com/privacy). To opt out permanently from Google Analytics, you can use the [Google Analytics Opt Out Browser add on](https://chrome.google.com/webstore/detail/google-analytics-opt-out/fllaojicojecljbmefodhfapmkghcbnh?hl=en).
 
 ### California Online Privacy Protection Act
 
