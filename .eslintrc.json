@@ -44,6 +44,12 @@
       },
       "plugins": ["jest"],
       "extends": ["eslint:recommended", "plugin:jest/recommended", "prettier"]
+    },
+    {
+      "files": "release.config.js",
+      "env": {
+        "node": true
+      }
     }
   ]
 }

@@ -17,7 +17,8 @@
     "start:firefox": "concurrently \"npm:build:watch\" \"npm:webext:run\"",
     "start:chrome": "concurrently \"npm:build:watch\" \"npm:webext:run -- -t chromium\"",
     "format": "prettier --loglevel warn --write \"{src,spec}/*.{js,css}\" \"*.{md,css,json,js}\"",
-    "lint": "eslint . --cache --fix"
+    "lint": "eslint . --cache --fix",
+    "semantic-release": "cross-env GIT_BRANCH=$(git rev-parse --abbrev-ref HEAD) semantic-release"
   },
   "devDependencies": {
     "@babel/core": "^7.9.6",
@@ -33,6 +34,7 @@
     "commitizen": "^4.2.4",
     "concurrently": "^5.2.0",
     "copy-webpack-plugin": "^9.0.1",
+    "cross-env": "^7.0.3",
     "cz-conventional-changelog": "^3.1.0",
     "enzyme": "^3.11.0",
     "enzyme-adapter-preact-pure": "^2.2.0",
