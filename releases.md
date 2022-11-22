@@ -1,5 +1,8 @@
 # Release Notes
 
+### v2.4.0 - Nov 22, 2022
+* Upgraded to the v3 of the Chrome Web Extension Manifest so that Just Not Sorry can stay on the Chrome Web Store
+
 ### v2.3.0 - Mar 31, 2022
 * Added "if that makes sense" as a warning
 
