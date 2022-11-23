@@ -26,13 +26,14 @@ module.exports = {
     },
   ],
   plugins:
-    branch === 'main'
+    branch === 'automate-release-process' // TODO: switch back to main
       ? [
           ['@semantic-release/commit-analyzer'],
           ['@semantic-release/release-notes-generator', { linkCompare: false }],
           ['@semantic-release/exec', { prepareCmd }],
           ['@semantic-release/github', { assets: githubAssets }],
           ['@semantic-release/git', { assets: gitAssetsToUpdate }],
+          ['@qiwi/semantic-release-gh-pages-plugin', { src: 'site' }],
         ]
       : [
           ['@semantic-release/commit-analyzer'],
