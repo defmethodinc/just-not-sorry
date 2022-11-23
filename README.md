@@ -26,6 +26,7 @@ Prerequisites:
 
 - [git](https://git-scm.com/)
 - [node.js 16.X+](https://nodejs.org/)
+- [jq](https://stedolan.github.io/jq/) (optional for dev - used to help build content for justnotsorry.com)
 
 Setup:
 

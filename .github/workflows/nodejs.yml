@@ -17,6 +17,9 @@ jobs:
 
     steps:
       - uses: actions/checkout@v2
+      - name: Install build dependencies
+        run: |
+          sudo apt-get install -y jq
       - name: Use Node.js
         uses: actions/setup-node@v1
         with:
@@ -31,6 +34,8 @@ jobs:
             ${{ runner.OS }}-
       - name: Install dependencies
         run: npm ci
+      - name: Verify that build works
+        run: npm run build
       - name: Run tests
         run: npm test
         env:
