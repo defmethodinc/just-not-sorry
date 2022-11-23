@@ -45,4 +45,4 @@ jobs:
           echo 'echo ${SSL_PASSPHRASE}' > /tmp/askpass && chmod +x /tmp/askpass
           eval "$(ssh-agent -s)"
           DISPLAY=":0.0" SSH_ASKPASS="/tmp/askpass" setsid ssh-add /tmp/git_deploy_key </dev/null
-          npx semantic-release
+          npm run semantic-release
