@@ -1,0 +1,5 @@
+.idea
+.DS_Store
+.jekyll-cache
+_site
+phrases.md
