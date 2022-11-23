@@ -1,9 +1,21 @@
 const { GIT_BRANCH: branch } = process.env;
+const isProd = branch === 'automate-release-process'; // TODO: switch back to main
 const prepareCmd = './package.sh ${nextRelease.version}';
+const extensionId = isProd
+  ? 'fmegmibednnlgojepmidhlhpjbppmlci'
+  : 'fgnoahpabaeffmkacgedecamkmddkebn';
+// const target = isProd ? 'default' : 'trustedTesters'; // TODO: uncomment
+const target = 'draft'; // TODO: delete me
+const packageName = 'just-not-sorry-${nextRelease.gitTag}.zip';
+const chromeWebStoreParams = {
+  extensionId,
+  distFolder: 'build',
+  target,
+  asset: packageName,
+};
 const githubAssets = [
   {
-    path: 'dist/just-not-sorry-chrome.zip',
-    name: 'just-not-sorry-${nextRelease.gitTag}.zip',
+    name: packageName,
     label: 'Chrome Web Store package',
   },
 ];
@@ -15,31 +27,32 @@ module.exports = {
     {
       name: 'main',
     },
-    {
-      name: 'beta',
-      prerelease: true,
-    },
+    // {
+    //   name: 'beta',
+    //   prerelease: true,
+    // },
     {
       // TODO: remove me
       name: 'automate-release-process',
-      prerelease: true,
+      prerelease: 'beta',
     },
   ],
-  plugins:
-    branch === 'automate-release-process' // TODO: switch back to main
-      ? [
-          ['@semantic-release/commit-analyzer'],
-          ['@semantic-release/release-notes-generator', { linkCompare: false }],
-          ['@semantic-release/exec', { prepareCmd }],
-          ['@semantic-release/github', { assets: githubAssets }],
-          ['@semantic-release/git', { assets: gitAssetsToUpdate }],
-          ['@qiwi/semantic-release-gh-pages-plugin', { src: 'site' }],
-        ]
-      : [
-          ['@semantic-release/commit-analyzer'],
-          ['@semantic-release/release-notes-generator', { linkCompare: false }],
-          ['@semantic-release/exec', { prepareCmd }],
-          ['@semantic-release/github', { assets: githubAssets }],
-          ['@semantic-release/git', { assets: gitAssetsToUpdate }],
-        ],
+  plugins: isProd
+    ? [
+        ['@semantic-release/commit-analyzer'],
+        ['@semantic-release/release-notes-generator', { linkCompare: false }],
+        ['@semantic-release/exec', { prepareCmd }],
+        ['semantic-release-chrome', chromeWebStoreParams],
+        ['@semantic-release/github', { assets: githubAssets }],
+        ['@semantic-release/git', { assets: gitAssetsToUpdate }],
+        ['@qiwi/semantic-release-gh-pages-plugin', { src: 'site' }],
+      ]
+    : [
+        ['@semantic-release/commit-analyzer'],
+        ['@semantic-release/release-notes-generator', { linkCompare: false }],
+        ['@semantic-release/exec', { prepareCmd }],
+        ['semantic-release-chrome', chromeWebStoreParams],
+        ['@semantic-release/github', { assets: githubAssets }],
+        ['@semantic-release/git', { assets: gitAssetsToUpdate }],
+      ],
 };

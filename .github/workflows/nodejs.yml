@@ -39,6 +39,11 @@ jobs:
           GPG_PASSPHRASE: ${{ secrets.GPG_PASSPHRASE }}
           SSL_PASSPHRASE: ${{ secrets.SSL_PASSPHRASE }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          # Required creds for publishing to Chrome Web Store
+          # For more info see https://github.com/GabrielDuarteM/semantic-release-chrome/blob/master/Authentication.md
+          GOOGLE_CLIENT_ID: ${{ secrets.CHROME_CLIENT_ID_DM }}
+          GOOGLE_CLIENT_SECRET: ${{ secrets.CHROME_CLIENT_SECRET_DM }}
+          GOOGLE_REFRESH_TOKEN: ${{ secrets.CHROME_REFRESH_TOKEN_DM }}
         run: |
           gpg --passphrase=$GPG_PASSPHRASE --batch --output /tmp/git_deploy_key --decrypt .git_deploy_key.enc
           chmod 600 /tmp/git_deploy_key
