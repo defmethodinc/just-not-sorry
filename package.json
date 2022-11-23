@@ -11,7 +11,6 @@
     "test": "jest --verbose ./spec",
     "test:watch": "npm run test -- --watch",
     "build": "webpack --config webpack.config.js",
-    "postbuild": "jq '{ \"phrases\": . }' ./src/warnings/phrases.json | ejs ./site/phrases.ejs -l _ -o ./build/phrases.md -i -",
     "build:watch": "webpack --config webpack.config.js --watch",
     "webext:run": "sleep 10 && web-ext run --source-dir ./build/ --start-url gmail.com",
     "webext:lint": "web-ext lint -s ./build",
@@ -19,6 +18,8 @@
     "start:chrome": "concurrently \"npm:build:watch\" \"npm:webext:run -- -t chromium\"",
     "format": "prettier --loglevel warn --write \"{src,spec}/*.{js,css}\" \"*.{md,css,json,js}\"",
     "lint": "eslint . --cache --fix",
+    "predeploy": "jq '{ \"phrases\": . }' ./src/warnings/phrases.json | ejs ./site/phrases.ejs -l _ -o ./site/phrases.md -i -",
+    "deploy": "gh-pages -d site",
     "semantic-release": "cross-env GIT_BRANCH=$(git rev-parse --abbrev-ref HEAD) semantic-release"
   },
   "devDependencies": {
@@ -46,6 +47,7 @@
     "eslint-plugin-jasmine": "^4.1.1",
     "eslint-plugin-jest": "^23.13.1",
     "eslint-plugin-react": "^7.20.0",
+    "gh-pages": "^4.0.0",
     "html-webpack-plugin": "^5.3.2",
     "husky": "^4.2.5",
     "jest": "^26.6.3",
