@@ -17,6 +17,12 @@
       {
         "changelogTitle": "Release Notes"
       }
+    ],
+    [
+      "@semantic-release/git",
+      {
+        "assets": ["package.json", "manifest.json", "CHANGELOG.md"]
+      }
     ]
   ]
 }
