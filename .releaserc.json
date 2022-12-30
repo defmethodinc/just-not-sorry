@@ -11,7 +11,7 @@
       {
         "linkCompare": false,
         "writerOpts": {
-          "commitsSort": false
+          "groupBy": false
         }
       }
     ],
