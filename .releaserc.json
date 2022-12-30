@@ -12,7 +12,8 @@
         "linkCompare": false,
         "writerOpts": {
           "groupBy": false,
-          "headerPartial": "## {{#if isPatch~}} <small>\n  {{~/if~}} {{version}}\n  {{~#if title}} \"{{title}}\"\n  {{~/if~}}\n  {{~#if date}} ({{date}})\n  {{~/if~}}\n  {{~#if isPatch~}} </small>\n  {{~/if}}"
+          "date": "dateFormat(new Date(), 'mm-dd-yyyy', true)",
+          "headerPartial": "## {{#if isPatch~}} <small>\n  {{~/if~}} v{{version}}\n  {{~#if title}} \"{{title}}\"\n  {{~/if~}}\n - {{~#if date}} {{date}}\n  {{~/if~}}\n  {{~#if isPatch~}} </small>\n  {{~/if}}"
         }
       }
     ],
