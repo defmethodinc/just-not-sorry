@@ -2,4 +2,5 @@
 .DS_Store
 .jekyll-cache
 _site
-phrases.md
+# copied from src/warnings
+_data/phrases.json
