@@ -1,5 +1,9 @@
 {
-  "branches": ["main", { "name": "beta", "prerelease": "beta" }],
+  "branches": [
+    "main",
+    { "name": "commit-log", "prerelease": "commit-log" },
+    { "name": "beta", "prerelease": "beta" }
+  ],
   "plugins": [
     "@semantic-release/commit-analyzer",
     [
@@ -9,27 +13,9 @@
       }
     ],
     [
-      "@semantic-release/exec",
+      "@semantic-release/changelog",
       {
-        "prepareCmd": "./package.sh ${nextRelease.version}"
-      }
-    ],
-    [
-      "@semantic-release/github",
-      {
-        "assets": [
-          {
-            "path": "dist/just-not-sorry-chrome.zip",
-            "name": "just-not-sorry-${nextRelease.gitTag}.zip",
-            "label": "Chrome Web Store package"
-          }
-        ]
-      }
-    ],
-    [
-      "@semantic-release/git",
-      {
-        "assets": ["package.json", "manifest.json"]
+        "changelogTitle": "Release Notes"
       }
     ]
   ]
