@@ -9,7 +9,10 @@
     [
       "@semantic-release/release-notes-generator",
       {
-        "linkCompare": false
+        "linkCompare": false,
+        "writerOpts": {
+          "commitsSort": false
+        }
       }
     ],
     [
@@ -21,7 +24,7 @@
     [
       "@semantic-release/git",
       {
-        "assets": ["package.json", "manifest.json", "CHANGELOG.md"]
+        "assets": ["CHANGELOG.md"]
       }
     ]
   ]
