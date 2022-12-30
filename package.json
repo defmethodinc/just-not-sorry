@@ -18,7 +18,9 @@
     "start:chrome": "concurrently \"npm:build:watch\" \"npm:webext:run -- -t chromium\"",
     "format": "prettier --loglevel warn --write \"{src,spec}/*.{js,css}\" \"*.{md,css,json,js}\"",
     "lint": "eslint . --cache --fix",
-    "predeploy": "cp ./src/warnings/phrases.json ./site/_data",
+    "site:version": "echo \"{\\\"commit\\\": \\\"$(git rev-parse --short HEAD)\\\"}\" > ./site/_data/version.json",
+    "site:phrases": "cp ./src/warnings/phrases.json ./site/_data",
+    "predeploy": "npm run site:phrases && npm run site:version",
     "deploy": "gh-pages -d site",
     "semantic-release": "cross-env GIT_BRANCH=$(git rev-parse --abbrev-ref HEAD) semantic-release"
   },

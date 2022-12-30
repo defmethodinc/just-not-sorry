@@ -4,3 +4,5 @@
 _site
 # copied from src/warnings
 _data/phrases.json
+# from git commit sha
+_data/version.json
