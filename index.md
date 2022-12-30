@@ -1,6 +1,7 @@
 ---
 title: Home
 ---
+
 <div class="video-container">
     <iframe src="https://www.youtube-nocookie.com/embed/riVZvP9zv0Y" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
 </div>
@@ -25,6 +26,6 @@ Just Not Sorry has been covered in [NYTimes](https://www.nytimes.com/2019/09/27/
     <a href="https://www.forbes.com/sites/carolinecastrillon/2019/07/14/how-women-can-stop-apologizing-and-take-their-power-back/"><img src="{{ '/img/Forbes.svg' | relative_url }}" alt="Forbes" /></a>
 </div>
 
-Inspired by the writings of Tara Mohr and others, Just Not Sorry will warn you when you use words or phrases that undermine your message. Commonly used qualifying words and phrases are underlined for you to choose how you want to address them. 
+Inspired by the writings of Tara Mohr and others, Just Not Sorry will warn you when you use words or phrases that undermine your message. Commonly used qualifying words and phrases are underlined for you to choose how you want to address them.
 
 Created by [Tami Reiss](https://linkedin.com/in/tamireiss), Steve Brudz, Manish Kakwani, and Eric Tillberg of [Def Method](https://www.defmethod.com/). Read the [backstory here](https://medium.com/@tamireiss/just-not-sorry-the-backstory-33f54b30fe48).
