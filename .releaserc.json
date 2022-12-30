@@ -11,14 +11,15 @@
       {
         "linkCompare": false,
         "writerOpts": {
-          "groupBy": false
+          "groupBy": false,
+          "headerPartial": "## {{#if isPatch~}} <small>\n  {{~/if~}} {{version}}\n  {{~#if title}} \"{{title}}\"\n  {{~/if~}}\n  {{~#if date}} ({{date}})\n  {{~/if~}}\n  {{~#if isPatch~}} </small>\n  {{~/if}}"
         }
       }
     ],
     [
       "@semantic-release/changelog",
       {
-        "changelogTitle": "Release Notes"
+        "changelogTitle": "# Release Notes"
       }
     ],
     [
