@@ -29,7 +29,7 @@
     "@semantic-release/git": "^10.0.1",
     "babel": "^6.23.0",
     "babel-eslint": "^8.2.6",
-    "babel-loader": "^8.0.6",
+    "babel-loader": "^8.3.0",
     "commitizen": "^4.2.4",
     "concurrently": "^5.2.0",
     "copy-webpack-plugin": "^9.0.1",
