@@ -1,7 +1,7 @@
 {
   "name": "just-not-sorry",
   "description": "Chrome extension that warns you when you write emails using words which undermine your message",
-  "version": "2.4.0",
+  "version": "2.5.0",
   "author": "Steve Brudz, Manish Kakwani, Tami Reiss, and Eric Tillberg of Def Method",
   "license": "MIT",
   "repository": "git@github.com:defmethodinc/just-not-sorry.git",
