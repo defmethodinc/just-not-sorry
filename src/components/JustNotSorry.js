@@ -1,4 +1,5 @@
-import { h, Component } from 'preact';
+import { h } from 'preact';
+import { useState, useEffect } from 'preact/hooks';
 import ReactDOM from 'react-dom';
 import Warning from './Warning.js';
 import * as Util from '../helpers/util.js';
@@ -18,73 +19,70 @@ const WATCH_FOR_NEW_NODES = {
   childList: true,
 };
 
-class JustNotSorry extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      parentNode: {},
-      warnings: [],
-    };
+const JustNotSorry = () => {
+  const [parentNode, setParentNode] = useState({})
+  const [warnings, setWarnings] = useState([])
+  const [enabled, setEnabled] = useState(false)
 
-    this.resetState = this.resetState.bind(this);
-    this.handleSearch = this.handleSearch.bind(this);
-    this.updateWarnings = this.updateWarnings.bind(this);
-    this.applyEventListeners = this.applyEventListeners.bind(this);
+  useEffect(() => {
+    // Run! Like go get some data from an API.
+    chrome.storage.onChanged.addListener(function(changes, namespace) {
+      if ("enabled" in changes) {
+        setEnabled(changes.enabled.newValue)
+      }
+    });
+  }, []);
 
-    this.documentObserver = new MutationObserver(
-      forEachUniqueContentEditable(this.applyEventListeners)
-    );
-    this.documentObserver.observe(document.body, WATCH_FOR_NEW_NODES);
+  const resetState = () => {
+    setParentNode({})
+    setWarnings([])
   }
 
-  resetState() {
-    this.setState({ parentNode: {}, warnings: [] });
-  }
-
-  updateWarnings(email, patterns) {
-    if (!email || !email.offsetParent) {
-      this.resetState();
-      return;
-    }
-    const newWarnings =
-      email.childNodes.length > 0
-        ? Array.from(email.childNodes)
-            .filter((node) => node.textContent !== '')
-            .flatMap((text) => findRanges(text, patterns))
-        : findRanges(email, patterns);
-
-    this.setState(({ parentNode }) =>
-      parentNode.id !== email.offsetParent.id
-        ? { parentNode: email.offsetParent, warnings: newWarnings }
-        : { parentNode, warnings: newWarnings }
-    );
-  }
-
-  handleSearch(email, patterns) {
-    return Util.debounce(
-      () => this.updateWarnings(email, patterns),
-      WAIT_TIME_BEFORE_RECALC_WARNINGS
-    );
-  }
-
-  applyEventListeners(mutation) {
+  const applyEventListeners = (mutation) => {
     const email = mutation.target;
-    const searchHandler = this.handleSearch(email, MESSAGE_PATTERNS);
+    const searchHandler = handleSearch(email, MESSAGE_PATTERNS);
     email.addEventListener('input', searchHandler);
     email.addEventListener('focus', searchHandler);
     email.addEventListener('cut', searchHandler);
-    email.addEventListener('blur', this.resetState);
+    email.addEventListener('blur', resetState);
   }
 
-  render() {
-    if (this.state.warnings.length > 0) {
-      const parentNode = this.state.parentNode;
-      const parentRect = parentNode.getBoundingClientRect();
-      const warnings = this.state.warnings.map((warning, index) => (
-        <Warning key={index} parentRect={parentRect} value={warning} />
-      ));
-      return ReactDOM.createPortal(warnings, parentNode);
+  const documentObserver = new MutationObserver(
+      forEachUniqueContentEditable(applyEventListeners)
+  );
+  documentObserver.observe(document.body, WATCH_FOR_NEW_NODES);
+
+  const updateWarnings = (email, patterns) => {
+    if (!email || !email.offsetParent) {
+      resetState();
+      return;
     }
+    const newWarnings =
+        email.childNodes.length > 0
+            ? Array.from(email.childNodes)
+                .filter((node) => node.textContent !== '')
+                .flatMap((text) => findRanges(text, patterns))
+            : findRanges(email, patterns);
+    setWarnings(newWarnings)
+
+    if( parentNode.id !== email.offsetParent.id) {
+      setParentNode(email.offsetParent)
+    }
+  }
+
+  const handleSearch = (email, patterns) => {
+    return Util.debounce(
+        () => updateWarnings(email, patterns),
+        WAIT_TIME_BEFORE_RECALC_WARNINGS
+    );
+  }
+
+  if (enabled && warnings.length > 0) {
+    const parentRect = parentNode.getBoundingClientRect();
+    const w = warnings.map((warning, index) => (
+        <Warning key={index} parentRect={parentRect} value={warning} />
+    ));
+    return ReactDOM.createPortal(w, parentNode);
   }
 }
 

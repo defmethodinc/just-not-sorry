@@ -20,6 +20,10 @@ chrome.runtime.onInstalled.addListener(function ({ reason }) {
   }
 });
 
-chrome.action.onClicked.addListener(function () {
-  chrome.runtime.openOptionsPage();
+let isEnabled = true
+chrome.action.setBadgeText({text: "ON"});
+chrome.action.onClicked.addListener(async function () {
+  isEnabled = !isEnabled
+  await chrome.action.setBadgeText({text: (isEnabled ? 'ON' : 'OFF')})
+  chrome.storage.sync.set({enabled: isEnabled})
 });

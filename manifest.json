@@ -38,5 +38,5 @@
     "open_in_tab": false
   },
   "web_accessible_resources": [],
-  "permissions": ["notifications"]
+  "permissions": ["notifications", "storage", "activeTab"]
 }
