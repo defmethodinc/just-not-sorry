@@ -20,10 +20,17 @@ chrome.runtime.onInstalled.addListener(function ({ reason }) {
   }
 });
 
-let isEnabled = true
+const BADGE_GRAY = '#c3c8bc';
+const BADGE_GREEN = '#9cd67f';
+let isEnabled = true;
 chrome.action.setBadgeText({text: "ON"});
+chrome.action.setBadgeBackgroundColor({ color: BADGE_GREEN });
+
 chrome.action.onClicked.addListener(async function () {
   isEnabled = !isEnabled
   await chrome.action.setBadgeText({text: (isEnabled ? 'ON' : 'OFF')})
+  isEnabled ?
+    chrome.action.setBadgeBackgroundColor({ color: BADGE_GREEN }) :
+    chrome.action.setBadgeBackgroundColor({ color: BADGE_GRAY });
   chrome.storage.sync.set({enabled: isEnabled})
 });
