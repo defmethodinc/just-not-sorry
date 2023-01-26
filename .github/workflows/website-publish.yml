@@ -18,13 +18,14 @@ jobs:
         uses: ruby/setup-ruby@v1
         with:
           bundler-cache: true
-          working-directory: ./site
+          working-directory: site
+          cache-version: site
       - name: Test build of website
         run: bundle exec jekyll build
-        working-directory: ./site
+        working-directory: site
       - name: Check health of justnotsorry.com
         run: bundle exec github-pages health-check
-        working-directory: ./site
+        working-directory: site
 
   publish-website:
     if: github.ref == 'refs/heads/main'
