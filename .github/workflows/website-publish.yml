@@ -2,15 +2,33 @@ name: Publish justnotsorry.com
 
 on:
   push:
-    branches:
-      - main
     paths:
       - 'site/**'
       - 'package.json'
       - 'src/warnings/phrases.json'
+      - '.github/workflows/website-publish.yml'
 
 jobs:
-  build:
+  build-website:
+
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Use ruby
+        uses: ruby/setup-ruby@v1
+        working-directory: ./site
+        with:
+          bundler-cache: true
+      - name: Test build of website
+        run: bundle exec jekyll build
+        working-directory: ./site
+      - name: Check health of justnotsorry.com
+        run: bundle exec github-pages health-check
+        working-directory: ./site
+
+  publish-website:
+    if: github.ref == 'refs/heads/main'
+    needs: build-website
 
     runs-on: ubuntu-latest
 
