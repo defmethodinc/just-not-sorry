@@ -16,9 +16,9 @@ jobs:
     steps:
       - name: Use ruby
         uses: ruby/setup-ruby@v1
-        working-directory: ./site
         with:
           bundler-cache: true
+          working-directory: ./site
       - name: Test build of website
         run: bundle exec jekyll build
         working-directory: ./site
