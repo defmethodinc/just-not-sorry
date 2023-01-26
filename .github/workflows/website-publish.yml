@@ -1,0 +1,51 @@
+name: Publish justnotsorry.com
+
+on:
+  push:
+    paths:
+      - 'site/**'
+      - 'package.json'
+      - 'src/warnings/phrases.json'
+      - '.github/workflows/website-publish.yml'
+
+jobs:
+  build-website:
+
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+      - name: Use ruby
+        uses: ruby/setup-ruby@v1
+        with:
+          bundler-cache: true
+          working-directory: site
+          cache-version: site
+      - name: Test build of website
+        run: bundle exec jekyll build
+        working-directory: site
+      - name: Check health of justnotsorry.com
+        run: bundle exec github-pages health-check
+        working-directory: site
+
+  publish-website:
+    if: github.ref == 'refs/heads/main'
+    needs: build-website
+
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+      - name: Use Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version-file: '.nvmrc'
+          cache: 'npm'
+      - name: Install dependencies
+        run: npm ci
+      - name: Build and deploy justnotsorry.com
+        run: |
+          git remote set-url origin https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/$GITHUB_REPOSITORY
+          git config user.email "just-not-sorry@defmethod.com"
+          git config user.name "just-not-sorry-bot"
+          npm run deploy

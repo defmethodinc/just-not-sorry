@@ -12,13 +12,13 @@ For more information about Just Not Sorry, go to https://defmethodinc.github.io/
 
 ### Requests to add or change warning phrases
 
-The list of warning phrases can be found [here](https://defmethodinc.github.io/just-not-sorry/phrases.html).
+The list of warning phrases can be found [here](https://justnotsorry.com/phrases.html).
 
-Please [create a GitHub issue](https://github.com/defmethodinc/just-not-sorry/issues/new) with your request.
-
-If you're a developer, you're welcome to submit a pull request. Please run the tests before submitting, as they will validate the format of the message.
+If you'd like us to add new warning phrases, please [create a GitHub issue](https://github.com/defmethodinc/just-not-sorry/issues/new) with your request.
 
 **NOTE:** All warning phrases must include a link to an article that explains why the phrase could negatively impact someone's message. If available, please also include alternative wording suggestions from the article.
+
+If you're a developer, you're welcome to submit a pull request. Please run the tests before submitting, as they will validate the format of the message.
 
 ### Development Setup
 
@@ -69,6 +69,10 @@ This project uses the [semantic-release](https://semantic-release.gitbook.io/sem
 
 To publish this release, download the zip file from GitHub. Find the Just Not Sorry extension on the [Chrome Developer Dashboard](https://chrome.google.com/webstore/devconsole/) (credentials available to DefMethod developers upon request), upload the zip file, and click the "Publish Item" button.
 
+### To publish changes to justnotsorry.com
+
+See the [website README.md](./site/README.md) for more information.
+
 ### Libraries Used
 
 For production:
@@ -85,4 +89,4 @@ For test:
 
 ### License
 
-Just Not Sorry is Copyright © 2015-22 Def Method, Inc. It is free software, and may be redistributed under the terms specified in the (MIT) LICENSE file.
+Just Not Sorry is Copyright © 2015-23 Def Method, Inc. It is free software, and may be redistributed under the terms specified in the (MIT) LICENSE file.

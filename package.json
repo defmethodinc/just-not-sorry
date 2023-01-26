@@ -17,7 +17,12 @@
     "start:firefox": "concurrently \"npm:build:watch\" \"npm:webext:run\"",
     "start:chrome": "concurrently \"npm:build:watch\" \"npm:webext:run -- -t chromium\"",
     "format": "prettier --loglevel warn --write \"{src,spec}/*.{js,css}\" \"*.{md,css,json,js}\"",
-    "lint": "eslint . --cache --fix"
+    "lint": "eslint . --cache --fix",
+    "site:version": "echo \"{\\\"commit\\\": \\\"$(git rev-parse --short HEAD)\\\"}\" > ./site/_data/version.json",
+    "site:phrases": "cp ./src/warnings/phrases.json ./site/_data",
+    "predeploy": "npm run site:phrases && npm run site:version",
+    "deploy": "gh-pages -d site",
+    "semantic-release": "cross-env GIT_BRANCH=$(git rev-parse --abbrev-ref HEAD) semantic-release"
   },
   "devDependencies": {
     "@babel/core": "^7.9.6",
@@ -42,6 +47,7 @@
     "eslint-plugin-jasmine": "^4.1.1",
     "eslint-plugin-jest": "^23.13.1",
     "eslint-plugin-react": "^7.20.0",
+    "gh-pages": "^4.0.0",
     "html-webpack-plugin": "^5.3.2",
     "husky": "^4.2.5",
     "jest": "^26.6.3",
