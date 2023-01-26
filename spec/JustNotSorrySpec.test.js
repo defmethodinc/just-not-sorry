@@ -1,9 +1,7 @@
 import { h } from 'preact';
 import JustNotSorry from '../src/components/JustNotSorry.js';
-import { configure, mount } from 'enzyme';
-import Adapter from 'enzyme-adapter-preact-pure';
+import { render, fireEvent, waitFor } from '@testing-library/preact';
 
-configure({ adapter: new Adapter() });
 jest.useFakeTimers();
 
 document.createRange = jest.fn(() => ({
@@ -18,27 +16,23 @@ document.createRange = jest.fn(() => ({
   getClientRects: jest.fn(() => [{}]),
 }));
 
-const buildWarning = (pattern, message) => ({
-  regex: new RegExp(pattern, 'ig'),
-  message,
-});
-
-const enterText = (text) => {
-  return mount(
-    <div props={{ id: 'div-focus' }} contentEditable={'true'}>
-      {text ?? ''}
-    </div>
-  );
+const emailContaining = (text) => {
+  const email = document.createElement('div');
+  email.setAttribute('id', 'test');
+  email.setAttribute('contentEditable', 'true');
+  email.append(text ?? 'some text');
+  document.body.appendChild(email);
+  return email;
 };
 
 describe('JustNotSorry', () => {
-  let wrapper, instance, mutationObserverMock;
+  let mutationObserverMock;
 
   const simulateEvent = (node, event) => {
-    const domNode = node.getDOMNode();
+    expect(mutationObserverMock.mock.instances.length).toBe(1);
     const documentObserver = mutationObserverMock.mock.instances[0];
-    documentObserver.trigger([{ type: 'childList', target: domNode }]);
-    node.simulate(event);
+    documentObserver.trigger([{ type: 'childList', target: node }]);
+    expect(fireEvent[event](node)).toBe(true);
     jest.runOnlyPendingTimers();
   };
 
@@ -51,17 +45,12 @@ describe('JustNotSorry', () => {
       };
     });
     global.MutationObserver = mutationObserverMock;
-
-    wrapper = mount(<JustNotSorry />);
-    instance = wrapper.instance();
-  });
-
-  afterEach(() => {
-    wrapper.unmount();
   });
 
   describe('documentObserver', () => {
     it('listens for structural changes to the content editable div in document body', () => {
+      render(<JustNotSorry />);
+
       const observerInstances = mutationObserverMock.mock.instances;
       expect(observerInstances.length).toBe(1);
       expect(observerInstances[0].observe).toHaveBeenCalledWith(document.body, {
@@ -71,131 +60,69 @@ describe('JustNotSorry', () => {
     });
   });
 
-  describe('#handleSearch', () => {
-    let handleSearch;
+  it('on event does nothing when given an empty string', async () => {
+    const email = emailContaining('');
 
-    beforeEach(() => {
-      handleSearch = jest.spyOn(instance, 'handleSearch');
-    });
+    render(<JustNotSorry onEvents={['focus']} />);
+    simulateEvent(email, 'focus');
 
-    const assertHandlerWasCalled = () => {
-      expect(handleSearch).toHaveBeenCalledTimes(1);
-    };
-
-    afterEach(assertHandlerWasCalled);
-
-    describe('on focus', () => {
-      it('checks for warnings', () => {
-        const node = enterText('just not sorry');
-
-        simulateEvent(node, 'focus');
-
-        expect(wrapper.state('warnings').length).toEqual(2);
-      });
-
-      it('does nothing when given an empty string', () => {
-        const node = enterText();
-
-        simulateEvent(node, 'focus');
-
-        expect(wrapper.state('warnings').length).toEqual(0);
-      });
-    });
-
-    describe('on input', () => {
-      it('updates warnings each time input is triggered', () => {
-        const node = enterText('just not sorry');
-
-        simulateEvent(node, 'input');
-      });
-    });
-
-    describe('on cut', () => {
-      it('updates warnings each time input is triggered', () => {
-        const node = enterText('just not sorry');
-
-        simulateEvent(node, 'cut');
-      });
+    await waitFor(() => {
+      expect(document.body.getElementsByClassName('jns-warning').length).toBe(
+        0
+      );
     });
   });
 
-  describe('#resetState', () => {
-    describe('on blur', () => {
-      it('removes any existing warnings', () => {
-        const spy = jest.spyOn(instance, 'resetState');
+  it('on event checks for warnings', async () => {
+    const email = emailContaining('just not');
 
-        const node = enterText('just not sorry');
+    render(<JustNotSorry onEvents={['focus']} />);
+    simulateEvent(email, 'focus');
 
-        simulateEvent(node, 'blur');
-
-        expect(spy).toHaveBeenCalledTimes(1);
-        expect(wrapper.state('warnings').length).toEqual(0);
-      });
+    await waitFor(() => {
+      expect(document.body.getElementsByClassName('jns-warning').length).toBe(
+        1
+      );
     });
   });
 
-  describe('#updateWarnings', () => {
-    it('updates state and parentNode for a match', () => {
-      const elem = enterText('test!!!');
+  it('should clear warnings on blur event', async () => {
+    const div = emailContaining('just not');
 
-      const domNode = elem.getDOMNode();
-      instance.updateWarnings(domNode, [
-        buildWarning('\\b!{3,}\\B', 'warning message'),
-      ]);
+    render(<JustNotSorry />);
+    simulateEvent(div, 'blur');
 
-      expect(wrapper.state('warnings').length).toBe(1);
-      expect(wrapper.state('parentNode')).toBe(domNode.parentNode);
+    await waitFor(() => {
+      expect(document.body.getElementsByClassName('jns-warning').length).toBe(
+        0
+      );
     });
+  });
 
-    describe('when the email node is null', () => {
-      it('clears the state', () => {
-        instance.updateWarnings(null, [
-          buildWarning('\\b!{3,}\\B', 'warning message'),
-        ]);
+  it('does not add warnings for partial matches', async () => {
+    const email = emailContaining('test justify test');
 
-        expect(wrapper.state('warnings').length).toEqual(0);
-        expect(wrapper.state('parentNode')).toEqual({});
-      });
+    render(<JustNotSorry onEvents={['focus']} />);
+    simulateEvent(email, 'focus');
+
+    await waitFor(() => {
+      expect(document.body.getElementsByClassName('jns-warning').length).toBe(
+        0
+      );
     });
+  });
 
-    describe('when the email node has an offsetParent of null', () => {
-      it('clears the state', () => {
-        const emailNode = {
-          offsetParent: null,
-          childNodes: [],
-        };
-        instance.updateWarnings(emailNode, [
-          buildWarning('\\b!{3,}\\B', 'warning message'),
-        ]);
+  it('catches the warnings when email contains div with phrase', async () => {
+    const div = emailContaining(`just not
+    <div>just not</div>`);
 
-        expect(wrapper.state('warnings').length).toEqual(0);
-        expect(wrapper.state('parentNode')).toEqual({});
-      });
-    });
+    render(<JustNotSorry onEvents={['focus']} />);
+    simulateEvent(div, 'focus');
 
-    describe('when there are top-level and child nodes', () => {
-      it('catches the warnings for both', () => {
-        const elem = mount(
-          <div props={{ id: 'div-focus' }} contentEditable={'true'}>
-            test!!!
-            <div>Hello!!!</div>
-          </div>
-        );
-
-        const domNode = elem.getDOMNode();
-        instance.updateWarnings(domNode, [
-          buildWarning('\\b!{3,}\\B', 'warning message'),
-        ]);
-
-        expect(wrapper.state('warnings').length).toBe(2);
-        expect(wrapper.state('parentNode')).toBe(domNode.parentNode);
-      });
-    });
-
-    it('does not add warnings for tooltip matches', () => {
-      const node = enterText('test justify test');
-      simulateEvent(node, 'focus');
-      expect(wrapper.state('warnings').length).toBe(0);
+    await waitFor(() => {
+      expect(document.body.getElementsByClassName('jns-warning').length).toBe(
+        2
+      );
     });
   });
 });

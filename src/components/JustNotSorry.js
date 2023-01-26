@@ -1,5 +1,6 @@
-import { h, Component } from 'preact';
+import { h } from 'preact';
 import ReactDOM from 'react-dom';
+import { useState } from 'preact/hooks';
 import Warning from './Warning.js';
 import * as Util from '../helpers/util.js';
 import PHRASES from '../warnings/phrases.json';
@@ -18,74 +19,66 @@ const WATCH_FOR_NEW_NODES = {
   childList: true,
 };
 
-class JustNotSorry extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      parentNode: {},
-      warnings: [],
-    };
+const JustNotSorry = ({ onEvents }) => {
+  const [state, setState] = useState({ warnings: [], parentNode: {} });
 
-    this.resetState = this.resetState.bind(this);
-    this.handleSearch = this.handleSearch.bind(this);
-    this.updateWarnings = this.updateWarnings.bind(this);
-    this.applyEventListeners = this.applyEventListeners.bind(this);
+  const resetState = () => {
+    setState({ warnings: [], parentNode: {} });
+  };
 
-    this.documentObserver = new MutationObserver(
-      forEachUniqueContentEditable(this.applyEventListeners)
-    );
-    this.documentObserver.observe(document.body, WATCH_FOR_NEW_NODES);
-  }
-
-  resetState() {
-    this.setState({ parentNode: {}, warnings: [] });
-  }
-
-  updateWarnings(email, patterns) {
+  const updateWarnings = (email, patterns) => {
     if (!email || !email.offsetParent) {
-      this.resetState();
-      return;
+      return resetState();
     }
+
     const newWarnings =
       email.childNodes.length > 0
         ? Array.from(email.childNodes)
-            .filter((node) => node.textContent !== '')
-            .flatMap((text) => findRanges(text, patterns))
+            .filter((n) => n.textContent !== '')
+            .flatMap((n) => findRanges(n, patterns))
         : findRanges(email, patterns);
 
-    this.setState(({ parentNode }) =>
-      parentNode.id !== email.offsetParent.id
-        ? { parentNode: email.offsetParent, warnings: newWarnings }
-        : { parentNode, warnings: newWarnings }
-    );
-  }
+    const nextParent =
+      state.parentNode.id !== email.offsetParent.id
+        ? email.offsetParent
+        : state.parentNode;
+    setState({
+      warnings: newWarnings,
+      parentNode: nextParent,
+    });
+  };
 
-  handleSearch(email, patterns) {
+  const handleSearch = (email, patterns) => {
     return Util.debounce(
-      () => this.updateWarnings(email, patterns),
+      () => updateWarnings(email, patterns),
       WAIT_TIME_BEFORE_RECALC_WARNINGS
     );
-  }
+  };
 
-  applyEventListeners(mutation) {
+  const applyEventListeners = (mutation) => {
     const email = mutation.target;
-    const searchHandler = this.handleSearch(email, MESSAGE_PATTERNS);
-    email.addEventListener('input', searchHandler);
-    email.addEventListener('focus', searchHandler);
-    email.addEventListener('cut', searchHandler);
-    email.addEventListener('blur', this.resetState);
-  }
-
-  render() {
-    if (this.state.warnings.length > 0) {
-      const parentNode = this.state.parentNode;
-      const parentRect = parentNode.getBoundingClientRect();
-      const warnings = this.state.warnings.map((warning, index) => (
-        <Warning key={index} parentRect={parentRect} value={warning} />
-      ));
-      return ReactDOM.createPortal(warnings, parentNode);
+    const searchHandler = handleSearch(email, MESSAGE_PATTERNS);
+    for (let i = 0; i < onEvents.length; i++) {
+      email.addEventListener(onEvents[i], searchHandler);
     }
-  }
-}
+    email.addEventListener('blur', resetState);
+  };
 
+  const documentObserver = new MutationObserver(
+    forEachUniqueContentEditable(applyEventListeners)
+  );
+  documentObserver.observe(document.body, WATCH_FOR_NEW_NODES);
+
+  if (state.warnings.length > 0) {
+    const parentRect = state.parentNode.getBoundingClientRect();
+    const w = state.warnings.map((warning, index) => (
+      <Warning key={index} parentRect={parentRect} value={warning} />
+    ));
+    return ReactDOM.createPortal(w, state.parentNode);
+  }
+};
+
+JustNotSorry.defaultProps = {
+  onEvents: ['input', 'focus', 'cut'],
+};
 export default JustNotSorry;

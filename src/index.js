@@ -1,4 +1,4 @@
 import { h, render } from 'preact';
-import JustNotSorry from "./components/JustNotSorry";
+import JustNotSorry from './components/JustNotSorry';
 
-render(<JustNotSorry />, document.body);
+render(<JustNotSorry onEvents={['input', 'focus', 'cut']} />, document.body);
