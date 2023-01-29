@@ -19,29 +19,30 @@ const WATCH_FOR_NEW_NODES = {
   childList: true,
 };
 
+const textNodeIterator = (target) =>
+  document.createNodeIterator(target, NodeFilter.SHOW_TEXT);
+
 const JustNotSorry = ({ onEvents }) => {
   const [state, setState] = useState({ warnings: [], parentNode: {} });
-
-  const resetState = () => {
-    setState({ warnings: [], parentNode: {} });
-  };
+  const resetState = () => setState({ warnings: [], parentNode: {} });
 
   const updateWarnings = (email, patterns) => {
     if (!email || !email.offsetParent) {
       return resetState();
     }
 
-    const newWarnings =
-      email.childNodes.length > 0
-        ? Array.from(email.childNodes)
-            .filter((n) => n.textContent !== '')
-            .flatMap((n) => findRanges(n, patterns))
-        : findRanges(email, patterns);
+    const iter = textNodeIterator(email);
+    const newWarnings = [];
+    let currentNode;
+    while ((currentNode = iter.nextNode()) !== null) {
+      newWarnings.push(...findRanges(currentNode, patterns).flat());
+    }
 
     const nextParent =
       state.parentNode.id !== email.offsetParent.id
         ? email.offsetParent
         : state.parentNode;
+
     setState({
       warnings: newWarnings,
       parentNode: nextParent,
