@@ -1,6 +1,6 @@
 import { h } from 'preact';
 import ReactDOM from 'react-dom';
-import { useState } from 'preact/hooks';
+import { useState, useEffect } from 'preact/hooks';
 import Warning from './Warning.js';
 import * as Util from '../helpers/util.js';
 import PHRASES from '../warnings/phrases.json';
@@ -19,33 +19,59 @@ const WATCH_FOR_NEW_NODES = {
   childList: true,
 };
 
-const textNodeIterator = (target) =>
-  document.createNodeIterator(target, NodeFilter.SHOW_TEXT);
+const textNodeIterator = (node) =>
+  document.createNodeIterator(node, NodeFilter.SHOW_TEXT);
 
 const JustNotSorry = ({ onEvents }) => {
+  const [observer, setObserver] = useState(null);
   const [state, setState] = useState({ warnings: [], parentNode: {} });
   const resetState = () => setState({ warnings: [], parentNode: {} });
 
-  const updateWarnings = (email, patterns) => {
-    if (!email || !email.offsetParent) {
-      return resetState();
+  const applyEventListeners = ({ target }) => {
+    const searchHandler = handleSearch(target, MESSAGE_PATTERNS);
+    for (let i = 0; i < onEvents.length; i++) {
+      target.addEventListener(onEvents[i], searchHandler);
     }
+    target.addEventListener('blur', resetState);
+  };
+
+  useEffect(() => {
+    if (observer) return;
+
+    const callback = forEachUniqueContentEditable(applyEventListeners);
+    const obs = new MutationObserver(callback);
+    obs.observe(document.body, WATCH_FOR_NEW_NODES);
+    setObserver(obs);
+    return () => {
+      if (observer) {
+        observer.disconnect();
+      }
+    };
+  }, [
+    forEachUniqueContentEditable,
+    applyEventListeners,
+    setObserver,
+    observer,
+  ]);
+
+  const updateWarnings = (email, patterns) => {
+    if (!email || !email.offsetParent) return resetState();
 
     const iter = textNodeIterator(email);
-    const newWarnings = [];
-    let currentNode;
-    while ((currentNode = iter.nextNode()) !== null) {
-      newWarnings.push(...findRanges(currentNode, patterns).flat());
+    const updatedWarnings = [];
+    let nextNode;
+    while ((nextNode = iter.nextNode()) !== null) {
+      updatedWarnings.push(...findRanges(nextNode, patterns));
     }
 
-    const nextParent =
+    const updatedParent =
       state.parentNode.id !== email.offsetParent.id
         ? email.offsetParent
         : state.parentNode;
 
     setState({
-      warnings: newWarnings,
-      parentNode: nextParent,
+      warnings: updatedWarnings,
+      parentNode: updatedParent,
     });
   };
 
@@ -56,26 +82,12 @@ const JustNotSorry = ({ onEvents }) => {
     );
   };
 
-  const applyEventListeners = (mutation) => {
-    const email = mutation.target;
-    const searchHandler = handleSearch(email, MESSAGE_PATTERNS);
-    for (let i = 0; i < onEvents.length; i++) {
-      email.addEventListener(onEvents[i], searchHandler);
-    }
-    email.addEventListener('blur', resetState);
-  };
-
-  const documentObserver = new MutationObserver(
-    forEachUniqueContentEditable(applyEventListeners)
-  );
-  documentObserver.observe(document.body, WATCH_FOR_NEW_NODES);
-
   if (state.warnings.length > 0) {
     const parentRect = state.parentNode.getBoundingClientRect();
-    const w = state.warnings.map((warning, index) => (
+    const warningComponents = state.warnings.map((warning, index) => (
       <Warning key={index} parentRect={parentRect} value={warning} />
     ));
-    return ReactDOM.createPortal(w, state.parentNode);
+    return ReactDOM.createPortal(warningComponents, state.parentNode);
   }
 };
 
