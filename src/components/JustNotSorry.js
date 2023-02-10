@@ -1,5 +1,6 @@
-import { h, Component } from 'preact';
+import { h } from 'preact';
 import ReactDOM from 'react-dom';
+import { useState, useEffect } from 'preact/hooks';
 import Warning from './Warning.js';
 import * as Util from '../helpers/util.js';
 import PHRASES from '../warnings/phrases.json';
@@ -18,74 +19,79 @@ const WATCH_FOR_NEW_NODES = {
   childList: true,
 };
 
-class JustNotSorry extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      parentNode: {},
-      warnings: [],
-    };
+const textNodeIterator = (node) =>
+  document.createNodeIterator(node, NodeFilter.SHOW_TEXT);
 
-    this.resetState = this.resetState.bind(this);
-    this.handleSearch = this.handleSearch.bind(this);
-    this.updateWarnings = this.updateWarnings.bind(this);
-    this.applyEventListeners = this.applyEventListeners.bind(this);
+const JustNotSorry = ({ onEvents }) => {
+  const [observer, setObserver] = useState(null);
+  const [state, setState] = useState({ warnings: [], parentNode: {} });
+  const resetState = () => setState({ warnings: [], parentNode: {} });
 
-    this.documentObserver = new MutationObserver(
-      forEachUniqueContentEditable(this.applyEventListeners)
-    );
-    this.documentObserver.observe(document.body, WATCH_FOR_NEW_NODES);
-  }
-
-  resetState() {
-    this.setState({ parentNode: {}, warnings: [] });
-  }
-
-  updateWarnings(email, patterns) {
-    if (!email || !email.offsetParent) {
-      this.resetState();
-      return;
+  const applyEventListeners = ({ target }) => {
+    const searchHandler = handleSearch(target, MESSAGE_PATTERNS);
+    for (let i = 0; i < onEvents.length; i++) {
+      target.addEventListener(onEvents[i], searchHandler);
     }
-    const newWarnings =
-      email.childNodes.length > 0
-        ? Array.from(email.childNodes)
-            .filter((node) => node.textContent !== '')
-            .flatMap((text) => findRanges(text, patterns))
-        : findRanges(email, patterns);
+    target.addEventListener('blur', resetState);
+  };
 
-    this.setState(({ parentNode }) =>
-      parentNode.id !== email.offsetParent.id
-        ? { parentNode: email.offsetParent, warnings: newWarnings }
-        : { parentNode, warnings: newWarnings }
-    );
-  }
+  useEffect(() => {
+    if (observer) return;
 
-  handleSearch(email, patterns) {
+    const callback = forEachUniqueContentEditable(applyEventListeners);
+    const obs = new MutationObserver(callback);
+    obs.observe(document.body, WATCH_FOR_NEW_NODES);
+    setObserver(obs);
+    return () => {
+      if (observer) {
+        observer.disconnect();
+      }
+    };
+  }, [
+    forEachUniqueContentEditable,
+    applyEventListeners,
+    setObserver,
+    observer,
+  ]);
+
+  const updateWarnings = (email, patterns) => {
+    if (!email || !email.offsetParent) return resetState();
+
+    const iter = textNodeIterator(email);
+    const updatedWarnings = [];
+    let nextNode;
+    while ((nextNode = iter.nextNode()) !== null) {
+      updatedWarnings.push(...findRanges(nextNode, patterns));
+    }
+
+    const updatedParent =
+      state.parentNode.id !== email.offsetParent.id
+        ? email.offsetParent
+        : state.parentNode;
+
+    setState({
+      warnings: updatedWarnings,
+      parentNode: updatedParent,
+    });
+  };
+
+  const handleSearch = (email, patterns) => {
     return Util.debounce(
-      () => this.updateWarnings(email, patterns),
+      () => updateWarnings(email, patterns),
       WAIT_TIME_BEFORE_RECALC_WARNINGS
     );
-  }
+  };
 
-  applyEventListeners(mutation) {
-    const email = mutation.target;
-    const searchHandler = this.handleSearch(email, MESSAGE_PATTERNS);
-    email.addEventListener('input', searchHandler);
-    email.addEventListener('focus', searchHandler);
-    email.addEventListener('cut', searchHandler);
-    email.addEventListener('blur', this.resetState);
+  if (state.warnings.length > 0) {
+    const parentRect = state.parentNode.getBoundingClientRect();
+    const warningComponents = state.warnings.map((warning, index) => (
+      <Warning key={index} parentRect={parentRect} value={warning} />
+    ));
+    return ReactDOM.createPortal(warningComponents, state.parentNode);
   }
+};
 
-  render() {
-    if (this.state.warnings.length > 0) {
-      const parentNode = this.state.parentNode;
-      const parentRect = parentNode.getBoundingClientRect();
-      const warnings = this.state.warnings.map((warning, index) => (
-        <Warning key={index} parentRect={parentRect} value={warning} />
-      ));
-      return ReactDOM.createPortal(warnings, parentNode);
-    }
-  }
-}
-
+JustNotSorry.defaultProps = {
+  onEvents: ['input', 'focus', 'cut'],
+};
 export default JustNotSorry;
