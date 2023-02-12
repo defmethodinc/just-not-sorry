@@ -64,14 +64,9 @@ const JustNotSorry = ({ onEvents }) => {
       updatedWarnings.push(...findRanges(nextNode, patterns));
     }
 
-    const updatedParent =
-      state.parentNode.id !== email.offsetParent.id
-        ? email.offsetParent
-        : state.parentNode;
-
     setState({
       warnings: updatedWarnings,
-      parentNode: updatedParent,
+      parentNode: email.offsetParent,
     });
   };
 
