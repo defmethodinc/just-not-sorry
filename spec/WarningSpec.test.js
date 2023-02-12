@@ -49,9 +49,9 @@ describe('<Warning/>', () => {
 
   const testProps = {
     key: 'test-key',
+    message: 'test-message',
     value: {
       pattern: 'test-pattern',
-      message: 'test-message',
       parentNode: parent,
       rangeToHighlight: range,
     },
@@ -62,6 +62,7 @@ describe('<Warning/>', () => {
       <Warning
         parentRect={parent.getBoundingClientRect()}
         value={testProps.value}
+        message={testProps.message}
         key={testProps.key}
       />
     );

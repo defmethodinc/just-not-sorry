@@ -80,7 +80,12 @@ const JustNotSorry = ({ onEvents }) => {
   if (state.warnings.length > 0) {
     const parentRect = state.parentNode.getBoundingClientRect();
     const warningComponents = state.warnings.map((warning, index) => (
-      <Warning key={index} parentRect={parentRect} value={warning} />
+      <Warning
+        key={index}
+        parentRect={parentRect}
+        value={warning}
+        message={warning.message}
+      />
     ));
     return ReactDOM.createPortal(warningComponents, state.parentNode);
   }

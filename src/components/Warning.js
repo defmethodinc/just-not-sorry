@@ -39,7 +39,7 @@ export default function Warning(props) {
         );
         return (
           <WarningHighlight
-            message={props.value.message}
+            message={props.message}
             position={highlight.position}
             styles={highlight.style}
             key={index}
