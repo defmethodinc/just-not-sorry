@@ -3,30 +3,24 @@ import ReactDOM from 'react-dom';
 import { useEffect, useState } from 'preact/hooks';
 import Warning from './Warning.js';
 import * as Util from '../helpers/util.js';
-import PHRASES from '../warnings/phrases.json';
 import { forEachUniqueContentEditable } from '../callbacks/ContentEditableDiv';
 import { findRanges } from '../helpers/RangeFinder';
 
 const WAIT_TIME_BEFORE_RECALC_WARNINGS = 500;
-
-const MESSAGE_PATTERNS = PHRASES.map((phrase) => ({
-  regex: new RegExp(phrase.pattern, 'gi'),
-  message: phrase.message,
-}));
 
 const WATCH_FOR_NEW_NODES = {
   subtree: true,
   childList: true,
 };
 
-const JustNotSorry = ({ onEvents }) => {
+const JustNotSorry = ({ phrases, onEvents }) => {
   const [observer, setObserver] = useState(null);
   const [state, setState] = useState({ warnings: [], parentNode: null });
 
   const clearWarnings = () => setState({ warnings: [], parentNode: null });
 
   const applyEventListeners = ({ target }) => {
-    const searchHandler = handleSearch(target, MESSAGE_PATTERNS);
+    const searchHandler = handleSearch(target, phrases);
     for (let i = 0; i < onEvents.length; i++) {
       target.addEventListener(onEvents[i], searchHandler);
     }
@@ -83,6 +77,7 @@ const JustNotSorry = ({ onEvents }) => {
 };
 
 JustNotSorry.defaultProps = {
+  phrases: [],
   onEvents: ['input', 'focus', 'cut'],
 };
 export default JustNotSorry;
