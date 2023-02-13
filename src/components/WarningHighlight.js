@@ -6,8 +6,8 @@ export default function Highlight(props) {
     <div
       className="jns-highlight"
       style={props.styles}
-      data-tip={props.message}
-      data-place={props.position}
+      data-tooltip-content={props.message}
+      data-tooltip-place={props.position}
     >
       <WarningTooltip />
     </div>
