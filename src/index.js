@@ -1,5 +1,5 @@
 import { h, render } from 'preact';
-import PHRASES from '../warnings/phrases.json';
+import PHRASES from './warnings/phrases.json';
 import JustNotSorry from './components/JustNotSorry';
 
 const MESSAGE_PATTERNS = PHRASES.map((phrase) => ({
