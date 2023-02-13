@@ -23,14 +23,14 @@ const JustNotSorry = ({ onEvents }) => {
   const [observer, setObserver] = useState(null);
   const [state, setState] = useState({ warnings: [], parentNode: null });
 
-  const resetState = () => setState({ warnings: [], parentNode: null });
+  const clearWarnings = () => setState({ warnings: [], parentNode: null });
 
   const applyEventListeners = ({ target }) => {
     const searchHandler = handleSearch(target, MESSAGE_PATTERNS);
     for (let i = 0; i < onEvents.length; i++) {
       target.addEventListener(onEvents[i], searchHandler);
     }
-    target.addEventListener('blur', resetState);
+    target.addEventListener('blur', clearWarnings);
   };
 
   useEffect(() => {
@@ -53,7 +53,7 @@ const JustNotSorry = ({ onEvents }) => {
   ]);
 
   const updateWarnings = (email, patterns) => {
-    if (!email || !email.offsetParent) return resetState();
+    if (!email || !email.offsetParent) return clearWarnings();
 
     setState({
       warnings: findRanges(email, patterns),
