@@ -1,6 +1,6 @@
 import { h } from 'preact';
 import ReactDOM from 'react-dom';
-import { useState, useEffect } from 'preact/hooks';
+import { useEffect, useState } from 'preact/hooks';
 import Warning from './Warning.js';
 import * as Util from '../helpers/util.js';
 import PHRASES from '../warnings/phrases.json';
@@ -19,14 +19,11 @@ const WATCH_FOR_NEW_NODES = {
   childList: true,
 };
 
-const textNodeIterator = (node) =>
-  document.createNodeIterator(node, NodeFilter.SHOW_TEXT);
-
 const JustNotSorry = ({ onEvents }) => {
   const [observer, setObserver] = useState(null);
-  const [state, setState] = useState({ warnings: [], parentNode: {} });
+  const [state, setState] = useState({ warnings: [], parentNode: null });
 
-  const resetState = () => setState({ warnings: [], parentNode: {} });
+  const resetState = () => setState({ warnings: [], parentNode: null });
 
   const applyEventListeners = ({ target }) => {
     const searchHandler = handleSearch(target, MESSAGE_PATTERNS);
@@ -58,15 +55,8 @@ const JustNotSorry = ({ onEvents }) => {
   const updateWarnings = (email, patterns) => {
     if (!email || !email.offsetParent) return resetState();
 
-    const iter = textNodeIterator(email);
-    const updatedWarnings = [];
-    let nextNode;
-    while ((nextNode = iter.nextNode()) !== null) {
-      updatedWarnings.push(...findRanges(nextNode, patterns));
-    }
-
     setState({
-      warnings: updatedWarnings,
+      warnings: findRanges(email, patterns),
       parentNode: email.offsetParent,
     });
   };
@@ -78,16 +68,17 @@ const JustNotSorry = ({ onEvents }) => {
     );
   };
 
-  if (state.warnings.length > 0) {
-    const warningComponents = state.warnings.map((warning, index) => (
+  const { parentNode, warnings } = state;
+  if (parentNode != null && warnings.length > 0) {
+    const warningComponents = warnings.map((warning, index) => (
       <Warning
         key={index}
-        container={state.parentNode}
+        container={parentNode}
         message={warning.message}
         rangeToHighlight={warning.rangeToHighlight}
       />
     ));
-    return ReactDOM.createPortal(warningComponents, state.parentNode);
+    return ReactDOM.createPortal(warningComponents, parentNode);
   }
 };
 
