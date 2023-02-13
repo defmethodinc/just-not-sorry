@@ -50,18 +50,14 @@ describe('<Warning/>', () => {
   const testProps = {
     key: 'test-key',
     message: 'test-message',
-    value: {
-      pattern: 'test-pattern',
-      parentNode: parent,
-      rangeToHighlight: range,
-    },
+    range,
   };
 
   beforeEach(() => {
     wrapper = shallow(
       <Warning
-        parentRect={parent.getBoundingClientRect()}
-        value={testProps.value}
+        container={parent}
+        rangeToHighlight={testProps.range}
         message={testProps.message}
         key={testProps.key}
       />

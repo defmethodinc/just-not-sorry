@@ -25,6 +25,7 @@ const textNodeIterator = (node) =>
 const JustNotSorry = ({ onEvents }) => {
   const [observer, setObserver] = useState(null);
   const [state, setState] = useState({ warnings: [], parentNode: {} });
+
   const resetState = () => setState({ warnings: [], parentNode: {} });
 
   const applyEventListeners = ({ target }) => {
@@ -78,13 +79,12 @@ const JustNotSorry = ({ onEvents }) => {
   };
 
   if (state.warnings.length > 0) {
-    const parentRect = state.parentNode.getBoundingClientRect();
     const warningComponents = state.warnings.map((warning, index) => (
       <Warning
         key={index}
-        parentRect={parentRect}
-        value={warning}
+        container={state.parentNode}
         message={warning.message}
+        rangeToHighlight={warning.rangeToHighlight}
       />
     ));
     return ReactDOM.createPortal(warningComponents, state.parentNode);

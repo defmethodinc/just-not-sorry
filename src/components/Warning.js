@@ -29,13 +29,14 @@ export function getHighlight(rect, coord) {
 }
 
 export default function Warning(props) {
-  const rects = props.value.rangeToHighlight.getClientRects();
+  const parentBounds = props.container.getBoundingClientRect();
+  const rects = props.rangeToHighlight.getClientRects();
   return (
     <div className="jns-warning">
       {Array.from(rects, (rect, index) => {
         const highlight = getHighlight(
           rect,
-          calculateCoords(props.parentRect, rect)
+          calculateCoords(parentBounds, rect)
         );
         return (
           <WarningHighlight
