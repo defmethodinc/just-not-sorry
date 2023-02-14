@@ -4,11 +4,11 @@ describe('Util', () => {
   describe('#debounce', () => {
     const WAIT_TIME = 500;
 
-    jest.useFakeTimers();
-    let func = jest.Mock;
-    let debouncedFunc = Function;
+    let func;
+    let debouncedFunc;
 
     beforeEach(() => {
+      jest.useFakeTimers();
       func = jest.fn();
       debouncedFunc = Util.debounce(func, WAIT_TIME);
     });
@@ -24,6 +24,8 @@ describe('Util', () => {
     it('should execute a function as many times as the debounced function if called beyond the wait time', () => {
       for (let i = 0; i < 3; i++) {
         setTimeout(() => debouncedFunc(), WAIT_TIME + 100);
+        jest.advanceTimersByTime(WAIT_TIME + 100);
+        expect(func).toBeCalledTimes(i);
       }
       jest.runAllTimers();
       expect(func).toBeCalledTimes(3);
