@@ -31,8 +31,7 @@ describe('Just Not Sorry', () => {
   beforeEach(async () => {
     //compose new email
     await page.keyboard.press('c');
-    await page.waitForNavigation();
-    await page.waitForTimeout(500);
+    await page.waitForTimeout(1000);
 
     //set cursor in body
     await page.keyboard.press('Tab');
@@ -47,7 +46,7 @@ describe('Just Not Sorry', () => {
     //go to all mail
     await page.keyboard.press('g');
     await page.keyboard.press('a');
-    await page.waitForNavigation();
+    await page.waitForTimeout(500);
 
     //select all
     await page.keyboard.press('*');
