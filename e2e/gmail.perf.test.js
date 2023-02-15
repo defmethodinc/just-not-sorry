@@ -60,6 +60,8 @@ describe('Just Not Sorry', () => {
   });
 
   it('should display warnings', async () => {
+    const url = await page.url();
+    console.log({ url });
     await page.keyboard.type(`I'm just not sorry.`);
     await assertWarningsWithin(2, TEST_WAIT_TIME);
   });
