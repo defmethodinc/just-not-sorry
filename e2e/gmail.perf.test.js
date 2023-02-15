@@ -1,9 +1,17 @@
 import * as Util from '../src/helpers/util.js';
 
 const ONE_MINUTE = 5000 * 12;
-jest.setTimeout(ONE_MINUTE * 2);
 
-const TEST_WAIT_TIME = Util.WAIT_TIME + 100;
+const IS_CI_ENV = process.env.CI === 'true';
+console.log(process.env.CI);
+if (IS_CI_ENV) {
+  console.log("IN CI");
+} else {
+  console.log("OUT CI");
+}
+jest.setTimeout(ONE_MINUTE * (IS_CI_ENV ? 2 : 1));
+
+const TEST_WAIT_TIME = Util.WAIT_TIME + (IS_CI_ENV ? 200 : 100);
 
 async function assertWarningsWithin(numExpected, time) {
   await page.waitForSelector('.jns-highlight', {

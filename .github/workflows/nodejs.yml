@@ -36,6 +36,7 @@ jobs:
         env:
           GMAIL_TEST_USER: ${{ vars.GMAIL_TEST_USER }}
           GMAIL_TEST_PASSWORD: ${{ secrets.GMAIL_TEST_PASSWORD }}
+          CI: true
       - name: Semantic Release
         env:
           GPG_PASSPHRASE: ${{ secrets.GPG_PASSPHRASE }}
