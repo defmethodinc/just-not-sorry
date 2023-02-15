@@ -4,8 +4,7 @@ const ONE_MINUTE = 5000 * 12;
 
 const IS_CI_ENV = process.env.CI === 'true';
 jest.setTimeout(ONE_MINUTE * (IS_CI_ENV ? 2 : 1));
-const TEST_WAIT_TIME = Util.WAIT_TIME + (IS_CI_ENV ? 500 : 100);
-console.log('test wait time', TEST_WAIT_TIME);
+const TEST_WAIT_TIME = Util.WAIT_TIME + (IS_CI_ENV ? 1000 : 100);
 
 async function assertWarningsWithin(numExpected, time) {
   await page.waitForSelector('.jns-highlight', {
