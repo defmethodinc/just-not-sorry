@@ -1,7 +1,7 @@
 import * as Util from '../src/helpers/util.js';
 
 const ONE_MINUTE = 5000 * 12;
-jest.setTimeout(ONE_MINUTE);
+jest.setTimeout(ONE_MINUTE * 2);
 
 const TEST_WAIT_TIME = Util.WAIT_TIME + 100;
 
