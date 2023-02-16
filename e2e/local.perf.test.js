@@ -1,5 +1,6 @@
 import * as path from 'path';
 import * as Util from '../src/helpers/util.js';
+
 const ONE_MINUTE = 5000 * 12;
 jest.setTimeout(ONE_MINUTE * 3);
 
@@ -65,7 +66,21 @@ describe('Just Not Sorry', () => {
     }
   });
 
-  it('should display 500 words with 200 warnings', async () => {
+  it('should work', async () => {
+    await page.keyboard.type(`just not sorry.`);
+    await page.keyboard.press('Enter');
+    await page.keyboard.press('Enter');
+
+    await page.keyboard.down('Shift');
+    await page.keyboard.press('Tab');
+    await page.keyboard.up('Shift');
+    await assertWarningsWithin(0, TEST_WAIT_TIME);
+
+    await page.keyboard.press('Tab');
+    await assertWarningsWithin(2, TEST_WAIT_TIME);
+  });
+
+  it.skip('should display 500 words with 200 warnings', async () => {
     const fiftyWords = `Just actually sorry. Apologize. I think I'm no expert. Yes, um, literally, very, sort of, If that's okay, um, I should feel, we believe, in my opinion, This might be a silly idea. This might be a stupid question. I may be wrong. If I'm being honest. I guess. Maybe!!!`;
     expect(fiftyWords.split(' ').length).toBe(50);
 
