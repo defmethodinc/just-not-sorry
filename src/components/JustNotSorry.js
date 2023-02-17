@@ -13,18 +13,40 @@ const WATCH_FOR_NEW_NODES = {
   childList: true,
 };
 
+const findWarnings = () => document.getElementsByClassName('jns-warning');
+const hide = (elem) => elem.setAttribute('hidden', true);
+const show = (elem) => elem.removeAttribute('hidden');
+
+const hideWarnings = () => {
+  const warnings = findWarnings();
+  for (let i = 0; i < warnings.length; i++) {
+    hide(warnings[i]);
+  }
+};
+const showWarnings = (onloadHandler) => {
+  return () => {
+    const warnings = findWarnings();
+    if (warnings.length > 0) {
+      for (let i = 0; i < warnings.length; i++) {
+        show(warnings[i]);
+      }
+    } else {
+      onloadHandler();
+    }
+  };
+};
+
 const JustNotSorry = ({ phrases, onEvents }) => {
   const [observer, setObserver] = useState(null);
   const [state, setState] = useState({ warnings: [], parentNode: null });
-
-  const clearWarnings = () => setState({ warnings: [], parentNode: null });
 
   const applyEventListeners = ({ target }) => {
     const searchHandler = handleSearch(target, phrases);
     for (let i = 0; i < onEvents.length; i++) {
       target.addEventListener(onEvents[i], searchHandler);
     }
-    target.addEventListener('blur', clearWarnings);
+    target.addEventListener('blur', hideWarnings);
+    target.addEventListener('focus', showWarnings(searchHandler));
   };
 
   useEffect(() => {
@@ -47,7 +69,7 @@ const JustNotSorry = ({ phrases, onEvents }) => {
   ]);
 
   const updateWarnings = (email, patterns) => {
-    if (!email || !email.offsetParent) return clearWarnings();
+    if (!email || !email.offsetParent) return hideWarnings();
 
     setState({
       warnings: findRanges(email, patterns),
@@ -68,9 +90,15 @@ const JustNotSorry = ({ phrases, onEvents }) => {
     // eslint-disable-next-line no-unused-vars
     for (let [message, values] of warnings) {
       for (let i = 0; i < values.length; i++) {
+        const range = values[i];
+        const parentElement = range.startContainer.parentElement;
+        const key = `${parentElement?.offsetTop ?? 0 + range.startOffset}x${
+          parentElement?.offsetLeft ?? 0 + range.endOffset
+        }`;
+
         warningComponents.push(
           <Warning
-            key={i}
+            key={key}
             container={parentNode}
             message={message}
             rangeToHighlight={values[i]}

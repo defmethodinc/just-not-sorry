@@ -8,9 +8,6 @@ const MESSAGE_PATTERNS = PHRASES.map((phrase) => ({
 }));
 
 render(
-  <JustNotSorry
-    phrases={MESSAGE_PATTERNS}
-    onEvents={['input', 'focus', 'cut']}
-  />,
+  <JustNotSorry phrases={MESSAGE_PATTERNS} onEvents={['input', 'cut']} />,
   document.body
 );

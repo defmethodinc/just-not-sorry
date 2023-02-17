@@ -33,17 +33,15 @@ export default function Warning(props) {
   const rects = props.rangeToHighlight.getClientRects();
   return (
     <div className="jns-warning">
-      {Array.from(rects, (rect, index) => {
-        const highlight = getHighlight(
-          rect,
-          calculateCoords(parentBounds, rect)
-        );
-        return (
+      {Array.from(rects, (rect ) => {
+          const coord = calculateCoords(parentBounds, rect);
+          const highlight = getHighlight(rect, coord);
+          return (
           <WarningHighlight
             message={props.message}
             position={highlight.position}
             styles={highlight.style}
-            key={index}
+            key={`${coord.top}x${coord.left}`}
           />
         );
       })}
