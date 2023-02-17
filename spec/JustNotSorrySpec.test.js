@@ -76,7 +76,17 @@ describe('JustNotSorry', () => {
   it('on event checks for warnings', async () => {
     const email = emailContaining('just not');
 
-    render(<JustNotSorry onEvents={['focus']} />);
+    render(
+      <JustNotSorry
+        phrases={[
+          {
+            regex: new RegExp('just', 'gi'),
+            message: 'just is not good',
+          },
+        ]}
+        onEvents={['focus']}
+      />
+    );
     simulateEvent(email, 'focus');
 
     await waitFor(() => {
@@ -89,7 +99,16 @@ describe('JustNotSorry', () => {
   it('should clear warnings on blur event', async () => {
     const div = emailContaining('just not');
 
-    render(<JustNotSorry />);
+    render(
+      <JustNotSorry
+        phrases={[
+          {
+            regex: new RegExp('just', 'gi'),
+            message: 'just is not good',
+          },
+        ]}
+      />
+    );
     simulateEvent(div, 'blur');
 
     await waitFor(() => {
@@ -102,7 +121,17 @@ describe('JustNotSorry', () => {
   it('does not add warnings for partial matches', async () => {
     const email = emailContaining('test justify test');
 
-    render(<JustNotSorry onEvents={['focus']} />);
+    render(
+      <JustNotSorry
+        phrases={[
+          {
+            regex: new RegExp('just', 'gi'),
+            message: 'just is not good',
+          },
+        ]}
+        onEvents={['focus']}
+      />
+    );
     simulateEvent(email, 'focus');
 
     await waitFor(() => {
@@ -116,7 +145,18 @@ describe('JustNotSorry', () => {
     const div = emailContaining(`just not
     <div>just not</div>`);
 
-    render(<JustNotSorry onEvents={['focus']} />);
+    render(
+      <JustNotSorry
+        phrases={[
+          {
+            regex: new RegExp('just', 'gi'),
+            message: 'just is not good',
+          },
+        ]}
+        onEvents={['focus']}
+      />
+    );
+
     simulateEvent(div, 'focus');
 
     await waitFor(() => {

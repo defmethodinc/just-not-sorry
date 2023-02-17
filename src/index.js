@@ -1,4 +1,13 @@
 import { h, render } from 'preact';
+import PHRASES from './warnings/phrases.json';
 import JustNotSorry from './components/JustNotSorry';
 
-render(<JustNotSorry onEvents={['input', 'focus', 'cut']} />, document.body);
+const MESSAGE_PATTERNS = PHRASES.map((phrase) => ({
+  regex: new RegExp(phrase.pattern, 'gi'),
+  message: phrase.message,
+}));
+
+render(
+  <JustNotSorry phrases={MESSAGE_PATTERNS} onEvents={['input', 'cut']} />,
+  document.body
+);

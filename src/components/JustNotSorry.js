@@ -1,36 +1,50 @@
 import { h } from 'preact';
 import ReactDOM from 'react-dom';
-import { useState, useEffect } from 'preact/hooks';
+import { useEffect, useState } from 'preact/hooks';
 import Warning from './Warning.js';
 import * as Util from '../helpers/util.js';
-import PHRASES from '../warnings/phrases.json';
 import { forEachUniqueContentEditable } from '../callbacks/ContentEditableDiv';
 import { findRanges } from '../helpers/RangeFinder';
-
-const MESSAGE_PATTERNS = PHRASES.map((phrase) => ({
-  regex: new RegExp(phrase.pattern, 'gi'),
-  message: phrase.message,
-}));
 
 const WATCH_FOR_NEW_NODES = {
   subtree: true,
   childList: true,
 };
 
-const textNodeIterator = (node) =>
-  document.createNodeIterator(node, NodeFilter.SHOW_TEXT);
+const findWarnings = () => document.getElementsByClassName('jns-warning');
+const hide = (elem) => elem.setAttribute('hidden', true);
+const show = (elem) => elem.removeAttribute('hidden');
 
-const JustNotSorry = ({ onEvents }) => {
+const hideWarnings = () => {
+  const warnings = findWarnings();
+  for (let i = 0; i < warnings.length; i++) {
+    hide(warnings[i]);
+  }
+};
+const showWarnings = (onloadHandler) => {
+  return () => {
+    const warnings = findWarnings();
+    if (warnings.length > 0) {
+      for (let i = 0; i < warnings.length; i++) {
+        show(warnings[i]);
+      }
+    } else {
+      onloadHandler();
+    }
+  };
+};
+
+const JustNotSorry = ({ phrases, onEvents }) => {
   const [observer, setObserver] = useState(null);
-  const [state, setState] = useState({ warnings: [], parentNode: {} });
-  const resetState = () => setState({ warnings: [], parentNode: {} });
+  const [state, setState] = useState({ warnings: [], parentNode: null });
 
   const applyEventListeners = ({ target }) => {
-    const searchHandler = handleSearch(target, MESSAGE_PATTERNS);
+    const searchHandler = handleSearch(target, phrases);
     for (let i = 0; i < onEvents.length; i++) {
       target.addEventListener(onEvents[i], searchHandler);
     }
-    target.addEventListener('blur', resetState);
+    target.addEventListener('blur', hideWarnings);
+    target.addEventListener('focus', showWarnings(searchHandler));
   };
 
   useEffect(() => {
@@ -53,23 +67,11 @@ const JustNotSorry = ({ onEvents }) => {
   ]);
 
   const updateWarnings = (email, patterns) => {
-    if (!email || !email.offsetParent) return resetState();
-
-    const iter = textNodeIterator(email);
-    const updatedWarnings = [];
-    let nextNode;
-    while ((nextNode = iter.nextNode()) !== null) {
-      updatedWarnings.push(...findRanges(nextNode, patterns));
-    }
-
-    const updatedParent =
-      state.parentNode.id !== email.offsetParent.id
-        ? email.offsetParent
-        : state.parentNode;
+    if (!email || !email.offsetParent) return hideWarnings();
 
     setState({
-      warnings: updatedWarnings,
-      parentNode: updatedParent,
+      warnings: findRanges(email, patterns),
+      parentNode: email.offsetParent,
     });
   };
 
@@ -77,16 +79,34 @@ const JustNotSorry = ({ onEvents }) => {
     return Util.debounce(() => updateWarnings(email, patterns), Util.WAIT_TIME);
   };
 
-  if (state.warnings.length > 0) {
-    const parentRect = state.parentNode.getBoundingClientRect();
-    const warningComponents = state.warnings.map((warning, index) => (
-      <Warning key={index} parentRect={parentRect} value={warning} />
-    ));
-    return ReactDOM.createPortal(warningComponents, state.parentNode);
+  const { parentNode, warnings } = state;
+  if (parentNode != null && warnings.size > 0) {
+    const warningComponents = [];
+    // eslint-disable-next-line no-unused-vars
+    for (let [message, values] of warnings) {
+      for (let i = 0; i < values.length; i++) {
+        const range = values[i];
+        const parentElement = range.startContainer.parentElement;
+        const key = `${parentElement?.offsetTop ?? 0 + range.startOffset}x${
+          parentElement?.offsetLeft ?? 0 + range.endOffset
+        }`;
+
+        warningComponents.push(
+          <Warning
+            key={key}
+            container={parentNode}
+            message={message}
+            rangeToHighlight={values[i]}
+          />
+        );
+      }
+    }
+    return ReactDOM.createPortal(warningComponents, parentNode);
   }
 };
 
 JustNotSorry.defaultProps = {
+  phrases: [],
   onEvents: ['input', 'focus', 'cut'],
 };
 export default JustNotSorry;

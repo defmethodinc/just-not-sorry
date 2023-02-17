@@ -11,17 +11,16 @@ describe('RangeFinder', () => {
   });
   it('should return empty array if given empty array', () => {
     const ranges = findRanges(element, []);
-    expect(ranges.length).toBe(0);
+    expect(ranges.size).toBe(0);
   });
 
-  it('should return array with message and valid range for each match found', () => {
+  it('should return map with message and array of ranges for each match found', () => {
     element.textContent = 'textToFind';
 
     const ranges = findRanges(element, [PHRASE_TO_FIND]);
 
-    expect(ranges.length).toBe(1);
-    expect(ranges).toEqual([
-      { message: 'text found!', rangeToHighlight: new Range() },
-    ]);
+    expect(ranges.size).toBe(1);
+    expect(ranges.has('text found!')).toEqual(true);
+    expect(ranges.get('text found!')).toEqual([new Range()]);
   });
 });

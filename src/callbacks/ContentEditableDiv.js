@@ -1,9 +1,7 @@
-function isEmailMessageBody(mutation) {
-  return (
-    mutation.type === 'childList' &&
-    mutation.target.hasAttribute('contentEditable')
-  );
-}
+const isEmailMessageBody = (mutation) =>
+  mutation.target.hasAttribute('contentEditable') &&
+  mutation.type === 'childList';
+
 export const forEachUniqueContentEditable = (action) => {
   const uniqueIds = new Set();
   let tempId = 0;
