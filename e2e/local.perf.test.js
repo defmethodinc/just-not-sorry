@@ -18,6 +18,15 @@ async function assertWarningsWithin(numExpected, time) {
   await expect(numWarnings.length).toBe(numExpected);
 }
 
+async function assertWarningsNotVisible(expected) {
+  await page.waitForSelector('.jns-warning', {
+    visible: false,
+    timeout: TEST_WAIT_TIME,
+  });
+  const numWarnings = await page.$$('.jns-warning');
+  await expect(numWarnings.length).toBe(expected);
+}
+
 //NOTE: keyboard shortcuts are enabled for this account
 describe('Just Not Sorry', () => {
   beforeEach(async () => {
@@ -28,44 +37,6 @@ describe('Just Not Sorry', () => {
     await assertWarningsWithin(0, TEST_WAIT_TIME);
   });
 
-  // eslint-disable-next-line jest/no-disabled-tests
-  it.skip('1000 words with 400 warnings displays within 1 second', async () => {
-    const fiftyWords = `Just actually sorry. Apologize. I think I'm no expert. Yes, um, literally, very, sort of, If that's okay, um, I should feel, we believe, in my opinion, This might be a silly idea. This might be a stupid question. I may be wrong. If I'm being honest. I guess. Maybe!!!`;
-    expect(fiftyWords.split(' ').length).toBe(50);
-
-    for (let i = 0; i < 1000 / 50; i++) {
-      await page.keyboard.type(fiftyWords);
-      await page.keyboard.press('Enter');
-      await page.keyboard.press('Enter');
-
-      await page.keyboard.down('Shift');
-      await page.keyboard.press('Tab');
-      await page.keyboard.up('Shift');
-      await page.keyboard.press('Tab');
-    }
-
-    await assertWarningsWithin(400, 1000);
-  });
-
-  it.skip('should display 1000 words with 400 warnings', async () => {
-    const fiftyWords = `Just actually sorry. Apologize. I think I'm no expert. Yes, um, literally, very, sort of, If that's okay, um, I should feel, we believe, in my opinion, This might be a silly idea. This might be a stupid question. I may be wrong. If I'm being honest. I guess. Maybe!!!`;
-    expect(fiftyWords.split(' ').length).toBe(50);
-
-    for (let i = 0; i < 1000 / 50; i++) {
-      await page.keyboard.type(fiftyWords);
-      await page.keyboard.press('Enter');
-      await page.keyboard.press('Enter');
-
-      await page.keyboard.down('Shift');
-      await page.keyboard.press('Tab');
-      await page.keyboard.up('Shift');
-      await assertWarningsWithin(0, TEST_WAIT_TIME * 10);
-
-      await page.keyboard.press('Tab');
-      await assertWarningsWithin(20 * (i + 1), 1000 * 20);
-    }
-  });
-
   it('should work', async () => {
     await page.keyboard.type(`just not sorry.`);
     await page.keyboard.press('Enter');
@@ -74,8 +45,7 @@ describe('Just Not Sorry', () => {
     await page.keyboard.down('Shift');
     await page.keyboard.press('Tab');
     await page.keyboard.up('Shift');
-    await assertWarningsWithin(0, TEST_WAIT_TIME);
-
+    await assertWarningsNotVisible(2);
     await page.keyboard.press('Tab');
     await assertWarningsWithin(2, TEST_WAIT_TIME);
   });
@@ -92,15 +62,11 @@ describe('Just Not Sorry', () => {
       await page.keyboard.down('Shift');
       await page.keyboard.press('Tab', { delay: 500 });
       await page.keyboard.up('Shift');
-      // await page.waitForSelector('.jns-warning', {
-      //   visible: false,
-      //   timeout: TEST_WAIT_TIME,
-      // });
-      // expect(hiddenWarnings.length).toEqual(20 * (i + 1));
-      // await assertWarningsWithin(0, TEST_WAIT_TIME);
+      const numExpected = 20 * (i + 1);
+      await assertWarningsNotVisible(numExpected);
 
       await page.keyboard.press('Tab', { delay: 500 });
-      await assertWarningsWithin(20 * (i + 1), 1000);
+      await assertWarningsWithin(numExpected, 1000);
     }
   });
 
@@ -117,12 +83,15 @@ describe('Just Not Sorry', () => {
       await page.keyboard.press('Tab', { delay: 500 });
       await page.keyboard.up('Shift');
 
+      const numExpected = 20 * (i + 1);
+      await assertWarningsNotVisible(numExpected);
+
       await page.keyboard.press('Tab', { delay: 500 });
-      await assertWarningsWithin(20 * (i + 1), 1000);
+      await assertWarningsWithin(numExpected, 1000);
     }
   });
 
-  it('should display 1000 words with 400 warnings in one second', async () => {
+  it('should display 1000 words with 400 warnings in one second with delay', async () => {
     const fiftyWords = `Just actually sorry. Apologize. I think I'm no expert. Yes, um, literally, very, sort of, If that's okay, um, I should feel, we believe, in my opinion, This might be a silly idea. This might be a stupid question. I may be wrong. If I'm being honest. I guess. Maybe!!!`;
     expect(fiftyWords.split(' ').length).toBe(50);
 
@@ -132,7 +101,7 @@ describe('Just Not Sorry', () => {
       await page.keyboard.press('Enter');
 
       await page.waitForTimeout(500);
-      await assertWarningsWithin(20 * (i + 1), 1000 * 5);
+      await assertWarningsWithin(20 * (i + 1), 1000 * 2);
     }
   });
 });

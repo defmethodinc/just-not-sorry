@@ -56,7 +56,7 @@ describe('<Warning/>', () => {
   beforeEach(() => {
     wrapper = shallow(
       <Warning
-        container={parent}
+        parentBounds={parent}
         rangeToHighlight={testProps.range}
         message={testProps.message}
         key={testProps.key}

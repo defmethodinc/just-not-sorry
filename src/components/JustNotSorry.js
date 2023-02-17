@@ -1,58 +1,58 @@
+// eslint-disable-next-line no-unused-vars
 import { h } from 'preact';
 import ReactDOM from 'react-dom';
-import { useEffect, useState } from 'preact/hooks';
-import Warning from './Warning.js';
+import {useEffect, useRef, useState} from 'preact/hooks';
 import * as Util from '../helpers/util.js';
-import { forEachUniqueContentEditable } from '../callbacks/ContentEditableDiv';
-import { findRanges } from '../helpers/RangeFinder';
-
-const WATCH_FOR_NEW_NODES = {
-  subtree: true,
-  childList: true,
-};
-
-const findWarnings = () => document.getElementsByClassName('jns-warning');
-const hide = (elem) => elem.setAttribute('hidden', true);
-const show = (elem) => elem.removeAttribute('hidden');
-
-const hideWarnings = () => {
-  const warnings = findWarnings();
-  for (let i = 0; i < warnings.length; i++) {
-    hide(warnings[i]);
-  }
-};
-const showWarnings = (onloadHandler) => {
-  return () => {
-    const warnings = findWarnings();
-    if (warnings.length > 0) {
-      for (let i = 0; i < warnings.length; i++) {
-        show(warnings[i]);
-      }
-    } else {
-      onloadHandler();
-    }
-  };
-};
+import {forEachUniqueContentEditable} from '../callbacks/ContentEditableDiv';
+import Warning from './Warning';
 
 const JustNotSorry = ({ phrases, onEvents }) => {
+  const warningContainer = useRef(null);
+  const currentEmail = useRef(null);
   const [observer, setObserver] = useState(null);
-  const [state, setState] = useState({ warnings: [], parentNode: null });
+  const [warnings, setWarnings] = useState([]);
+
+  const hideWarnings = () => {
+    if (warningContainer.current) {
+      warningContainer.current.style.visibility = 'hidden';
+    }
+  };
+
+  const displayWarnings = ({target}) => {
+    const current = warningContainer.current;
+    if (current && current.dataset.emailId === target.id) {
+      current.style.visibility = 'visible';
+      return true;
+    }
+    return false
+  }
+
+  const displayOr = (elseAction) => (e) =>  {
+    if(!displayWarnings(e)) {
+      elseAction()
+    }
+  };
+
+  const findWarnings = (target) => Util.debounce(() => search(target), Util.WAIT_TIME);
 
   const applyEventListeners = ({ target }) => {
-    const searchHandler = handleSearch(target, phrases);
-    for (let i = 0; i < onEvents.length; i++) {
-      target.addEventListener(onEvents[i], searchHandler);
-    }
+    const updateWarnings = findWarnings(target);
+    onEvents.forEach((event) => target.addEventListener(event, updateWarnings));
     target.addEventListener('blur', hideWarnings);
-    target.addEventListener('focus', showWarnings(searchHandler));
+    target.addEventListener('focus', displayOr(updateWarnings));
   };
 
   useEffect(() => {
-    if (observer) return;
+    if (observer) {
+      return;
+    }
 
     const callback = forEachUniqueContentEditable(applyEventListeners);
     const obs = new MutationObserver(callback);
-    obs.observe(document.body, WATCH_FOR_NEW_NODES);
+    obs.observe(document.body, {
+      subtree: true,
+      childList: true,
+    });
     setObserver(obs);
     return () => {
       if (observer) {
@@ -66,42 +66,47 @@ const JustNotSorry = ({ phrases, onEvents }) => {
     observer,
   ]);
 
-  const updateWarnings = (email, patterns) => {
-    if (!email || !email.offsetParent) return hideWarnings();
+  const textNodeIterator = (node) => document.createNodeIterator(node, NodeFilter.SHOW_TEXT);
 
-    setState({
-      warnings: findRanges(email, patterns),
-      parentNode: email.offsetParent,
-    });
-  };
-
-  const handleSearch = (email, patterns) => {
-    return Util.debounce(() => updateWarnings(email, patterns), Util.WAIT_TIME);
-  };
-
-  const { parentNode, warnings } = state;
-  if (parentNode != null && warnings.size > 0) {
-    const warningComponents = [];
-    // eslint-disable-next-line no-unused-vars
-    for (let [message, values] of warnings) {
-      for (let i = 0; i < values.length; i++) {
-        const range = values[i];
-        const parentElement = range.startContainer.parentElement;
-        const key = `${parentElement?.offsetTop ?? 0 + range.startOffset}x${
-          parentElement?.offsetLeft ?? 0 + range.endOffset
-        }`;
-
-        warningComponents.push(
-          <Warning
-            key={key}
-            container={parentNode}
-            message={message}
-            rangeToHighlight={values[i]}
-          />
-        );
+  const search = (email) => {
+    const warnings = [];
+    const emailBounds = email.offsetParent.getBoundingClientRect();
+    let textNode;
+    const iter = textNodeIterator(email);
+    while ((textNode = iter.nextNode()) !== null) {
+      for (let i = 0; i < phrases.length; i++) {
+        const {regex, message} = phrases[i];
+        const ranges = Util.match(textNode, regex);
+        for (let j = 0; j < ranges.length; j++) {
+          const range = ranges[j];
+          let key = `${email.offsetTop + range.startOffset}x${email.offsetLeft + range.endOffset}`;
+          if(range.startContainer.parentElement){
+            const {offsetTop, offsetLeft} = range.startContainer.parentElement;
+            key = `${offsetTop + range.startOffset}x${offsetLeft + range.endOffset}`;
+          }
+          warnings.push(
+              <Warning
+                  key={key}
+                  parentBounds={emailBounds}
+                  message={message}
+                  rangeToHighlight={range}
+              />
+          );
+        }
       }
     }
-    return ReactDOM.createPortal(warningComponents, parentNode);
+    currentEmail.current = email;
+    setWarnings(warnings);
+  };
+
+  if (warnings.length > 0) {
+    const email = currentEmail.current;
+    const component = (
+        <div data-email-id={email.id} ref={warningContainer}>
+          {warnings}
+        </div>
+    );
+    return ReactDOM.createPortal(component, email.offsetParent);
   }
 };
 
