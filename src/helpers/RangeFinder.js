@@ -6,16 +6,20 @@ const textNodeIterator = (node) =>
 export function findRanges(node, patternsToFind) {
   const result = [];
   const iter = textNodeIterator(node);
-  let nextNode;
-  while ((nextNode = iter.nextNode()) !== null) {
-    result.push(
-      ...patternsToFind.flatMap((pattern) =>
-        Util.match(nextNode, pattern.regex).map((range) => ({
-          message: pattern.message,
-          rangeToHighlight: range,
-        }))
-      )
-    );
+  let textNode;
+  while ((textNode = iter.nextNode()) !== null) {
+    for (let p = 0; p < patternsToFind.length; p++) {
+      const pattern = patternsToFind[p];
+      const ranges = Util.match(textNode, pattern.regex);
+      if (ranges.length > 0) {
+        for (let r = 0; r < ranges.length; r++) {
+          result.push({
+            message: pattern.message,
+            rangeToHighlight: ranges[r],
+          });
+        }
+      }
+    }
   }
   return result;
 }
