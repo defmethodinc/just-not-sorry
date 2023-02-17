@@ -4,7 +4,7 @@ const textNodeIterator = (node) =>
   document.createNodeIterator(node, NodeFilter.SHOW_TEXT);
 
 export function findRanges(node, patternsToFind) {
-  const result = [];
+  const map = new Map();
   const iter = textNodeIterator(node);
   let textNode;
   while ((textNode = iter.nextNode()) !== null) {
@@ -12,14 +12,17 @@ export function findRanges(node, patternsToFind) {
       const pattern = patternsToFind[p];
       const ranges = Util.match(textNode, pattern.regex);
       if (ranges.length > 0) {
+        if (!map.has(pattern.message)){
+          map.set(pattern.message, []);
+        }
+
         for (let r = 0; r < ranges.length; r++) {
-          result.push({
-            message: pattern.message,
-            rangeToHighlight: ranges[r],
-          });
+          const values = map.get(pattern.message);
+          values.push(ranges[r]);
+          map.set(pattern.message, values);
         }
       }
     }
   }
-  return result;
+  return map;
 }

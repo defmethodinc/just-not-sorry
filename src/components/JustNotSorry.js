@@ -63,15 +63,21 @@ const JustNotSorry = ({ phrases, onEvents }) => {
   };
 
   const { parentNode, warnings } = state;
-  if (parentNode != null && warnings.length > 0) {
-    const warningComponents = warnings.map((warning, index) => (
-      <Warning
-        key={index}
-        container={parentNode}
-        message={warning.message}
-        rangeToHighlight={warning.rangeToHighlight}
-      />
-    ));
+  if (parentNode != null && warnings.size > 0) {
+    const warningComponents = [];
+    // eslint-disable-next-line no-unused-vars
+    for (let [message, values] of warnings) {
+      for (let i = 0; i < values.length; i++) {
+        warningComponents.push(
+          <Warning
+            key={i}
+            container={parentNode}
+            message={message}
+            rangeToHighlight={values[i]}
+          />
+        );
+      }
+    }
     return ReactDOM.createPortal(warningComponents, parentNode);
   }
 };
