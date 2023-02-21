@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import ReactDOM from 'react-dom';
 import Warning from './Warning.js';
 import * as Util from '../helpers/util.js';
@@ -20,9 +20,11 @@ const textNodeIterator = (node) =>
   document.createNodeIterator(node, NodeFilter.SHOW_TEXT);
 
 const JustNotSorry = ({ onEvents }) => {
+  const email = useRef(null);
   const [observer, setObserver] = useState(null);
-  const [state, setState] = useState({ warnings: [], parentNode: {} });
-  const resetState = () => setState({ warnings: [], parentNode: {} });
+  const [warnings, setWarnings] = useState([]);
+
+  const resetState = () => setWarnings([]);
 
   const applyEventListeners = ({ target }) => {
     const searchHandler = handleSearch(target, MESSAGE_PATTERNS);
@@ -51,42 +53,30 @@ const JustNotSorry = ({ onEvents }) => {
     observer,
   ]);
 
-  const updateWarnings = (email, patterns) => {
-    if (!email || !email.offsetParent) return resetState();
+  const updateWarnings = (target, patterns) => {
+    if (!target || !target.offsetParent) return resetState();
+    email.current = target;
 
-    const iter = textNodeIterator(email);
+    const iter = textNodeIterator(target);
     const updatedWarnings = [];
     let nextNode;
     while ((nextNode = iter.nextNode()) !== null) {
       updatedWarnings.push(...findRanges(nextNode, patterns));
     }
 
-    const updatedParent =
-      state.parentNode.id !== email.offsetParent.id
-        ? email.offsetParent
-        : state.parentNode;
-
-    setState({
-      warnings: updatedWarnings,
-      parentNode: updatedParent,
-    });
+    setWarnings(updatedWarnings);
   };
 
   const handleSearch = (email, patterns) => {
     return Util.debounce(() => updateWarnings(email, patterns), Util.WAIT_TIME);
   };
 
-  if (state.warnings.length > 0) {
-    const parentRect = state.parentNode.getBoundingClientRect();
-    const warningComponents = state.warnings.map((warning, index) => (
-      <Warning
-        key={index}
-        parentRect={parentRect}
-        value={warning}
-        number={index}
-      />
+  if (email.current !== null && warnings.length > 0) {
+    const parentRect = email.current.offsetParent.getBoundingClientRect();
+    const warningComponents = warnings.map((warning, index) => (
+      <Warning key={index} parentRect={parentRect} value={warning} />
     ));
-    return ReactDOM.createPortal(warningComponents, state.parentNode);
+    return ReactDOM.createPortal(warningComponents, email.current.offsetParent);
   }
 };
 
