@@ -33,10 +33,6 @@ jobs:
           export DISPLAY=:99
           sudo Xvfb -ac :99 -screen 0 1280x1024x24 > /dev/null 2>&1 &
           npm run e2e
-        env:
-          GMAIL_TEST_USER: ${{ vars.GMAIL_TEST_USER }}
-          GMAIL_TEST_PASSWORD: ${{ secrets.GMAIL_TEST_PASSWORD }}
-          CI: true
       - name: Semantic Release
         env:
           GPG_PASSPHRASE: ${{ secrets.GPG_PASSPHRASE }}
