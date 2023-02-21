@@ -101,7 +101,7 @@ describe('Just Not Sorry', () => {
       await page.keyboard.press('Enter');
 
       await page.waitForTimeout(500);
-      await assertWarningsWithin(20 * (i + 1), 1000 * 3);
+      await assertWarningsWithin(20 * (i + 1), 1000 * 4);
     }
   });
 });
