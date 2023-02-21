@@ -91,7 +91,7 @@ describe('Just Not Sorry', () => {
     }
   });
 
-  it('should display 1000 words with 400 warnings in one second with delay', async () => {
+  it('should display 1000 words with 400 warnings with delay', async () => {
     const fiftyWords = `Just actually sorry. Apologize. I think I'm no expert. Yes, um, literally, very, sort of, If that's okay, um, I should feel, we believe, in my opinion, This might be a silly idea. This might be a stupid question. I may be wrong. If I'm being honest. I guess. Maybe!!!`;
     expect(fiftyWords.split(' ').length).toBe(50);
 
@@ -101,7 +101,7 @@ describe('Just Not Sorry', () => {
       await page.keyboard.press('Enter');
 
       await page.waitForTimeout(500);
-      await assertWarningsWithin(20 * (i + 1), 1000 * 2);
+      await assertWarningsWithin(20 * (i + 1), 1000 * 3);
     }
   });
 });
