@@ -1,15 +1,20 @@
 import React from 'react';
-import WarningTooltip from './WarningTooltip.js';
+import { Tooltip } from 'react-tooltip';
 
 export default function Highlight(props) {
   return (
     <div
       className="jns-highlight"
       style={props.styles}
-      data-tip={props.message}
-      data-place={props.position}
+      data-tooltip-content={props.message}
+      data-tooltip-place={props.position}
+      data-tooltip-position-strategy="fixed"
     >
-      <WarningTooltip />
+      <Tooltip
+        className="jns-tooltip"
+        anchorSelect=".jns-highlight"
+        float={true}
+      />
     </div>
   );
 }

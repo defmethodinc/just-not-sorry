@@ -41,8 +41,7 @@ describe('<WarningHighlight/>', () => {
       expect(jnsHighlights.length).toBe(1);
       const jnsHighlight = jnsHighlights[0];
       expect(jnsHighlight.tagName).toEqual('DIV');
-      expect(jnsHighlight.dataset.tip).toEqual('test-message');
-      expect(jnsHighlight.dataset.place).toEqual('test-position');
+      expect(jnsHighlight.dataset.tooltipContent).toEqual('test-message');
       expect(jnsHighlight.style._values).toEqual({
         left: '10px',
         height: '3px',

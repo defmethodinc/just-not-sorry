@@ -52,17 +52,19 @@
     "lint-staged": "^10.2.2",
     "prettier": "^2.0.5",
     "semantic-release": "^19.0.2",
+    "style-loader": "^3.3.1",
     "web-ext": "^7.1.1",
     "webpack": "^5.51.1",
     "webpack-cli": "^4.8.0",
     "webpack-dev-server": "^4.0.0"
   },
   "dependencies": {
+    "css-loader": "^6.7.3",
     "prop-types": "^15.7.2",
     "range-at-index": "^1.0.4",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
-    "react-tooltip": "^4.2.6"
+    "react-tooltip": "^5.8.1"
   },
   "husky": {
     "hooks": {
