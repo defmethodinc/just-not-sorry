@@ -48,7 +48,8 @@
     "gh-pages": "^4.0.0",
     "html-webpack-plugin": "^5.3.2",
     "husky": "^4.2.5",
-    "jest": "^26.6.3",
+    "jest": "^29.4.3",
+    "jest-environment-jsdom": "^29.4.3",
     "lint-staged": "^10.2.2",
     "prettier": "^2.0.5",
     "semantic-release": "^19.0.2",
@@ -88,6 +89,7 @@
     ]
   },
   "jest": {
+    "testEnvironment": "jsdom",
     "setupFilesAfterEnv": [
       "<rootDir>/spec/setupTests.js"
     ]

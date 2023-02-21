@@ -35,3 +35,5 @@ export function match(el, regexp) {
   }
   return ranges;
 }
+
+export const WAIT_TIME = 500;

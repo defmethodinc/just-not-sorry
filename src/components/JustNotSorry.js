@@ -6,8 +6,6 @@ import PHRASES from '../warnings/phrases.json';
 import { forEachUniqueContentEditable } from '../callbacks/ContentEditableDiv';
 import { findRanges } from '../helpers/RangeFinder';
 
-const WAIT_TIME_BEFORE_RECALC_WARNINGS = 500;
-
 const MESSAGE_PATTERNS = PHRASES.map((phrase) => ({
   regex: new RegExp(phrase.pattern, 'gi'),
   message: phrase.message,
@@ -75,10 +73,7 @@ const JustNotSorry = ({ onEvents }) => {
   };
 
   const handleSearch = (email, patterns) => {
-    return Util.debounce(
-      () => updateWarnings(email, patterns),
-      WAIT_TIME_BEFORE_RECALC_WARNINGS
-    );
+    return Util.debounce(() => updateWarnings(email, patterns), Util.WAIT_TIME);
   };
 
   if (state.warnings.length > 0) {
