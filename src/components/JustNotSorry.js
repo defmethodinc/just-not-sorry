@@ -10,15 +10,20 @@ const JustNotSorry = ({ onEvents, phrases }) => {
   const [observer, setObserver] = useState(null);
   const [warnings, setWarnings] = useState([]);
 
-  const resetState = () => setWarnings([]);
+  const hideWarnings = () => setWarnings([]);
+
+  const showWarnings = (target) => {
+    email.current = target;
+    setWarnings(findRanges(target, phrases));
+  };
 
   const applyEventListeners = ({ target }) => {
     const searchHandler = Util.debounce(
-      () => updateWarnings(target),
+      () => showWarnings(target),
       Util.WAIT_TIME
     );
     onEvents.map((onEvent) => target.addEventListener(onEvent, searchHandler));
-    target.addEventListener('blur', resetState);
+    target.addEventListener('blur', hideWarnings);
   };
 
   useEffect(() => {
@@ -42,20 +47,6 @@ const JustNotSorry = ({ onEvents, phrases }) => {
     setObserver,
     observer,
   ]);
-
-  const updateWarnings = (target) => {
-    email.current = target;
-    const textNodeIterator = document.createNodeIterator(
-      target,
-      NodeFilter.SHOW_TEXT
-    );
-    const updatedWarnings = [];
-    let nextNode;
-    while ((nextNode = textNodeIterator.nextNode()) !== null) {
-      updatedWarnings.push(...findRanges(nextNode, phrases));
-    }
-    setWarnings(updatedWarnings);
-  };
 
   if (email.current !== null && warnings.length > 0) {
     const parentRect = email.current.offsetParent.getBoundingClientRect();
