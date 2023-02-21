@@ -29,9 +29,9 @@
     "@babel/plugin-proposal-class-properties": "^7.12.1",
     "@babel/plugin-transform-react-jsx": "^7.9.4",
     "@babel/preset-env": "^7.9.6",
-    "@os33/preact-render-spy": "^1.4.0",
     "@semantic-release/exec": "^6.0.3",
     "@semantic-release/git": "^10.0.1",
+    "@testing-library/react": "^14.0.0",
     "babel": "^6.23.0",
     "babel-eslint": "^8.2.6",
     "babel-loader": "^8.0.6",
@@ -39,8 +39,6 @@
     "concurrently": "^5.2.0",
     "copy-webpack-plugin": "^9.0.1",
     "cz-conventional-changelog": "^3.1.0",
-    "enzyme": "^3.11.0",
-    "enzyme-adapter-preact-pure": "^2.2.0",
     "eslint": "^6.8.0",
     "eslint-config-prettier": "^6.11.0",
     "eslint-plugin-import": "^2.20.2",
@@ -51,7 +49,6 @@
     "html-webpack-plugin": "^5.3.2",
     "husky": "^4.2.5",
     "jest": "^26.6.3",
-    "jest-enzyme": "^7.1.2",
     "lint-staged": "^10.2.2",
     "prettier": "^2.0.5",
     "semantic-release": "^19.0.2",
@@ -61,10 +58,10 @@
     "webpack-dev-server": "^4.0.0"
   },
   "dependencies": {
-    "@testing-library/preact": "^3.2.3",
-    "preact": "^10.4.1",
     "prop-types": "^15.7.2",
     "range-at-index": "^1.0.4",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
     "react-tooltip": "^4.2.6"
   },
   "husky": {
@@ -89,16 +86,8 @@
     ]
   },
   "jest": {
-    "moduleNameMapper": {
-      "^react$": "preact/compat",
-      "^react-dom/test-utils$": "preact/test-utils",
-      "^react-dom$": "preact/compat"
-    },
     "setupFilesAfterEnv": [
       "<rootDir>/spec/setupTests.js"
     ]
-  },
-  "snapshotSerializers": [
-    "preact-render-spy/snapshot"
-  ]
+  }
 }

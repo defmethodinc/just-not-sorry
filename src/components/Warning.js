@@ -1,4 +1,4 @@
-import { h } from 'preact';
+import React from 'react';
 import WarningHighlight from './WarningHighlight.js';
 
 const YPOS_ADJUSTMENT = 3;

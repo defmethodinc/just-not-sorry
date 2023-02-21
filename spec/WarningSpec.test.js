@@ -1,12 +1,9 @@
-import { h } from 'preact';
+import React from 'react';
+import { render, waitFor } from '@testing-library/react';
 import Warning, {
   calculateCoords,
   getHighlight,
 } from '../src/components/Warning.js';
-import { configure, shallow } from 'enzyme';
-import Adapter from 'enzyme-adapter-preact-pure';
-
-configure({ adapter: new Adapter() });
 
 const parent = document.createElement('div');
 
@@ -45,8 +42,6 @@ document.createRange = jest.fn(() => ({
 const range = document.createRange();
 
 describe('<Warning/>', () => {
-  let wrapper;
-
   const testProps = {
     key: 'test-key',
     value: {
@@ -58,7 +53,7 @@ describe('<Warning/>', () => {
   };
 
   beforeEach(() => {
-    wrapper = shallow(
+    render(
       <Warning
         parentRect={parent.getBoundingClientRect()}
         value={testProps.value}
@@ -67,9 +62,12 @@ describe('<Warning/>', () => {
     );
   });
 
-  it('should return a warning div', () => {
-    expect(wrapper.type()).toBe('div');
-    expect(wrapper.hasClass('jns-warning')).toEqual(true);
+  it('should return a warning div', async () => {
+    await waitFor(() => {
+      const jnsWarnings = document.body.getElementsByClassName('jns-warning');
+      expect(jnsWarnings.length).toBe(1);
+      expect(jnsWarnings[0].tagName).toEqual('DIV');
+    });
   });
 });
 

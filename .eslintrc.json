@@ -17,11 +17,7 @@
     "global": true
   },
   "parser": "babel-eslint",
-  "settings": {
-    "react": {
-      "pragma": "h"
-    }
-  },
+  "settings": {},
   "parserOptions": {
     "ecmaFeatures": {
       "modules": true,

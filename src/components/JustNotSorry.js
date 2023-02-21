@@ -1,6 +1,5 @@
-import { h } from 'preact';
+import React, { useState, useEffect } from 'react';
 import ReactDOM from 'react-dom';
-import { useState, useEffect } from 'preact/hooks';
 import Warning from './Warning.js';
 import * as Util from '../helpers/util.js';
 import PHRASES from '../warnings/phrases.json';

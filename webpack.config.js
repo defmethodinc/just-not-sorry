@@ -39,7 +39,7 @@ module.exports = {
           loader: 'babel-loader',
           options: {
             presets: ['@babel/preset-env'],
-            plugins: [['@babel/plugin-transform-react-jsx', { pragma: 'h' }]],
+            plugins: [['@babel/plugin-transform-react-jsx']],
           },
         },
       },
@@ -47,11 +47,6 @@ module.exports = {
   },
   resolve: {
     extensions: ['.js', '.jsx'],
-    alias: {
-      react: 'preact/compat',
-      'react-dom': 'preact/compat',
-      'enzyme-adapter-react-16': 'enzyme-adapter-preact-pure',
-    },
   },
   devtool: 'inline-source-map',
   performance: {

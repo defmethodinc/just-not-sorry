@@ -1,4 +1,4 @@
-import { h } from 'preact';
+import React from 'react';
 import WarningTooltip from './WarningTooltip.js';
 
 export default function Highlight(props) {

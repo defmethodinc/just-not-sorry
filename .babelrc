@@ -10,7 +10,9 @@
     ]
   ],
   "plugins": [
-    ["@babel/plugin-transform-react-jsx", { "pragma":"h" }],
+    ["@babel/plugin-transform-react-jsx", {
+      "runtime": "automatic"
+    }],
     ["@babel/plugin-proposal-class-properties", { "loose": true }]
   ]
 }

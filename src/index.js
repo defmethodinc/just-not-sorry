@@ -1,4 +1,9 @@
-import { h, render } from 'preact';
+import React from 'react';
+import * as ReactDOM from 'react-dom/client';
+
 import JustNotSorry from './components/JustNotSorry';
 
-render(<JustNotSorry onEvents={['input', 'focus', 'cut']} />, document.body);
+ReactDOM.hydrateRoot(
+  document.body,
+  <JustNotSorry onEvents={['input', 'focus', 'cut']} />
+);

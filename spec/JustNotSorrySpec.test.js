@@ -1,6 +1,7 @@
-import { h } from 'preact';
+import React from 'react';
 import JustNotSorry from '../src/components/JustNotSorry.js';
-import { render, fireEvent, waitFor } from '@testing-library/preact';
+import { render, fireEvent, waitFor } from '@testing-library/react';
+import { act } from 'react-dom/test-utils';
 
 jest.useFakeTimers();
 
@@ -29,11 +30,13 @@ describe('JustNotSorry', () => {
   let mutationObserverMock;
 
   const simulateEvent = (node, event) => {
-    expect(mutationObserverMock.mock.instances.length).toBe(1);
-    const documentObserver = mutationObserverMock.mock.instances[0];
-    documentObserver.trigger([{ type: 'childList', target: node }]);
-    expect(fireEvent[event](node)).toBe(true);
-    jest.runOnlyPendingTimers();
+    act(() => {
+      expect(mutationObserverMock.mock.instances.length).toBe(1);
+      const documentObserver = mutationObserverMock.mock.instances[0];
+      documentObserver.trigger([{ type: 'childList', target: node }]);
+      expect(fireEvent[event](node)).toBe(true);
+      jest.runOnlyPendingTimers();
+    });
   };
 
   beforeEach(() => {
@@ -47,25 +50,22 @@ describe('JustNotSorry', () => {
     global.MutationObserver = mutationObserverMock;
   });
 
-  describe('documentObserver', () => {
-    it('listens for structural changes to the content editable div in document body', () => {
-      render(<JustNotSorry />);
+  it('listens for structural changes to the content editable div in document body', () => {
+    render(<JustNotSorry />);
 
-      const observerInstances = mutationObserverMock.mock.instances;
-      expect(observerInstances.length).toBe(1);
-      expect(observerInstances[0].observe).toHaveBeenCalledWith(document.body, {
-        childList: true,
-        subtree: true,
-      });
+    const observerInstances = mutationObserverMock.mock.instances;
+    expect(observerInstances.length).toBe(1);
+    expect(observerInstances[0].observe).toHaveBeenCalledWith(document.body, {
+      childList: true,
+      subtree: true,
     });
   });
 
   it('on event does nothing when given an empty string', async () => {
     const email = emailContaining('');
-
     render(<JustNotSorry onEvents={['focus']} />);
-    simulateEvent(email, 'focus');
 
+    simulateEvent(email, 'focus');
     await waitFor(() => {
       expect(document.body.getElementsByClassName('jns-warning').length).toBe(
         0
