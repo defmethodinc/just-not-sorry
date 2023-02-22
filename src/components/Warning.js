@@ -12,7 +12,6 @@ export function calculateCoords(parentRect, rect) {
 }
 
 export function getHighlightStyle(rect, coord) {
-  console.log({ rect, coord });
   return rect && coord
     ? {
         top: `${coord.top - YPOS_ADJUSTMENT}px`,

@@ -49,17 +49,25 @@ const JustNotSorry = ({ onEvents, phrases }) => {
   ]);
 
   if (warnings.length > 0) {
-    const parentRect = email.current.offsetParent.getBoundingClientRect();
-    const warningComponents = warnings.map((warning, index) => (
-      <Warning
-        key={index}
-        textArea={parentRect}
-        range={warning.rangeToHighlight}
-        message={warning.message}
-        number={index}
-      />
-    ));
-    return ReactDOM.createPortal(warningComponents, email.current.offsetParent);
+    const currentEmail = email.current;
+    const parentRect = currentEmail.offsetParent.getBoundingClientRect();
+    const warningComponents = warnings.map((warning, i) => {
+      let key = i;
+
+      if (currentEmail.offsetTop && currentEmail.offsetLeft) {
+        key = `${currentEmail.offsetTop + warning.startOffset}x${
+          currentEmail.offsetLeft + warning.endOffset
+        }`;
+      }
+      if (warning?.startContainer?.parentElement) {
+        const { offsetTop, offsetLeft } = warning.startContainer.parentElement;
+        key = `${offsetTop + warning.startOffset}x${
+          offsetLeft + warning.endOffset
+        }`;
+      }
+      return <Warning key={key} textArea={parentRect} range={warning.rangeToHighlight} message={warning.message} number={i} />;
+    });
+    return ReactDOM.createPortal(warningComponents, currentEmail.offsetParent);
   }
 };
 

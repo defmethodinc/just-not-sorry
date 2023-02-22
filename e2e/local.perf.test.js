@@ -4,7 +4,7 @@ import * as Util from '../src/helpers/util.js';
 const ONE_MINUTE = 5000 * 12;
 jest.setTimeout(ONE_MINUTE * 3);
 
-const TEST_WAIT_TIME = (Util.WAIT_TIME + 100) * 20;
+const TEST_WAIT_TIME = (Util.WAIT_TIME + 100) * 10;
 const test_page = path.join(__dirname, '..', 'public', 'jns-test.html');
 
 async function assertWarningsWithin(numExpected, time) {
