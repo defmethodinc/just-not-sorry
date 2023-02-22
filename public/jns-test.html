@@ -1,0 +1,26 @@
+<!doctype html>
+<html>
+<body>
+<div>
+    <H1 id="to-blur" tabindex="1" onfocus="colorBackground()" onblur="removeBackground()">JustNotSorry Test</H1>
+    <div style="padding: 0 17px;">
+        <div style="padding: 10px 0;">
+            <div id="email" tabindex="2" contenteditable="true"
+                 style="border: dashed; border-color: green;
+                 min-height: 300px;">
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    function colorBackground() {
+        const header = document.getElementById('to-blur')
+        header.style.backgroundColor = 'green';
+    }
+    function removeBackground() {
+        const header = document.getElementById('to-blur')
+        header.style.backgroundColor = 'white';
+    }
+</script>
+</body>
+</html>

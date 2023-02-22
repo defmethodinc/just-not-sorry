@@ -8,6 +8,7 @@
   "homepage": "https://github.com/defmethodinc/just-not-sorry",
   "bugs": "https://github.com/defmethodinc/just-not-sorry/issues/new",
   "scripts": {
+    "e2e": "npm run build && jest --verbose --config='.jest.puppeteer.config.js' ./e2e",
     "test": "jest --verbose ./spec",
     "test:watch": "npm run test -- --watch",
     "build": "webpack --config webpack.config.js",
@@ -50,6 +51,7 @@
     "husky": "^4.2.5",
     "jest": "^29.4.3",
     "jest-environment-jsdom": "^29.4.3",
+    "jest-puppeteer": "^7.0.1",
     "lint-staged": "^10.2.2",
     "prettier": "^2.0.5",
     "semantic-release": "^19.0.2",
