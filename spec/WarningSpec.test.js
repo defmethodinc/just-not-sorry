@@ -1,5 +1,5 @@
 import React from 'react';
-import { render, waitFor } from '@testing-library/react';
+import { render, waitFor, screen } from '@testing-library/react';
 import Warning, {
   calculateCoords,
   getHighlight,
@@ -64,7 +64,7 @@ describe('<Warning/>', () => {
 
   it('should return a warning div', async () => {
     await waitFor(() => {
-      const jnsWarnings = document.body.getElementsByClassName('jns-warning');
+      const jnsWarnings = screen.getAllByTestId('jns-warning');
       expect(jnsWarnings.length).toBe(1);
       expect(jnsWarnings[0].tagName).toEqual('DIV');
     });

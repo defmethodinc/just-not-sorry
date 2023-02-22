@@ -1,6 +1,6 @@
 import React from 'react';
 import WarningHighlight from '../src/components/WarningHighlight.js';
-import { render, waitFor } from '@testing-library/react';
+import { render, waitFor, screen } from '@testing-library/react';
 
 describe('<WarningHighlight/>', () => {
   const testProps = {
@@ -25,9 +25,7 @@ describe('<WarningHighlight/>', () => {
 
   it('should return a highlight div', async () => {
     await waitFor(() => {
-      const jnsHighlights = document.body.getElementsByClassName(
-        'jns-highlight'
-      );
+      const jnsHighlights = screen.getAllByTestId('jns-highlight');
       expect(jnsHighlights.length).toBe(1);
       expect(jnsHighlights[0].tagName).toEqual('DIV');
     });
@@ -35,9 +33,7 @@ describe('<WarningHighlight/>', () => {
 
   it('should have the correct data and style attributes', async () => {
     await waitFor(() => {
-      const jnsHighlights = document.body.getElementsByClassName(
-        'jns-highlight'
-      );
+      const jnsHighlights = screen.getAllByTestId('jns-highlight');
       expect(jnsHighlights.length).toBe(1);
       const jnsHighlight = jnsHighlights[0];
       expect(jnsHighlight.tagName).toEqual('DIV');

@@ -4,6 +4,7 @@ import { Tooltip } from 'react-tooltip';
 export default function Highlight(props) {
   return (
     <div
+      data-testid="jns-highlight"
       className="jns-highlight"
       style={props.styles}
       data-tooltip-content={props.message}

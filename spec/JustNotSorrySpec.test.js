@@ -1,6 +1,6 @@
 import React from 'react';
 import JustNotSorry from '../src/components/JustNotSorry.js';
-import { render, fireEvent, waitFor } from '@testing-library/react';
+import { fireEvent, render, screen, waitFor } from '@testing-library/react';
 import { act } from 'react-dom/test-utils';
 
 jest.useFakeTimers();
@@ -67,9 +67,7 @@ describe('JustNotSorry', () => {
 
     simulateEvent(email, 'focus');
     await waitFor(() => {
-      expect(document.body.getElementsByClassName('jns-warning').length).toBe(
-        0
-      );
+      expect(screen.queryAllByTestId('jns-warning').length).toEqual(0);
     });
   });
 
@@ -80,9 +78,7 @@ describe('JustNotSorry', () => {
     simulateEvent(email, 'focus');
 
     await waitFor(() => {
-      expect(document.body.getElementsByClassName('jns-warning').length).toBe(
-        1
-      );
+      expect(screen.getAllByTestId('jns-warning').length).toEqual(1);
     });
   });
 
@@ -93,9 +89,7 @@ describe('JustNotSorry', () => {
     simulateEvent(div, 'blur');
 
     await waitFor(() => {
-      expect(document.body.getElementsByClassName('jns-warning').length).toBe(
-        0
-      );
+      expect(screen.queryAllByTestId('jns-warning').length).toEqual(0);
     });
   });
 
@@ -106,9 +100,7 @@ describe('JustNotSorry', () => {
     simulateEvent(email, 'focus');
 
     await waitFor(() => {
-      expect(document.body.getElementsByClassName('jns-warning').length).toBe(
-        0
-      );
+      expect(screen.queryAllByTestId('jns-warning').length).toEqual(0);
     });
   });
 
@@ -120,9 +112,7 @@ describe('JustNotSorry', () => {
     simulateEvent(div, 'focus');
 
     await waitFor(() => {
-      expect(document.body.getElementsByClassName('jns-warning').length).toBe(
-        2
-      );
+      expect(screen.getAllByTestId('jns-warning').length).toEqual(2);
     });
   });
 });

@@ -31,7 +31,7 @@ export function getHighlight(rect, coord) {
 export default function Warning(props) {
   const rects = props.value.rangeToHighlight.getClientRects();
   return (
-    <div className="jns-warning">
+    <div data-testid="jns-warning" className="jns-warning">
       {Array.from(rects, (rect, index) => {
         const highlight = getHighlight(
           rect,
