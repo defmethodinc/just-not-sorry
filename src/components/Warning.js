@@ -30,16 +30,14 @@ export default function Warning(props) {
   return (
     <div data-testid="jns-warning" className="jns-warning">
       {Array.from(rects, (rect, index) => {
-        const highlightStyle = getHighlightStyle(
-          rect,
-          calculateCoords(props.textArea, rect)
-        );
+        const coord = calculateCoords(props.textArea, rect);
+        const highlightStyle = getHighlightStyle(rect, coord);
         return (
           <WarningHighlight
             number={props.number + index * 10}
             message={props.message}
             styles={highlightStyle}
-            key={index}
+            key={`${coord.top}x${coord.left}`}
           />
         );
       })}
