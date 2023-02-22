@@ -116,7 +116,6 @@ describe('#setNodeStyles', () => {
         left: '0px',
         width: '39px',
         height: '3px',
-        zIndex: 10,
         position: 'absolute',
         padding: '0px',
       },

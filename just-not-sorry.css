@@ -5,4 +5,5 @@
 .jns-tooltip {
   max-width: 380px;
   border: 1px solid darkgray;
+  z-index: 1;
 }

@@ -6,15 +6,16 @@ export default function Highlight(props) {
     <div
       data-testid="jns-highlight"
       className="jns-highlight"
+      data-tooltip-id={`jns-highlight-${props.number}`}
       style={props.styles}
       data-tooltip-content={props.message}
-      data-tooltip-place={props.position}
-      data-tooltip-position-strategy="fixed"
     >
       <Tooltip
         className="jns-tooltip"
-        anchorSelect=".jns-highlight"
+        id={`jns-highlight-${props.number}`}
         float={true}
+        positionStrategy={'fixed'}
+        place={props.position}
       />
     </div>
   );

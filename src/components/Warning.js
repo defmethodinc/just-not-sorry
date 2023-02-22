@@ -19,7 +19,6 @@ export function getHighlight(rect, coord) {
           left: `${coord.left}px`,
           width: `${rect.width}px`,
           height: `${rect.height * 0.2}px`,
-          zIndex: 10,
           position: 'absolute',
           padding: '0px',
         },
@@ -39,6 +38,7 @@ export default function Warning(props) {
         );
         return (
           <WarningHighlight
+            number={props.number + index * 10}
             message={props.value.message}
             position={highlight.position}
             styles={highlight.style}
