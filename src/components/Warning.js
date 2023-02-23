@@ -1,4 +1,4 @@
-import { h } from 'preact';
+import React from 'react';
 import WarningHighlight from './WarningHighlight.js';
 
 const YPOS_ADJUSTMENT = 3;
@@ -19,7 +19,6 @@ export function getHighlight(rect, coord) {
           left: `${coord.left}px`,
           width: `${rect.width}px`,
           height: `${rect.height * 0.2}px`,
-          zIndex: 10,
           position: 'absolute',
           padding: '0px',
         },
@@ -31,7 +30,7 @@ export function getHighlight(rect, coord) {
 export default function Warning(props) {
   const rects = props.value.rangeToHighlight.getClientRects();
   return (
-    <div className="jns-warning">
+    <div data-testid="jns-warning" className="jns-warning">
       {Array.from(rects, (rect, index) => {
         const highlight = getHighlight(
           rect,
@@ -39,6 +38,7 @@ export default function Warning(props) {
         );
         return (
           <WarningHighlight
+            number={props.number + index * 10}
             message={props.value.message}
             position={highlight.position}
             styles={highlight.style}

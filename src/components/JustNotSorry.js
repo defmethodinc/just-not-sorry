@@ -1,13 +1,10 @@
-import { h } from 'preact';
+import React, { useState, useEffect } from 'react';
 import ReactDOM from 'react-dom';
-import { useState, useEffect } from 'preact/hooks';
 import Warning from './Warning.js';
 import * as Util from '../helpers/util.js';
 import PHRASES from '../warnings/phrases.json';
 import { forEachUniqueContentEditable } from '../callbacks/ContentEditableDiv';
 import { findRanges } from '../helpers/RangeFinder';
-
-const WAIT_TIME_BEFORE_RECALC_WARNINGS = 500;
 
 const MESSAGE_PATTERNS = PHRASES.map((phrase) => ({
   regex: new RegExp(phrase.pattern, 'gi'),
@@ -76,16 +73,18 @@ const JustNotSorry = ({ onEvents }) => {
   };
 
   const handleSearch = (email, patterns) => {
-    return Util.debounce(
-      () => updateWarnings(email, patterns),
-      WAIT_TIME_BEFORE_RECALC_WARNINGS
-    );
+    return Util.debounce(() => updateWarnings(email, patterns), Util.WAIT_TIME);
   };
 
   if (state.warnings.length > 0) {
     const parentRect = state.parentNode.getBoundingClientRect();
     const warningComponents = state.warnings.map((warning, index) => (
-      <Warning key={index} parentRect={parentRect} value={warning} />
+      <Warning
+        key={index}
+        parentRect={parentRect}
+        value={warning}
+        number={index}
+      />
     ));
     return ReactDOM.createPortal(warningComponents, state.parentNode);
   }
