@@ -44,19 +44,18 @@ const range = document.createRange();
 describe('<Warning/>', () => {
   const testProps = {
     key: 'test-key',
-    value: {
-      pattern: 'test-pattern',
-      message: 'test-message',
-      parentNode: parent,
-      rangeToHighlight: range,
-    },
+    pattern: 'test-pattern',
+    message: 'test-message',
+    parentNode: parent,
+    rangeToHighlight: range,
   };
 
   beforeEach(() => {
     render(
       <Warning
-        parentRect={parent.getBoundingClientRect()}
-        value={testProps.value}
+        textArea={parent.getBoundingClientRect()}
+        range={testProps.rangeToHighlight}
+        message={testProps.message}
         key={testProps.key}
       />
     );

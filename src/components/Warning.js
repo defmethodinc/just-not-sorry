@@ -28,18 +28,18 @@ export function getHighlight(rect, coord) {
 }
 
 export default function Warning(props) {
-  const rects = props.value.rangeToHighlight.getClientRects();
+  const rects = props.range.getClientRects();
   return (
     <div data-testid="jns-warning" className="jns-warning">
       {Array.from(rects, (rect, index) => {
         const highlight = getHighlight(
           rect,
-          calculateCoords(props.parentRect, rect)
+          calculateCoords(props.textArea, rect)
         );
         return (
           <WarningHighlight
             number={props.number + index * 10}
-            message={props.value.message}
+            message={props.message}
             position={highlight.position}
             styles={highlight.style}
             key={index}

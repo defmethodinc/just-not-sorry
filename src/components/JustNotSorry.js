@@ -51,7 +51,13 @@ const JustNotSorry = ({ onEvents, phrases }) => {
   if (warnings.length > 0) {
     const parentRect = email.current.offsetParent.getBoundingClientRect();
     const warningComponents = warnings.map((warning, index) => (
-      <Warning key={index} parentRect={parentRect} value={warning} number={index} />
+      <Warning
+        key={index}
+        textArea={parentRect}
+        range={warning.rangeToHighlight}
+        message={warning.message}
+        number={index}
+      />
     ));
     return ReactDOM.createPortal(warningComponents, email.current.offsetParent);
   }
