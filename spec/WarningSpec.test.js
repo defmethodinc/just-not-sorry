@@ -2,7 +2,7 @@ import React from 'react';
 import { render, waitFor, screen } from '@testing-library/react';
 import Warning, {
   calculateCoords,
-  getHighlight,
+  getHighlightStyle,
 } from '../src/components/Warning.js';
 
 const parent = document.createElement('div');
@@ -92,8 +92,8 @@ describe('#calculateCoords', () => {
 
 describe('#setNodeStyles', () => {
   it('should return undefined if the parentNode or rangeToHighlight are invalid', () => {
-    expect(getHighlight(null, null)).toEqual(undefined);
-    expect(getHighlight(undefined, undefined)).toEqual(undefined);
+    expect(getHighlightStyle(null, null)).toEqual(undefined);
+    expect(getHighlightStyle(undefined, undefined)).toEqual(undefined);
   });
 
   it('should return a style object when both parentNode and rangeToHighlight are valid', () => {
@@ -108,17 +108,14 @@ describe('#setNodeStyles', () => {
       y: 202,
     };
     const coords = { top: 65, left: 0 };
-    const highlight = getHighlight(rect, coords);
+    const highlight = getHighlightStyle(rect, coords);
     expect(highlight).toEqual({
-      style: {
-        top: '62px',
-        left: '0px',
-        width: '39px',
-        height: '3px',
-        position: 'absolute',
-        padding: '0px',
-      },
-      position: 'bottom',
+      top: '62px',
+      left: '0px',
+      width: '39px',
+      height: '3px',
+      position: 'absolute',
+      padding: '0px',
     });
   });
 });

@@ -7,7 +7,7 @@ function search(element, phrase) {
   }));
 }
 
-export function findRanges(target, patternsToFind) {
+export function calculateWarnings(target, patternsToFind) {
   const ranges = [];
   let nextNode;
   const textNodeIterator = document.createNodeIterator(

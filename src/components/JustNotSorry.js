@@ -3,7 +3,7 @@ import ReactDOM from 'react-dom';
 import Warning from './Warning.js';
 import * as Util from '../helpers/util.js';
 import { forEachUniqueContentEditable } from '../callbacks/ContentEditableDiv';
-import { findRanges } from '../helpers/RangeFinder';
+import { calculateWarnings } from '../helpers/RangeFinder';
 
 const JustNotSorry = ({ onEvents, phrases }) => {
   const email = useRef(null);
@@ -14,7 +14,7 @@ const JustNotSorry = ({ onEvents, phrases }) => {
 
   const showWarnings = (target) => {
     email.current = target;
-    setWarnings(findRanges(target, phrases));
+    setWarnings(calculateWarnings(target, phrases));
   };
 
   const applyEventListeners = ({ target }) => {
