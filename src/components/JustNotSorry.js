@@ -1,35 +1,29 @@
-import React, { useState, useEffect } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import ReactDOM from 'react-dom';
 import Warning from './Warning.js';
 import * as Util from '../helpers/util.js';
-import PHRASES from '../warnings/phrases.json';
 import { forEachUniqueContentEditable } from '../callbacks/ContentEditableDiv';
-import { findRanges } from '../helpers/RangeFinder';
+import { calculateWarnings } from '../helpers/RangeFinder';
 
-const MESSAGE_PATTERNS = PHRASES.map((phrase) => ({
-  regex: new RegExp(phrase.pattern, 'gi'),
-  message: phrase.message,
-}));
-
-const WATCH_FOR_NEW_NODES = {
-  subtree: true,
-  childList: true,
-};
-
-const textNodeIterator = (node) =>
-  document.createNodeIterator(node, NodeFilter.SHOW_TEXT);
-
-const JustNotSorry = ({ onEvents }) => {
+const JustNotSorry = ({ onEvents, phrases }) => {
+  const email = useRef(null);
   const [observer, setObserver] = useState(null);
-  const [state, setState] = useState({ warnings: [], parentNode: {} });
-  const resetState = () => setState({ warnings: [], parentNode: {} });
+  const [warnings, setWarnings] = useState([]);
+
+  const hideWarnings = () => setWarnings([]);
+
+  const showWarnings = (target) => {
+    email.current = target;
+    setWarnings(calculateWarnings(target, phrases));
+  };
 
   const applyEventListeners = ({ target }) => {
-    const searchHandler = handleSearch(target, MESSAGE_PATTERNS);
-    for (let i = 0; i < onEvents.length; i++) {
-      target.addEventListener(onEvents[i], searchHandler);
-    }
-    target.addEventListener('blur', resetState);
+    const searchHandler = Util.debounce(
+      () => showWarnings(target),
+      Util.WAIT_TIME
+    );
+    onEvents.map((onEvent) => target.addEventListener(onEvent, searchHandler));
+    target.addEventListener('blur', hideWarnings);
   };
 
   useEffect(() => {
@@ -37,7 +31,10 @@ const JustNotSorry = ({ onEvents }) => {
 
     const callback = forEachUniqueContentEditable(applyEventListeners);
     const obs = new MutationObserver(callback);
-    obs.observe(document.body, WATCH_FOR_NEW_NODES);
+    obs.observe(document.body, {
+      subtree: true,
+      childList: true,
+    });
     setObserver(obs);
     return () => {
       if (observer) {
@@ -51,46 +48,23 @@ const JustNotSorry = ({ onEvents }) => {
     observer,
   ]);
 
-  const updateWarnings = (email, patterns) => {
-    if (!email || !email.offsetParent) return resetState();
-
-    const iter = textNodeIterator(email);
-    const updatedWarnings = [];
-    let nextNode;
-    while ((nextNode = iter.nextNode()) !== null) {
-      updatedWarnings.push(...findRanges(nextNode, patterns));
-    }
-
-    const updatedParent =
-      state.parentNode.id !== email.offsetParent.id
-        ? email.offsetParent
-        : state.parentNode;
-
-    setState({
-      warnings: updatedWarnings,
-      parentNode: updatedParent,
-    });
-  };
-
-  const handleSearch = (email, patterns) => {
-    return Util.debounce(() => updateWarnings(email, patterns), Util.WAIT_TIME);
-  };
-
-  if (state.warnings.length > 0) {
-    const parentRect = state.parentNode.getBoundingClientRect();
-    const warningComponents = state.warnings.map((warning, index) => (
+  if (warnings.length > 0) {
+    const parentRect = email.current.offsetParent.getBoundingClientRect();
+    const warningComponents = warnings.map((warning, index) => (
       <Warning
         key={index}
-        parentRect={parentRect}
-        value={warning}
+        textArea={parentRect}
+        range={warning.rangeToHighlight}
+        message={warning.message}
         number={index}
       />
     ));
-    return ReactDOM.createPortal(warningComponents, state.parentNode);
+    return ReactDOM.createPortal(warningComponents, email.current.offsetParent);
   }
 };
 
 JustNotSorry.defaultProps = {
   onEvents: ['input', 'focus', 'cut'],
+  phrases: [],
 };
 export default JustNotSorry;

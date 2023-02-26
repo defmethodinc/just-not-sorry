@@ -7,6 +7,17 @@ function search(element, phrase) {
   }));
 }
 
-export function findRanges(node, patternsToFind) {
-  return patternsToFind.flatMap((pattern) => search(node, pattern));
+export function calculateWarnings(target, patternsToFind) {
+  const ranges = [];
+  let nextNode;
+  const textNodeIterator = document.createNodeIterator(
+    target,
+    NodeFilter.SHOW_TEXT
+  );
+  while ((nextNode = textNodeIterator.nextNode()) !== null) {
+    ranges.push(
+      ...patternsToFind.flatMap((pattern) => search(nextNode, pattern))
+    );
+  }
+  return ranges;
 }

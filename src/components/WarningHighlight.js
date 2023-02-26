@@ -14,8 +14,6 @@ export default function Highlight(props) {
         className="jns-tooltip"
         id={`jns-highlight-${props.number}`}
         float={true}
-        positionStrategy={'fixed'}
-        place={props.position}
       />
     </div>
   );
