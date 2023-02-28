@@ -17,8 +17,7 @@
         "https://mail.google.com/*",
         "https://outlook.office.com/*",
         "https://outlook.live.com/*",
-        "https://outlook.office365.com/*",
-        "file:///*/just-not-sorry/public/jns-test.html"
+        "https://outlook.office365.com/*"
       ],
       "css": ["./just-not-sorry.css"],
       "js": ["bundle.js"]
