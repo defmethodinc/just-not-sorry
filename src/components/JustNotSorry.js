@@ -48,17 +48,13 @@ const JustNotSorry = ({ onEvents, phrases }) => {
     observer,
   ]);
 
-  if (email.current != null && warnings.length > 0) {
+  const isEmailOpen = () => email.current && email.current.offsetParent;
+
+  if (isEmailOpen() && warnings.length > 0) {
     const currentEmail = email.current;
     const parentRect = currentEmail.offsetParent.getBoundingClientRect();
     const warningComponents = warnings.map((warning, i) => {
       let key = i;
-
-      if (currentEmail.offsetTop && currentEmail.offsetLeft) {
-        key = `${currentEmail.offsetTop + warning.startOffset}x${
-          currentEmail.offsetLeft + warning.endOffset
-        }`;
-      }
       if (warning?.startContainer?.parentElement) {
         const { offsetTop, offsetLeft } = warning.startContainer.parentElement;
         key = `${offsetTop + warning.startOffset}x${
