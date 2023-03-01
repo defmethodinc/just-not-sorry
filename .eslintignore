@@ -3,3 +3,4 @@ build/
 dist/
 gulpfile.js
 webpack.config.js
+jest-puppeteer.config.js

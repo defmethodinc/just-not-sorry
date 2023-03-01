@@ -12,7 +12,6 @@ export function calculateCoords(parentRect, rect) {
 }
 
 export function getHighlightStyle(rect, coord) {
-  console.log({ rect, coord });
   return rect && coord
     ? {
         top: `${coord.top - YPOS_ADJUSTMENT}px`,
@@ -27,22 +26,23 @@ export function getHighlightStyle(rect, coord) {
 
 export default function Warning(props) {
   const rects = props.range.getClientRects();
+  const highlights = [];
+  for (let i = 0; i < rects.length; i++) {
+    const rect = rects[i];
+    const coord = calculateCoords(props.textArea, rect);
+    const highlightStyle = getHighlightStyle(rect, coord);
+    highlights.push(
+      <WarningHighlight
+        number={props.number + i * 10}
+        message={props.message}
+        styles={highlightStyle}
+        key={`${coord.top}x${coord.left}`}
+      />
+    );
+  }
   return (
     <div data-testid="jns-warning" className="jns-warning">
-      {Array.from(rects, (rect, index) => {
-        const highlightStyle = getHighlightStyle(
-          rect,
-          calculateCoords(props.textArea, rect)
-        );
-        return (
-          <WarningHighlight
-            number={props.number + index * 10}
-            message={props.message}
-            styles={highlightStyle}
-            key={index}
-          />
-        );
-      })}
+      {highlights}
     </div>
   );
 }

@@ -1,12 +1,5 @@
 import * as Util from './util';
 
-function search(element, phrase) {
-  return Util.match(element, phrase.regex).map((range) => ({
-    message: phrase.message,
-    rangeToHighlight: range,
-  }));
-}
-
 export function calculateWarnings(target, patternsToFind) {
   const ranges = [];
   let nextNode;
@@ -16,7 +9,12 @@ export function calculateWarnings(target, patternsToFind) {
   );
   while ((nextNode = textNodeIterator.nextNode()) !== null) {
     ranges.push(
-      ...patternsToFind.flatMap((pattern) => search(nextNode, pattern))
+      ...patternsToFind.flatMap((pattern) => {
+        return Util.match(nextNode, pattern.regex).map((range) => ({
+          message: pattern.message,
+          rangeToHighlight: range,
+        }));
+      })
     );
   }
   return ranges;

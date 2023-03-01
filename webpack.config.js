@@ -56,4 +56,11 @@ module.exports = {
   performance: {
     hints: process.env.NODE_ENV === 'production' ? 'warning' : false,
   },
+  devServer: {
+    static: {
+      directory: path.join(__dirname, 'public'),
+    },
+    compress: true,
+    port: 9021,
+  },
 };

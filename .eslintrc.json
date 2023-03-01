@@ -14,7 +14,11 @@
     "analytics": true,
     "window": true,
     "document": true,
-    "global": true
+    "global": true,
+    "page": true,
+    "browser": true,
+    "context": true,
+    "jestPuppeteer": true
   },
   "parser": "babel-eslint",
   "settings": {},
@@ -33,8 +37,9 @@
   },
   "overrides": [
     {
-      "files": "**/*Spec.test.js",
+      "files": "**/*.test.js",
       "env": {
+        "node": true,
         "jest": true,
         "es6": true
       },
