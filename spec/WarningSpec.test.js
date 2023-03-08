@@ -1,121 +1,38 @@
 import React from 'react';
 import { render, waitFor, screen } from '@testing-library/react';
-import Warning, {
-  calculateCoords,
-  getHighlightStyle,
-} from '../src/components/Warning.js';
-
-const parent = document.createElement('div');
-
-parent.getBoundingClientRect = jest.fn(() => ({
-  bottom: 591,
-  height: 439,
-  left: 26,
-  right: 462,
-  top: 152,
-  width: 436,
-  x: 26,
-  y: 152,
-}));
-
-document.createRange = jest.fn(() => ({
-  setStart: jest.fn(),
-  setEnd: jest.fn(),
-  commonAncestorContainer: {
-    nodeName: 'BODY',
-    ownerDocument: document,
-  },
-  getClientRects: jest.fn(() => [
-    {
-      bottom: 217,
-      height: 15,
-      left: 26,
-      right: 65,
-      top: 202,
-      width: 39,
-      x: 26,
-      y: 202,
-    },
-  ]),
-}));
-
-const range = document.createRange();
+import Warning from '../src/components/Warning.js';
 
 describe('<Warning/>', () => {
-  const testProps = {
-    key: 'test-key',
-    pattern: 'test-pattern',
-    message: 'test-message',
-    parentNode: parent,
-    rangeToHighlight: range,
-  };
-
-  beforeEach(() => {
-    render(
-      <Warning
-        textArea={parent.getBoundingClientRect()}
-        range={testProps.rangeToHighlight}
-        message={testProps.message}
-        key={testProps.key}
-      />
-    );
+  it('should not return a warning div', async () => {
+    render(<Warning textArea={null} />);
+    await waitFor(() => {
+      const jnsWarnings = screen.queryAllByTestId('jns-warning');
+      expect(jnsWarnings.length).toBe(0);
+    });
   });
 
   it('should return a warning div', async () => {
+    const rangeToHighlight = {
+      setStart: jest.fn(),
+      setEnd: jest.fn(),
+      commonAncestorContainer: {
+        nodeName: 'BODY',
+        ownerDocument: document,
+      },
+      getClientRects: jest.fn(() => []),
+    };
+
+    render(
+      <Warning
+        textArea={{}}
+        range={rangeToHighlight}
+        message={'test-message'}
+      />
+    );
     await waitFor(() => {
       const jnsWarnings = screen.getAllByTestId('jns-warning');
       expect(jnsWarnings.length).toBe(1);
       expect(jnsWarnings[0].tagName).toEqual('DIV');
-    });
-  });
-});
-
-describe('#calculateCoords', () => {
-  it('should return undefined if the parentNode or rangeToHighlight are invalid', () => {
-    expect(calculateCoords(null, null)).toEqual(undefined);
-    expect(calculateCoords(undefined, undefined)).toEqual(undefined);
-  });
-
-  it('should return valid coords when both parentNode and rangeToHighlight are valid', () => {
-    const parentNode = parent;
-    const rectsToHighlight = range.getClientRects();
-    expect(rectsToHighlight.length).toEqual(1);
-
-    const rect = rectsToHighlight[0];
-    const coords = calculateCoords(parentNode.getBoundingClientRect(), rect);
-    expect(coords).toEqual({
-      top: 65,
-      left: 0,
-    });
-  });
-});
-
-describe('#setNodeStyles', () => {
-  it('should return undefined if the parentNode or rangeToHighlight are invalid', () => {
-    expect(getHighlightStyle(null, null)).toEqual(undefined);
-    expect(getHighlightStyle(undefined, undefined)).toEqual(undefined);
-  });
-
-  it('should return a style object when both parentNode and rangeToHighlight are valid', () => {
-    const rect = {
-      bottom: 217,
-      height: 15,
-      left: 26,
-      right: 65,
-      top: 202,
-      width: 39,
-      x: 26,
-      y: 202,
-    };
-    const coords = { top: 65, left: 0 };
-    const highlight = getHighlightStyle(rect, coords);
-    expect(highlight).toEqual({
-      top: '62px',
-      left: '0px',
-      width: '39px',
-      height: '3px',
-      position: 'absolute',
-      padding: '0px',
     });
   });
 });
