@@ -10,15 +10,22 @@ describe('<WarningHighlight/>', () => {
       width: '25px',
     },
     message: 'test-message',
-    position: 'test-position',
   };
 
   beforeEach(() => {
     render(
       <WarningHighlight
-        styles={testProps.style}
+        container={{
+          left: 16,
+          top: 152,
+        }}
+        bounds={{
+          top: 202,
+          left: 26,
+          width: 25,
+          height: 15,
+        }}
         message={testProps.message}
-        position={testProps.position}
       />
     );
   });
@@ -38,11 +45,7 @@ describe('<WarningHighlight/>', () => {
       const jnsHighlight = jnsHighlights[0];
       expect(jnsHighlight.tagName).toEqual('DIV');
       expect(jnsHighlight.dataset.tooltipContent).toEqual('test-message');
-      expect(jnsHighlight.style._values).toEqual({
-        left: '10px',
-        height: '3px',
-        width: '25px',
-      });
+      expect(jnsHighlight).toHaveStyle('left: 10px; height: 3px; width: 25px;');
     });
   });
 });

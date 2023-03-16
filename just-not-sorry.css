@@ -1,5 +1,7 @@
 .jns-highlight {
   border-bottom: 2px dashed #ff9933;
+  position: absolute;
+  padding: 0;
 }
 
 .jns-tooltip {
