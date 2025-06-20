@@ -57,7 +57,7 @@
     "prettier": "^2.0.5",
     "semantic-release": "^19.0.2",
     "style-loader": "^3.3.1",
-    "web-ext": "^7.1.1",
+    "web-ext": "^8.8.0",
     "webpack": "^5.99.9",
     "webpack-cli": "^6.0.1",
     "webpack-dev-server": "^5.2.2"
