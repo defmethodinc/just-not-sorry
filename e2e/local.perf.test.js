@@ -19,7 +19,7 @@ async function assertWarnings(expected, options) {
 describe('Just Not Sorry', () => {
   beforeEach(async () => {
     await page.goto(`file://${TEST_PAGE}`);
-    await page.waitForTimeout(500);
+    await new Promise((resolve) => setTimeout(resolve, 500));
     await page.click('#email');
     await assertWarnings(0, { visible: false, timeout: TEST_WAIT_TIME });
   });
@@ -105,7 +105,7 @@ describe('Just Not Sorry', () => {
       await page.keyboard.press('Enter');
       await page.keyboard.press('Enter');
 
-      await page.waitForTimeout(500);
+      await new Promise((resolve) => setTimeout(resolve, 500));
       await assertWarnings(20 * (i + 1), {
         visible: true,
         timeout: TEST_WAIT_TIME,

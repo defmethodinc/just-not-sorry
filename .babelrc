@@ -7,12 +7,7 @@
           "node": "current"
         }
       }
-    ]
-  ],
-  "plugins": [
-    ["@babel/plugin-transform-react-jsx", {
-      "runtime": "automatic"
-    }],
-    ["@babel/plugin-proposal-class-properties", { "loose": true }]
+    ],
+    "@babel/preset-react"
   ]
 }
