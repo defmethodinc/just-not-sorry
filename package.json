@@ -39,6 +39,7 @@
     "commitizen": "^4.3.1",
     "concurrently": "^5.2.0",
     "copy-webpack-plugin": "^13.0.0",
+    "css-loader": "^7.1.2",
     "cz-conventional-changelog": "^3.3.0",
     "eslint": "^6.8.0",
     "eslint-config-prettier": "^6.11.0",
@@ -56,14 +57,13 @@
     "lint-staged": "^10.2.2",
     "prettier": "^2.0.5",
     "semantic-release": "^24.2.5",
-    "style-loader": "^3.3.1",
+    "style-loader": "^4.0.0",
     "web-ext": "^8.8.0",
     "webpack": "^5.99.9",
     "webpack-cli": "^6.0.1",
     "webpack-dev-server": "^5.2.2"
   },
   "dependencies": {
-    "css-loader": "^6.7.3",
     "prop-types": "^15.7.2",
     "range-at-index": "^1.0.4",
     "react": "^18.2.0",
