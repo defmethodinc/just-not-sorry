@@ -8,7 +8,7 @@
   "homepage": "https://github.com/defmethodinc/just-not-sorry",
   "bugs": "https://github.com/defmethodinc/just-not-sorry/issues/new",
   "scripts": {
-    "e2e": "npm run build && jest --verbose --config='.jest.puppeteer.config.js' ./e2e",
+    "e2e": "npm run build && jest --verbose --config='.jest.puppeteer.config.js' --maxWorkers=1 ./e2e",
     "test": "jest --verbose ./spec",
     "test:watch": "npm run test -- --watch",
     "build": "webpack --config webpack.config.js",

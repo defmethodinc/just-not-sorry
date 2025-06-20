@@ -1,7 +1,7 @@
 import { e2eTeardown } from './utility.js';
-import { teardown } from 'jest-environment-puppeteer';
+import teardownPuppeteer from 'jest-environment-puppeteer/teardown';
 
 export default async function globalTeardown(globalConfig) {
-  await teardown(globalConfig);
+  await teardownPuppeteer(globalConfig);
   e2eTeardown();
 }

@@ -1,7 +1,7 @@
 import { e2eSetup } from './utility.js';
-import { setup } from 'jest-environment-puppeteer';
+import setupPuppeteer from 'jest-environment-puppeteer/setup';
 
 export default async function globalSetup(globalConfig) {
   e2eSetup();
-  await setup(globalConfig);
+  await setupPuppeteer(globalConfig);
 }
