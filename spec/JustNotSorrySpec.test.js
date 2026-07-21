@@ -1,7 +1,6 @@
-import React from 'react';
+import React, { act } from 'react';
 import JustNotSorry from '../src/components/JustNotSorry.js';
 import { fireEvent, render, screen, waitFor } from '@testing-library/react';
-import { act } from 'react-dom/test-utils';
 
 jest.useFakeTimers();
 
