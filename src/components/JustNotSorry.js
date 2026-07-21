@@ -5,7 +5,10 @@ import * as Util from '../helpers/util.js';
 import { forEachUniqueContentEditable } from '../callbacks/ContentEditableDiv';
 import { calculateWarnings } from '../helpers/RangeFinder';
 
-const JustNotSorry = ({ onEvents, phrases }) => {
+const JustNotSorry = ({
+  onEvents = ['input', 'focus', 'cut'],
+  phrases = [],
+}) => {
   const email = useRef(null);
   const [observer, setObserver] = useState(null);
   const [warnings, setWarnings] = useState([]);
@@ -75,8 +78,4 @@ const JustNotSorry = ({ onEvents, phrases }) => {
   }
 };
 
-JustNotSorry.defaultProps = {
-  onEvents: ['input', 'focus', 'cut'],
-  phrases: [],
-};
 export default JustNotSorry;
