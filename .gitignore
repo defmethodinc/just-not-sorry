@@ -9,3 +9,4 @@ build
 coverage
 .jekyll-cache
 _site
+.worktrees/
