@@ -16,17 +16,17 @@ describe('Util', () => {
         debouncedFunc();
       }
       jest.runAllTimers();
-      expect(func).toBeCalledTimes(1);
+      expect(func).toHaveBeenCalledTimes(1);
     });
 
     it('should execute a function as many times as the debounced function if called beyond the wait time', () => {
       for (let i = 0; i < 3; i++) {
         setTimeout(() => debouncedFunc(), Util.WAIT_TIME + 100);
         jest.advanceTimersByTime(Util.WAIT_TIME + 100);
-        expect(func).toBeCalledTimes(i);
+        expect(func).toHaveBeenCalledTimes(i);
       }
       jest.runAllTimers();
-      expect(func).toBeCalledTimes(3);
+      expect(func).toHaveBeenCalledTimes(3);
     });
   });
 
