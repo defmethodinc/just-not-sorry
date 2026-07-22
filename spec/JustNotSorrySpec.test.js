@@ -1,6 +1,6 @@
 import React, { act } from 'react';
 import JustNotSorry from '../src/components/JustNotSorry.js';
-import { fireEvent, render, screen, waitFor } from '@testing-library/react';
+import { fireEvent, render, screen } from '@testing-library/react';
 
 jest.useFakeTimers();
 
@@ -28,10 +28,11 @@ const emailContaining = (text) => {
 describe('JustNotSorry', () => {
   let mutationObserverMock;
 
-  const simulateEvent = (node, event) => {
-    act(() => {
-      expect(mutationObserverMock.mock.instances.length).toBe(1);
-      const documentObserver = mutationObserverMock.mock.instances[0];
+  const simulateEvent = async (node, event) => {
+    expect(mutationObserverMock).toHaveBeenCalledTimes(1);
+    const documentObserver = mutationObserverMock.mock.instances[0];
+
+    await act(async () => {
       documentObserver.trigger([{ type: 'childList', target: node }]);
       expect(fireEvent[event](node)).toBe(true);
       jest.runOnlyPendingTimers();
@@ -71,12 +72,10 @@ describe('JustNotSorry', () => {
           },
         ]}
         onEvents={['focus']}
-      />
+      />,
     );
-    simulateEvent(email, 'focus');
-    await waitFor(() => {
-      expect(screen.queryAllByTestId('jns-warning').length).toEqual(0);
-    });
+    await simulateEvent(email, 'focus');
+    expect(screen.queryAllByTestId('jns-warning')).toHaveLength(0);
   });
 
   it('on event checks for warnings', async () => {
@@ -90,13 +89,10 @@ describe('JustNotSorry', () => {
           },
         ]}
         onEvents={['focus']}
-      />
+      />,
     );
-    simulateEvent(email, 'focus');
-
-    await waitFor(() => {
-      expect(screen.getAllByTestId('jns-warning').length).toEqual(1);
-    });
+    await simulateEvent(email, 'focus');
+    expect(screen.getAllByTestId('jns-warning')).toHaveLength(1);
   });
 
   it('should clear warnings on blur event', async () => {
@@ -111,13 +107,10 @@ describe('JustNotSorry', () => {
           },
         ]}
         onEvents={['focus']}
-      />
+      />,
     );
-    simulateEvent(div, 'blur');
-
-    await waitFor(() => {
-      expect(screen.queryAllByTestId('jns-warning').length).toEqual(0);
-    });
+    await simulateEvent(div, 'blur');
+    expect(screen.queryAllByTestId('jns-warning')).toHaveLength(0);
   });
 
   it('does not add warnings for partial matches', async () => {
@@ -132,13 +125,10 @@ describe('JustNotSorry', () => {
           },
         ]}
         onEvents={['focus']}
-      />
+      />,
     );
-    simulateEvent(email, 'focus');
-
-    await waitFor(() => {
-      expect(screen.queryAllByTestId('jns-warning').length).toEqual(0);
-    });
+    await simulateEvent(email, 'focus');
+    expect(screen.queryAllByTestId('jns-warning')).toHaveLength(0);
   });
 
   it('catches the warnings when email contains div with phrase', async () => {
@@ -154,12 +144,9 @@ describe('JustNotSorry', () => {
           },
         ]}
         onEvents={['focus']}
-      />
+      />,
     );
-    simulateEvent(div, 'focus');
-
-    await waitFor(() => {
-      expect(screen.getAllByTestId('jns-warning').length).toEqual(2);
-    });
+    await simulateEvent(div, 'focus');
+    expect(screen.getAllByTestId('jns-warning')).toHaveLength(2);
   });
 });

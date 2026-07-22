@@ -1,17 +1,14 @@
 import React from 'react';
-import { render, waitFor, screen } from '@testing-library/react';
+import { render, screen } from '@testing-library/react';
 import Warning from '../src/components/Warning.js';
 
 describe('<Warning/>', () => {
-  it('should not return a warning div', async () => {
+  it('should not return a warning div', () => {
     render(<Warning textArea={null} />);
-    await waitFor(() => {
-      const jnsWarnings = screen.queryAllByTestId('jns-warning');
-      expect(jnsWarnings.length).toBe(0);
-    });
+    expect(screen.queryAllByTestId('jns-warning')).toHaveLength(0);
   });
 
-  it('should return a warning div', async () => {
+  it('should return a warning div', () => {
     const rangeToHighlight = {
       setStart: jest.fn(),
       setEnd: jest.fn(),
@@ -27,12 +24,10 @@ describe('<Warning/>', () => {
         textArea={{}}
         range={rangeToHighlight}
         message={'test-message'}
-      />
+      />,
     );
-    await waitFor(() => {
-      const jnsWarnings = screen.getAllByTestId('jns-warning');
-      expect(jnsWarnings.length).toBe(1);
-      expect(jnsWarnings[0].tagName).toEqual('DIV');
-    });
+    const jnsWarnings = screen.getAllByTestId('jns-warning');
+    expect(jnsWarnings).toHaveLength(1);
+    expect(jnsWarnings[0].tagName).toEqual('DIV');
   });
 });
