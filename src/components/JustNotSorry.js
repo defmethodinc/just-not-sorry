@@ -23,7 +23,7 @@ const JustNotSorry = ({
   const applyEventListeners = ({ target }) => {
     const searchHandler = Util.debounce(
       () => showWarnings(target),
-      Util.WAIT_TIME
+      Util.WAIT_TIME,
     );
     onEvents.map((onEvent) => target.addEventListener(onEvent, searchHandler));
     target.addEventListener('blur', hideWarnings);

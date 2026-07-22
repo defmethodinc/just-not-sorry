@@ -16,7 +16,7 @@ export default function Warning(props) {
         message={props.message}
         container={props.textArea}
         bounds={clientRects[i]}
-      />
+      />,
     );
   }
   return <div data-testid="jns-warning">{highlights}</div>;
