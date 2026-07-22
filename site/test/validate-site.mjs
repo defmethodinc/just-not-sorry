@@ -1,5 +1,5 @@
-import { existsSync, readFileSync } from 'node:fs';
-import { resolve } from 'node:path';
+import { existsSync, readFileSync, readdirSync } from 'node:fs';
+import { dirname, relative, resolve } from 'node:path';
 import { pathToFileURL } from 'node:url';
 
 const REQUIRED_FILES = [
@@ -28,12 +28,81 @@ export function validateSite(root, expectedVersion, expectedPhrase) {
   if (!index.includes('/assets/css/style.css')) {
     throw new Error('Missing theme stylesheet reference');
   }
+  if (!index.includes(`/assets/css/style.css?v=${expectedVersion}`)) {
+    throw new Error('Missing versioned theme stylesheet reference');
+  }
+  if (
+    !index.includes(
+      'href="https://github.com/defmethodinc/just-not-sorry"',
+    )
+  ) {
+    throw new Error('Missing repository link');
+  }
   if (!index.includes(`Site version ${expectedVersion}`)) {
     throw new Error('Missing site version');
   }
   if (!phrases.includes(expectedPhrase))
     throw new Error('Missing generated warning phrase');
   if (css.trim() === '') throw new Error('Theme stylesheet is empty');
+
+  for (const marker of [
+    'class="wrapper"',
+    '<header',
+    '<footer',
+    'class="logo"',
+    'href="/phrases.html"',
+  ]) {
+    if (!index.includes(marker)) {
+      throw new Error(`Missing generated layout marker: ${marker}`);
+    }
+  }
+
+  validateHtmlTargets(root);
+}
+
+function validateHtmlTargets(root) {
+  const htmlFiles = findHtmlFiles(root);
+  for (const file of htmlFiles) {
+    const html = readFileSync(file, 'utf8');
+    const relativeFile = relative(root, file);
+    for (const match of html.matchAll(/\b(href|src)\s*=\s*(["'])(.*?)\2/giu)) {
+      const [, attribute, , rawTarget] = match;
+      const target = rawTarget.trim();
+      if (target === '') {
+        throw new Error(`Empty ${attribute} target in ${relativeFile}`);
+      }
+      if (isIgnoredTarget(target)) continue;
+
+      const path = target.split(/[?#]/u, 1)[0];
+      const resolved = path.startsWith('/')
+        ? resolve(root, `.${path}`)
+        : resolve(dirname(file), path);
+      const candidates = path.endsWith('/')
+        ? [resolve(resolved, 'index.html')]
+        : [resolved, resolve(resolved, 'index.html')];
+      if (!candidates.some(existsSync)) {
+        throw new Error(
+          `Missing internal target ${target} in ${relativeFile}`,
+        );
+      }
+    }
+  }
+}
+
+function findHtmlFiles(directory) {
+  return readdirSync(directory, { withFileTypes: true }).flatMap((entry) => {
+    const path = resolve(directory, entry.name);
+    if (entry.isDirectory()) return findHtmlFiles(path);
+    return entry.isFile() && entry.name.endsWith('.html') ? [path] : [];
+  });
+}
+
+function isIgnoredTarget(target) {
+  return (
+    target.startsWith('#') ||
+    target.startsWith('//') ||
+    /^(?:https?:|mailto:|tel:|data:)/iu.test(target)
+  );
 }
 
 if (import.meta.url === pathToFileURL(process.argv[1]).href) {

@@ -8,6 +8,13 @@ on:
       - 'package-lock.json'
       - 'src/warnings/phrases.json'
       - '.github/workflows/website-publish.yml'
+  pull_request:
+    paths:
+      - 'site/**'
+      - 'package.json'
+      - 'package-lock.json'
+      - 'src/warnings/phrases.json'
+      - '.github/workflows/website-publish.yml'
 
 permissions:
   contents: read

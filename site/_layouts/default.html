@@ -6,7 +6,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
   {% seo %}
-  <link rel="stylesheet" href="{{ "/assets/css/style.css?v=" | append: site.github.build_revision | relative_url }}">
+  <link rel="stylesheet" href="{{ "/assets/css/style.css?v=" | append: site.data.version.commit | relative_url }}">
   <!--[if lt IE 9]>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv.min.js"></script>
   <![endif]-->
@@ -29,7 +29,7 @@
         <a href="{{ item.url | relative_url }}">{{ item.title }}</a>
       </li>
       {% endfor %}
-      <li><a href="{{ site.github.repository_url }}">View the Source Code on GitHub</a></li>
+      <li><a href="{{ site.repository_url }}">View the Source Code on GitHub</a></li>
     </ul>
 
   </header>
