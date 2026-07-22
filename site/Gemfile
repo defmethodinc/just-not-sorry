@@ -1,6 +1,7 @@
 source 'https://rubygems.org'
 
-gem 'github-pages', '~> 219', group: :jekyll_plugins
-gem 'jekyll-theme-minimal'
+ruby file: '.ruby-version'
 
-gem "webrick", "~> 1.8"
+gem 'jekyll', '~> 4.4.1'
+gem 'jekyll-theme-minimal', '~> 0.2.0'
+gem 'webrick', '~> 1.9.2'
