@@ -1,6 +1,6 @@
 import React from 'react';
 import WarningHighlight from '../src/components/WarningHighlight.js';
-import { render, screen } from '@testing-library/react';
+import { fireEvent, render, screen } from '@testing-library/react';
 
 describe('<WarningHighlight/>', () => {
   const testProps = {
@@ -25,6 +25,7 @@ describe('<WarningHighlight/>', () => {
           width: 25,
           height: 15,
         }}
+        number={3}
         message={testProps.message}
       />,
     );
@@ -41,7 +42,19 @@ describe('<WarningHighlight/>', () => {
     expect(jnsHighlights).toHaveLength(1);
     const jnsHighlight = jnsHighlights[0];
     expect(jnsHighlight.tagName).toEqual('DIV');
+    expect(jnsHighlight.dataset.tooltipId).toEqual('jns-highlight-3');
     expect(jnsHighlight.dataset.tooltipContent).toEqual('test-message');
     expect(jnsHighlight).toHaveStyle('left: 10px; height: 3px; width: 25px;');
+  });
+
+  it('should show the warning message in its tooltip', async () => {
+    const jnsHighlight = screen.getByTestId('jns-highlight');
+
+    fireEvent.mouseEnter(jnsHighlight);
+
+    const tooltip = await screen.findByRole('tooltip');
+    expect(tooltip).toHaveAttribute('id', 'jns-highlight-3');
+    expect(tooltip).toHaveClass('jns-tooltip');
+    expect(tooltip).toHaveTextContent('test-message');
   });
 });
