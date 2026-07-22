@@ -1,5 +1,5 @@
-import { existsSync, readFileSync, readdirSync } from 'node:fs';
-import { dirname, relative, resolve } from 'node:path';
+import { existsSync, readFileSync, readdirSync, statSync } from 'node:fs';
+import { dirname, isAbsolute, relative, resolve, sep } from 'node:path';
 import { pathToFileURL } from 'node:url';
 
 const REQUIRED_FILES = [
@@ -61,6 +61,7 @@ export function validateSite(root, expectedVersion, expectedPhrase) {
 }
 
 function validateHtmlTargets(root) {
+  const artifactRoot = resolve(root);
   const htmlFiles = findHtmlFiles(root);
   for (const file of htmlFiles) {
     const html = readFileSync(file, 'utf8');
@@ -75,18 +76,39 @@ function validateHtmlTargets(root) {
 
       const path = target.split(/[?#]/u, 1)[0];
       const resolved = path.startsWith('/')
-        ? resolve(root, `.${path}`)
+        ? resolve(artifactRoot, `.${path}`)
         : resolve(dirname(file), path);
+      if (!isInsideRoot(artifactRoot, resolved)) {
+        throw new Error(
+          `Internal target escapes artifact root ${target} in ${relativeFile}`,
+        );
+      }
       const candidates = path.endsWith('/')
         ? [resolve(resolved, 'index.html')]
-        : [resolved, resolve(resolved, 'index.html')];
-      if (!candidates.some(existsSync)) {
+        : [resolved];
+      if (
+        !candidates.some(
+          (candidate) =>
+            isInsideRoot(artifactRoot, candidate) &&
+            existsSync(candidate) &&
+            statSync(candidate).isFile(),
+        )
+      ) {
         throw new Error(
           `Missing internal target ${target} in ${relativeFile}`,
         );
       }
     }
   }
+}
+
+function isInsideRoot(root, candidate) {
+  const pathFromRoot = relative(root, candidate);
+  return (
+    pathFromRoot !== '..' &&
+    !pathFromRoot.startsWith(`..${sep}`) &&
+    !isAbsolute(pathFromRoot)
+  );
 }
 
 function findHtmlFiles(directory) {
