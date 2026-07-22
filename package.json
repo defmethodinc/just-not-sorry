@@ -25,6 +25,8 @@
     "check": "npm run lint:check && npm run format:check",
     "site:version": "echo \"{\\\"commit\\\": \\\"$(git rev-parse --short HEAD)\\\"}\" > ./site/_data/version.json",
     "site:phrases": "cp ./src/warnings/phrases.json ./site/_data",
+    "site:test": "node --test site/test/validate-site.test.mjs",
+    "site:validate": "node site/test/validate-site.mjs site/_site $(git rev-parse --short HEAD) 'does that make sense'",
     "predeploy": "npm run site:phrases && npm run site:version",
     "deploy": "gh-pages -d site",
     "semantic-release": "cross-env GIT_BRANCH=$(git rev-parse --abbrev-ref HEAD) semantic-release",
