@@ -73,6 +73,14 @@ To publish this release, download the zip file from GitHub. Find the Just Not So
 
 See the [website README.md](./site/README.md) for more information.
 
+Before submitting website changes, run:
+
+```
+npm run site:test
+npm run site:build
+npm run site:validate
+```
+
 ### Libraries Used
 
 For production:
