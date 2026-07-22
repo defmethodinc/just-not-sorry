@@ -3,5 +3,5 @@ import teardownPuppeteer from 'jest-environment-puppeteer/teardown';
 
 export default async function globalTeardown(globalConfig) {
   await teardownPuppeteer(globalConfig);
-  e2eTeardown();
+  await e2eTeardown();
 }

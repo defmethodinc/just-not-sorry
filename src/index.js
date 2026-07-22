@@ -14,5 +14,5 @@ ReactDOM.hydrateRoot(
   <JustNotSorry
     phrases={MESSAGE_PATTERNS}
     onEvents={['input', 'focus', 'cut']}
-  />
+  />,
 );

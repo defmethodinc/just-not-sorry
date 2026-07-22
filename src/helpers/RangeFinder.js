@@ -5,7 +5,7 @@ export function calculateWarnings(target, patternsToFind) {
   let nextNode;
   const textNodeIterator = document.createNodeIterator(
     target,
-    NodeFilter.SHOW_TEXT
+    NodeFilter.SHOW_TEXT,
   );
   while ((nextNode = textNodeIterator.nextNode()) !== null) {
     ranges.push(
@@ -14,7 +14,7 @@ export function calculateWarnings(target, patternsToFind) {
           message: pattern.message,
           rangeToHighlight: range,
         }));
-      })
+      }),
     );
   }
   return ranges;
