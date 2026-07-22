@@ -41,7 +41,7 @@
     "@eslint/js": "^9.39.5",
     "@semantic-release/exec": "^6.0.3",
     "@semantic-release/git": "^10.0.1",
-    "@testing-library/jest-dom": "^5.17.0",
+    "@testing-library/jest-dom": "^7.0.0",
     "@testing-library/react": "^14.3.1",
     "babel-loader": "^10.1.1",
     "commitizen": "^4.3.2",

@@ -7,13 +7,17 @@ jest.setTimeout(ONE_MINUTE * 2);
 const TEST_WAIT_TIME = Util.WAIT_TIME + 100;
 const TEST_PAGE = path.join(__dirname, '..', 'public', 'jns-test.html');
 
-async function assertWarnings(expected, options) {
-  if (expected > 0) {
-    await page.waitForSelector('.jns-highlight', options);
-  }
+async function assertWarnings(expected, { timeout = TEST_WAIT_TIME } = {}) {
+  await page.waitForFunction(
+    (expectedWarnings) =>
+      document.querySelectorAll('.jns-highlight').length >= expectedWarnings,
+    { timeout },
+    expected,
+  );
+
   const numWarnings = await page.$$('.jns-highlight');
   //longer phrases can wrap lines and create multiple tooltips
-  await expect(numWarnings.length).toBeGreaterThanOrEqual(expected);
+  expect(numWarnings.length).toBeGreaterThanOrEqual(expected);
 }
 
 describe('Just Not Sorry', () => {
@@ -21,7 +25,7 @@ describe('Just Not Sorry', () => {
     await page.goto(`file://${TEST_PAGE}`);
     await new Promise((resolve) => setTimeout(resolve, 500));
     await page.click('#email');
-    await assertWarnings(0, { visible: false, timeout: TEST_WAIT_TIME });
+    await assertWarnings(0);
   });
 
   it('should work', async () => {
@@ -33,11 +37,11 @@ describe('Just Not Sorry', () => {
     await page.keyboard.down('Shift');
     await page.keyboard.press('Tab');
     await page.keyboard.up('Shift');
-    await assertWarnings(2, { visible: false, timeout: TEST_WAIT_TIME });
+    await assertWarnings(2);
 
     //focus
     await page.keyboard.press('Tab');
-    await assertWarnings(2, { visible: true, timeout: TEST_WAIT_TIME });
+    await assertWarnings(2);
   });
 
   it('should display 500 words with 200 warnings', async () => {
@@ -54,17 +58,11 @@ describe('Just Not Sorry', () => {
       await page.keyboard.press('Tab', { delay: 500 });
       await page.keyboard.up('Shift');
       const numExpected = 20 * (i + 1);
-      await assertWarnings(numExpected, {
-        visible: false,
-        timeout: TEST_WAIT_TIME,
-      });
+      await assertWarnings(numExpected);
 
       //focus
       await page.keyboard.press('Tab', { delay: 500 });
-      await assertWarnings(numExpected, {
-        visible: true,
-        timeout: TEST_WAIT_TIME,
-      });
+      await assertWarnings(numExpected);
     }
   });
 
@@ -82,17 +80,11 @@ describe('Just Not Sorry', () => {
       await page.keyboard.press('Tab', { delay: 500 });
       await page.keyboard.up('Shift');
       const numExpected = 20 * (i + 1);
-      await assertWarnings(numExpected, {
-        visible: false,
-        timeout: TEST_WAIT_TIME,
-      });
+      await assertWarnings(numExpected);
 
       //focus
       await page.keyboard.press('Tab', { delay: 500 });
-      await assertWarnings(numExpected, {
-        visible: true,
-        timeout: TEST_WAIT_TIME,
-      });
+      await assertWarnings(numExpected);
     }
   });
 
@@ -106,10 +98,7 @@ describe('Just Not Sorry', () => {
       await page.keyboard.press('Enter');
 
       await new Promise((resolve) => setTimeout(resolve, 500));
-      await assertWarnings(20 * (i + 1), {
-        visible: true,
-        timeout: TEST_WAIT_TIME,
-      });
+      await assertWarnings(20 * (i + 1));
     }
   });
 });
