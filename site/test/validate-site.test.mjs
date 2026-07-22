@@ -1,13 +1,52 @@
 import assert from 'node:assert/strict';
-import { mkdtempSync, mkdirSync, rmSync, writeFileSync } from 'node:fs';
+import {
+  mkdtempSync,
+  mkdirSync,
+  readFileSync,
+  rmSync,
+  writeFileSync,
+} from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import test from 'node:test';
 
 import { validateSite } from './validate-site.mjs';
 
+const packageJson = JSON.parse(readFileSync('package.json', 'utf8'));
+const workflow = readFileSync(
+  '.github/workflows/website-publish.yml',
+  'utf8',
+);
+const phrasesPage = readFileSync('site/phrases.md', 'utf8');
+const releasesPage = readFileSync('site/releases.md', 'utf8');
+const siteConfig = readFileSync('site/_config.yml', 'utf8');
+
 const expectedVersion = 'abc1234';
 const expectedPhrase = 'does that make sense';
+
+test('builds and deploys a verified GitHub Pages artifact', () => {
+  assert.equal(
+    packageJson.scripts['site:build'],
+    'npm run site:phrases && npm run site:version && cd site && bundle exec jekyll build',
+  );
+  assert.equal(packageJson.scripts.deploy, undefined);
+  assert.equal(packageJson.devDependencies['gh-pages'], undefined);
+  assert.match(workflow, /actions\/upload-pages-artifact@v4/);
+  assert.match(workflow, /actions\/deploy-pages@v4/);
+  assert.match(workflow, /path: site\/_site/);
+  assert.match(workflow, /if: github\.ref == 'refs\/heads\/main'/);
+  assert.doesNotMatch(workflow, /github-pages health-check/);
+});
+
+test('configures standalone Jekyll to render only deployable site content', () => {
+  assert.match(phrasesPage, /^---\ntitle: List of Warning Phrases\n---\n/);
+  assert.match(releasesPage, /^---\ntitle: Release Notes\n---\n/);
+  assert.match(siteConfig, /^exclude:\n  - test$/m);
+  assert.match(
+    siteConfig,
+    /^defaults:\n  - scope:\n      path: ''\n    values:\n      layout: default$/m,
+  );
+});
 
 function createValidFixture() {
   const root = mkdtempSync(join(tmpdir(), 'just-not-sorry-site-'));

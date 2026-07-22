@@ -1,3 +1,7 @@
+---
+title: List of Warning Phrases
+---
+
 # List of Warning Phrases
 
 <table>
