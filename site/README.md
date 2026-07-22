@@ -8,8 +8,8 @@ It is built using standalone [Jekyll 4](https://jekyllrb.com/) and a customized 
 
 Prerequisites:
 
-- ruby
-- bundler
+- Ruby 4.0.6
+- Bundler
 
 To install dependencies:
 
