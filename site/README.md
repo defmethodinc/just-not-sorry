@@ -2,7 +2,7 @@
 
 The Just Not Sorry web site is hosted on GitHub Pages at both https://justnotsorry.com and https://defmethodinc.github.io/just-not-sorry/
 
-It is built using standalone [Jekyll 4](https://jekyllrb.com/) and a customized version of the [minimal theme](https://github.com/pages-themes/minimal). It does not use the `github-pages` gem.
+It is built using standalone [Jekyll 4](https://jekyllrb.com/) and a customized version of the [minimal theme](https://github.com/pages-themes/minimal).
 
 Before the first deployment, configure the repository under **Settings → Pages → Build and deployment** and set **Source** to **GitHub Actions**.
 
