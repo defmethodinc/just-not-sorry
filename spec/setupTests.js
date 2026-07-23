@@ -10,10 +10,12 @@ class ResizeObserver {
 
 global.ResizeObserver = ResizeObserver;
 
-// Work-around for jsdom not supporting offsetParent
+// Work-around for DOM environments that do not support offsetParent
 // https://github.com/jsdom/jsdom/issues/1261
-Object.defineProperty(HTMLElement.prototype, 'offsetParent', {
-  get() {
-    return this.parentNode;
-  },
-});
+if (!Object.getOwnPropertyDescriptor(HTMLElement.prototype, 'offsetParent')) {
+  Object.defineProperty(HTMLElement.prototype, 'offsetParent', {
+    get() {
+      return this.parentNode;
+    },
+  });
+}

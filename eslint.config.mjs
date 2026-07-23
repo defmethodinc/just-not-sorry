@@ -92,6 +92,7 @@ export default defineConfig([
     "spec/setupTests.js",
     "e2e/**/*.test.js",
     "e2e/global-setup.js",
+    "e2e/setup-puppeteer.js",
     "e2e/global-teardown.js",
     ],
 
