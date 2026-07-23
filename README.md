@@ -25,7 +25,8 @@ If you're a developer, you're welcome to submit a pull request. Please run the t
 Prerequisites:
 
 - [git](https://git-scm.com/)
-- [node.js 22.X+](https://nodejs.org/)
+- [Node.js 24.15.0](https://nodejs.org/) (see [`.nvmrc`](./.nvmrc))
+- [Ruby 4.0.6](https://www.ruby-lang.org/) for website development (see [`site/.ruby-version`](./site/.ruby-version))
 
 Setup:
 
