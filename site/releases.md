@@ -1,3 +1,7 @@
+---
+title: Release Notes
+---
+
 # Release Notes
 
 ### v2.4.0 - Nov 22, 2022

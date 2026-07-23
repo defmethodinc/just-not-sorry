@@ -1,3 +1,11 @@
 theme: jekyll-theme-minimal
 logo: img/JustNotSorry-logo.png
 title: Just Not Sorry
+repository_url: https://github.com/defmethodinc/just-not-sorry
+exclude:
+  - test
+defaults:
+  - scope:
+      path: ''
+    values:
+      layout: default
