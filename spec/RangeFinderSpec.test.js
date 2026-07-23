@@ -20,8 +20,8 @@ describe('RangeFinder', () => {
     const ranges = calculateWarnings(element, [PHRASE_TO_FIND]);
 
     expect(ranges.length).toBe(1);
-    expect(ranges).toEqual([
-      { message: 'text found!', rangeToHighlight: new Range() },
-    ]);
+    expect(ranges[0].message).toBe('text found!');
+    expect(ranges[0].rangeToHighlight).toBeInstanceOf(Range);
+    expect(ranges[0].rangeToHighlight.toString()).toBe('textToFind');
   });
 });
