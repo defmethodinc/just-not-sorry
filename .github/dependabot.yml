@@ -1,0 +1,39 @@
+version: 2
+updates:
+  - package-ecosystem: npm
+    directory: /
+    schedule:
+      interval: monthly
+    open-pull-requests-limit: 5
+    labels:
+      - dependencies
+      - javascript
+    groups:
+      npm-dependencies:
+        patterns:
+          - '*'
+
+  - package-ecosystem: bundler
+    directory: /site
+    schedule:
+      interval: monthly
+    open-pull-requests-limit: 5
+    labels:
+      - dependencies
+      - ruby
+    groups:
+      bundler-dependencies:
+        patterns:
+          - '*'
+
+  - package-ecosystem: github-actions
+    directory: /
+    schedule:
+      interval: monthly
+    open-pull-requests-limit: 5
+    labels:
+      - dependencies
+    groups:
+      github-actions:
+        patterns:
+          - '*'
